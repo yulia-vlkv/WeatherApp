@@ -10,11 +10,11 @@ import UIKit
 
 class CustomSegmented: UISegmentedControl {
     
-    init(leftItem: String, rightItem: String) {
-        super.init(frame: .zero)
+    init(items: [String]) {
+        super.init(items: items)
         
-        self.setTitle(leftItem, forSegmentAt: 0)
-        self.setTitle(rightItem, forSegmentAt: 1)
+        self.selectedSegmentIndex = 1
+        self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
         self.selectedSegmentTintColor = CustomColors.setColor(style: .deepBlue)
         self.contentMode = .right
         self.setWidth(50, forSegmentAt: 0)
