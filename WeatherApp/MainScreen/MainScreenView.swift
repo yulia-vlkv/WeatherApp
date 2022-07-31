@@ -11,15 +11,30 @@ import UIKit
 
 class MainScreenView: UIViewController {
     
-    
     override func viewDidLoad() {
         self.view.backgroundColor = .white
         
+        configureHeaderViewLayout()
         configureHorizontalViewLayout()
         configureVerticalViewLayout()
     }
     
     // MARK: - Header
+    let header = MainScreenHeaderView()
+    
+    private func configureHeaderViewLayout() {
+        view.addSubview(header)
+        header.toAutoLayout()
+    
+        let constraints = [
+            header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            header.heightAnchor.constraint(equalToConstant: 400),
+            header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            header.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ]
+        
+        NSLayoutConstraint.activate(constraints)
+    }
     
     // MARK: - horizontal scroll
     
@@ -38,9 +53,9 @@ class MainScreenView: UIViewController {
         
         
         let constraints = [
-            oneDayWeatherCollection.topAnchor.constraint(equalTo: view.topAnchor),
+            oneDayWeatherCollection.topAnchor.constraint(equalTo: header.bottomAnchor),
             oneDayWeatherCollection.heightAnchor.constraint(equalToConstant: 200),
-            oneDayWeatherCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            oneDayWeatherCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             oneDayWeatherCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ]
         
@@ -64,7 +79,7 @@ class MainScreenView: UIViewController {
                forHeaderFooterViewReuseIdentifier: "sectionHeader")
         
         let constraints = [
-            dailyForecastTable.topAnchor.constraint(equalTo: oneDayWeatherCollection.bottomAnchor, constant: 70),
+            dailyForecastTable.topAnchor.constraint(equalTo: oneDayWeatherCollection.bottomAnchor),
             dailyForecastTable.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             dailyForecastTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             dailyForecastTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
