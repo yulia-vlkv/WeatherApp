@@ -1,5 +1,5 @@
 //
-//  WeatherVerticalCell.swift
+//  DailyWeatherCell.swift
 //  WeatherApp
 //
 //  Created by Iuliia Volkova on 31.07.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WeatherVerticalCell: UITableViewCell {
+class DailyWeatherTableCell: UITableViewCell {
     
     private let backgroundLabel: UILabel = {
         let label = UILabel()
@@ -141,8 +141,8 @@ class WeatherVerticalCell: UITableViewCell {
             
             frameLabel.topAnchor.constraint(equalTo: backgroundLabel.topAnchor),
             frameLabel.heightAnchor.constraint(equalToConstant: 56),
-            frameLabel.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor),
-            frameLabel.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor),
+            frameLabel.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: 16),
+            frameLabel.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -16),
             
             leftStackView.topAnchor.constraint(equalTo: frameLabel.topAnchor, constant: 6),
             leftStackView.bottomAnchor.constraint(equalTo: frameLabel.bottomAnchor, constant: -6),

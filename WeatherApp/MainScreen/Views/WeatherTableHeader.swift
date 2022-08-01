@@ -9,28 +9,17 @@ import UIKit
 
 class MyCustomHeader: UITableViewHeaderFooterView {
     
-    private let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Ежедневный прогноз"
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         label.toAutoLayout()
         return label
     }()
     
-    private let toDetailsButton: UIButton = {
+    let toDetailsButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .clear
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 16, weight: .regular),
-            .foregroundColor: UIColor.black,
-            .underlineStyle: NSUnderlineStyle.single.rawValue
-        ]
-        let attributedString = NSMutableAttributedString(
-            string: "25 дней",
-            attributes: attributes
-        )
-        button.setAttributedTitle(attributedString, for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         button.contentHorizontalAlignment = .right

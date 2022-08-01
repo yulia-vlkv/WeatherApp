@@ -1,5 +1,5 @@
 //
-//  WeatherHorizontalCell.swift
+//  HourlyWeatherCell.swift
 //  WeatherApp
 //
 //  Created by Iuliia Volkova on 31.07.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WeatherHorizontalCell: UICollectionViewCell {
+class HourlyWeatherCell: UICollectionViewCell {
     
     private let backgroundLabel: UILabel = {
         let label = UILabel()

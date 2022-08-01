@@ -2,140 +2,119 @@
 //  MainScreenView.swift
 //  WeatherApp
 //
-//  Created by Iuliia Volkova on 28.07.2022.
+//  Created by Iuliia Volkova on 31.07.2022.
 //
 
-import Foundation
 import UIKit
-
 
 class MainScreenView: UIViewController {
     
+    private let mainTableView = UITableView(frame: .zero, style: .grouped)
+//    private let tableCellID = "tableCellID"
+
     override func viewDidLoad() {
-        self.view.backgroundColor = .white
-        
-        configureHeaderViewLayout()
-        configureHorizontalViewLayout()
-        configureVerticalViewLayout()
+        super.viewDidLoad()
+
+        configureTableView()
     }
     
-    // MARK: - Header
-    let header = MainScreenHeaderView()
-    
-    private func configureHeaderViewLayout() {
-        view.addSubview(header)
-        header.toAutoLayout()
-    
-        let constraints = [
-            header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            header.heightAnchor.constraint(equalToConstant: 400),
-            header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            header.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ]
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        NSLayoutConstraint.activate(constraints)
+        configureTableView()
     }
     
-    // MARK: - horizontal scroll
-    
-    private let layout = UICollectionViewFlowLayout()
-    private let collectionCellID = "collectionCellID"
-    private lazy var oneDayWeatherCollection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-    
-    private func configureHorizontalViewLayout(){
-        view.addSubview(oneDayWeatherCollection)
-        oneDayWeatherCollection.toAutoLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = CGFloat.greatestFiniteMagnitude
-        oneDayWeatherCollection.dataSource = self
-        oneDayWeatherCollection.delegate = self
-        oneDayWeatherCollection.register(WeatherHorizontalCell.self, forCellWithReuseIdentifier: collectionCellID)
-        
-        
-        let constraints = [
-            oneDayWeatherCollection.topAnchor.constraint(equalTo: header.bottomAnchor),
-            oneDayWeatherCollection.heightAnchor.constraint(equalToConstant: 200),
-            oneDayWeatherCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            oneDayWeatherCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(constraints)
-    }
-    
-    // MARK: - vertical scroll
-    
-    private let dailyForecastTable = UITableView(frame: .zero, style: .grouped)
-    private let tableCellID = "tableCellID"
-    
-    private func configureVerticalViewLayout(){
-        view.addSubview(dailyForecastTable)
-        dailyForecastTable.backgroundColor = .white
-        dailyForecastTable.toAutoLayout()
-        dailyForecastTable.separatorStyle = .none
-        dailyForecastTable.dataSource = self
-        dailyForecastTable.delegate = self
-        dailyForecastTable.register(WeatherVerticalCell.self, forCellReuseIdentifier: tableCellID)
-        dailyForecastTable.register(MyCustomHeader.self,
+    private func configureTableView(){
+        view.addSubview(mainTableView)
+        mainTableView.backgroundColor = .white
+        mainTableView.toAutoLayout()
+        mainTableView.showsVerticalScrollIndicator = false
+        mainTableView.separatorStyle = .none
+        mainTableView.dataSource = self
+        mainTableView.delegate = self
+        mainTableView.register(DailyWeatherTableCell.self, forCellReuseIdentifier: String(describing: DailyWeatherTableCell.self))
+        mainTableView.register(HourlyWeatherTableCell.self, forCellReuseIdentifier: String(describing: HourlyWeatherTableCell.self))
+        mainTableView.register(MainInfoTableCell.self, forCellReuseIdentifier: String(describing: MainInfoTableCell.self))
+        mainTableView.register(MyCustomHeader.self,
                forHeaderFooterViewReuseIdentifier: "sectionHeader")
         
         let constraints = [
-            dailyForecastTable.topAnchor.constraint(equalTo: oneDayWeatherCollection.bottomAnchor),
-            dailyForecastTable.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            dailyForecastTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            dailyForecastTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            mainTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mainTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            mainTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mainTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ]
         
         NSLayoutConstraint.activate(constraints)
     }
-}
-
-
-// MARK: - CollectionViewDataSource, CollectionViewDelegate
-extension MainScreenView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellID, for: indexPath) as! WeatherHorizontalCell
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 42, height: 83)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return inset
-    }
-    
-    private var inset: CGFloat {return 8}
     
 }
-
 
 extension MainScreenView: UITableViewDelegate, UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 25
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return 1
+        default:
+            return 25
+        }
     }
     
     func tableView(_ tableView: UITableView,
-            viewForHeaderInSection section: Int) -> UIView? {
-       let view = tableView.dequeueReusableHeaderFooterView(withIdentifier:
-                   "sectionHeader") as! MyCustomHeader
-       return view
+                   viewForHeaderInSection section: Int) -> UIView? {
+        switch section {
+        case 1:
+            let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! MyCustomHeader
+            let attributes: [NSAttributedString.Key: Any] = [.underlineStyle: NSUnderlineStyle.single.rawValue]
+            let attributedString = NSMutableAttributedString(
+                string: "Подробнее на 24 часа",
+                attributes: attributes
+            )
+            view.toDetailsButton.setAttributedTitle(attributedString, for: .normal)
+            return view
+        case 2:
+            let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! MyCustomHeader
+            view.titleLabel.text = "Ежедневный прогноз"
+            let attributes: [NSAttributedString.Key: Any] = [.underlineStyle: NSUnderlineStyle.single.rawValue]
+            let attributedString = NSMutableAttributedString(
+                string: "25 дней",
+                attributes: attributes
+            )
+            view.toDetailsButton.setAttributedTitle(attributedString, for: .normal)
+            return view
+        default:
+            return nil
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: tableCellID, for: indexPath) as! WeatherVerticalCell
-        return cell
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MainInfoTableCell.self), for: indexPath) as! MainInfoTableCell
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: HourlyWeatherTableCell.self), for: indexPath) as! HourlyWeatherTableCell
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: DailyWeatherTableCell.self), for: indexPath) as! DailyWeatherTableCell
+            return cell
+        }
     }
     
 }
+
