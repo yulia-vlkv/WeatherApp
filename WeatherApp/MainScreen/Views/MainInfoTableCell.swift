@@ -31,7 +31,7 @@ class MainInfoTableCell:  UITableViewCell {
     @objc private func pageControlDidChange(_ sender: UIPageControl) {
         print("pressed")
         let current = sender.currentPage
-        mainInfoCollection.setContentOffset(CGPoint(x: CGFloat(current) * contentView.frame.size.width,
+        mainInfoCollection.setContentOffset(CGPoint(x: CGFloat(current) * (contentView.frame.size.width - 32),
                                                     y: 0),
                                             animated: true)
     }
