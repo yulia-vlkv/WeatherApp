@@ -70,10 +70,14 @@ class MainScreenView: UIViewController {
     
     @objc private func toOnboarding(){
         print("toOnboarding in pressed")
+        let vc = OnboardingView()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc private func toSettings(){
         print("toSettings in pressed")
+        let vc = SettingsView()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
 }
