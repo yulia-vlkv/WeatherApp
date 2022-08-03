@@ -10,19 +10,15 @@ import UIKit
 class MainScreenView: UIViewController {
     
     private let mainTableView = UITableView(frame: .zero, style: .grouped)
-//    private let tableCellID = "tableCellID"
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configureTableView()
+        configureNavigationBar()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        configureTableView()
-    }
+    // MARK: - Configure TableView
     
     private func configureTableView(){
         view.addSubview(mainTableView)
@@ -48,7 +44,41 @@ class MainScreenView: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
+    // MARK: - move to MainCoordinator
+    private func configureNavigationBar(){
+        
+        navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.backgroundColor = .white
+        navigationItem.title = "Город, страна"
+        navigationController?.navigationBar.tintColor = .black
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "mappin.circle"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action:  #selector(toOnboarding))
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "line.3.horizontal"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action:  #selector(toSettings))
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        navigationController?.navigationBar.scrollEdgeAppearance  = appearance
+        navigationController?.navigationBar.standardAppearance  = appearance
+
+    }
+    
+    @objc private func toOnboarding(){
+        print("toOnboarding in pressed")
+    }
+    
+    @objc private func toSettings(){
+        print("toSettings in pressed")
+    }
+    
 }
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension MainScreenView: UITableViewDelegate, UITableViewDataSource {
     
@@ -95,7 +125,12 @@ extension MainScreenView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        switch section {
+        case 0:
+            return 20
+        default:
+            return 40
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -115,6 +150,5 @@ extension MainScreenView: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
     }
-    
 }
 

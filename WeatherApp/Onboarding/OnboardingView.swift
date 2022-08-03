@@ -10,11 +10,20 @@ import UIKit
 
 class OnboardingView: UIViewController {
     
-    private let backgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = CustomColors.setColor(style: .deepBlue)
-        view.toAutoLayout()
-        return view
+    private let scroll: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.toAutoLayout()
+        scroll.alwaysBounceVertical = true
+        scroll.backgroundColor = CustomColors.setColor(style: .deepBlue)
+        return scroll
+    }()
+    
+    private let contentStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 25
+        stack.toAutoLayout()
+        return stack
     }()
     
     private let weatherGirlImage: UIImageView = {
@@ -69,49 +78,43 @@ class OnboardingView: UIViewController {
     }
     
     override func viewDidLoad() {
-        self.view.backgroundColor = .cyan
         
         configureLayout()
     }
     
+    // MARK: - configureLayout
     
     private func configureLayout(){
         
-        view.addSubview(backgroundView)
-        view.addSubview(weatherGirlImage)
-        view.addSubview(permissionTitleLabel)
-        view.addSubview(permissionCommentLabel)
-        view.addSubview(grantAccessButton)
-        view.addSubview(denyAccessButton)
+        view.addSubview(scroll)
+        scroll.addSubview(contentStack)
+        contentStack.addArrangedSubview(weatherGirlImage)
+        contentStack.addArrangedSubview(permissionTitleLabel)
+        contentStack.addArrangedSubview(permissionCommentLabel)
+        contentStack.addArrangedSubview(grantAccessButton)
+        contentStack.addArrangedSubview(denyAccessButton)
         
         let constraints = [
             
-            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scroll.topAnchor.constraint(equalTo: view.topAnchor),
+            scroll.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scroll.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scroll.widthAnchor.constraint(equalTo: view.widthAnchor),
+            scroll.heightAnchor.constraint(equalTo: view.heightAnchor),
             
-            weatherGirlImage.topAnchor.constraint(equalTo: backgroundView.safeAreaLayoutGuide.topAnchor, constant: 60),
-            weatherGirlImage.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 20),
-            weatherGirlImage.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -20),
-            
-            permissionTitleLabel.topAnchor.constraint(equalTo: weatherGirlImage.bottomAnchor, constant: 30),
-            permissionTitleLabel.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 20),
-            permissionTitleLabel.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -20),
-        
-            permissionCommentLabel.topAnchor.constraint(equalTo: permissionTitleLabel.bottomAnchor, constant: 30),
-            permissionCommentLabel.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 20),
-            permissionCommentLabel.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -20),
-            
-            grantAccessButton.topAnchor.constraint(equalTo: permissionCommentLabel.bottomAnchor, constant: 30),
-            grantAccessButton.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 20),
-            grantAccessButton.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -20),
-            grantAccessButton.heightAnchor.constraint(equalToConstant: 40),
-            
-            denyAccessButton.topAnchor.constraint(equalTo: grantAccessButton.bottomAnchor, constant: 25),
-            denyAccessButton.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -20)
+            contentStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: sideInset),
+            contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant:  -sideInset),
+            contentStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            contentStack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+
         ]
         
         NSLayoutConstraint.activate(constraints)
     }
+    
+    // MARK: - Insets
+    
+    private var sideInset: CGFloat { return 20 }
+    
 }

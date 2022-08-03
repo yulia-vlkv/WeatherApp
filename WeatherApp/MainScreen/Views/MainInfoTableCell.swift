@@ -7,12 +7,13 @@
 
 import UIKit
 
-class MainInfoTableCell:  UITableViewCell {
+class MainInfoTableCell: UITableViewCell {
 
     private let layout = UICollectionViewFlowLayout()
     private let collectionCellID = "CellID"
     
-    private lazy var mainInfoCollection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    private lazy var mainInfoCollection = UICollectionView(frame: .zero,
+                                                           collectionViewLayout: layout)
     
     private lazy var pageControl: UIPageControl = {
         let control = UIPageControl()
@@ -29,7 +30,6 @@ class MainInfoTableCell:  UITableViewCell {
     }()
     
     @objc private func pageControlDidChange(_ sender: UIPageControl) {
-        print("pressed")
         let current = sender.currentPage
         mainInfoCollection.setContentOffset(CGPoint(x: CGFloat(current) * (contentView.frame.size.width - 32),
                                                     y: 0),
@@ -45,9 +45,15 @@ class MainInfoTableCell:  UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
  
         contentView.backgroundColor = .white
+        configureLayout()
+    }
+    
+    // MARK: - Configure Layout
+
+    private func configureLayout(){
         contentView.addSubview(pageControl)
-        
         contentView.addSubview(mainInfoCollection)
+        
         mainInfoCollection.toAutoLayout()
         mainInfoCollection.isPagingEnabled = true
         mainInfoCollection.showsHorizontalScrollIndicator = false
@@ -58,52 +64,61 @@ class MainInfoTableCell:  UITableViewCell {
         mainInfoCollection.register(MainInfoCell.self, forCellWithReuseIdentifier: collectionCellID)
         
         let constraints = [
-            pageControl.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            pageControl.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: topInset),
             pageControl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            mainInfoCollection.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 20),
+            mainInfoCollection.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: topInset * 2),
             mainInfoCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            mainInfoCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            mainInfoCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-//            mainInfoCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-//            mainInfoCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            mainInfoCollection.heightAnchor.constraint(equalToConstant: 212)
+            mainInfoCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: sideInset),
+            mainInfoCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -sideInset),
+            mainInfoCollection.heightAnchor.constraint(equalToConstant: height)
         ]
         
         NSLayoutConstraint.activate(constraints)
     }
-
+    
+    // MARK: - Insets
+    
+    private var minInset: CGFloat { return 0 }
+    
+    private var height: CGFloat { return 212 }
+    
+    private var sideInset: CGFloat { return 16 }
+    
+    private var topInset: CGFloat { return 10 }
+    
 }
 
 
 // MARK: - CollectionViewDataSource, CollectionViewDelegate
-extension MainInfoTableCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
+
+extension MainInfoTableCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let count = 4
-        
         pageControl.numberOfPages = count
-//        pageControl.isHidden = !(count > 1)
-        
         return count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellID, for: indexPath) as! MainInfoCell
         cell.backgroundColor = .white
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: contentView.frame.width - 32, height: 212)
+        return CGSize(width: contentView.frame.width - sideInset * 2, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return inset
+        return minInset
     }
     
-    private var inset: CGFloat {return 0}
+}
+    
+// MARK: - UIScrollViewDelegate
+
+extension MainInfoTableCell: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 

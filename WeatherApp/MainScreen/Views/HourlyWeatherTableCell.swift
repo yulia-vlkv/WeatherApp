@@ -22,6 +22,13 @@ class HourlyWeatherTableCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         contentView.backgroundColor = .clear
+        
+        configureLayout()
+    }
+    
+    // MARK: - Configure Layout
+
+    private func configureLayout(){
         contentView.addSubview(oneDayWeatherCollection)
         oneDayWeatherCollection.toAutoLayout()
         oneDayWeatherCollection.showsHorizontalScrollIndicator = false
@@ -34,18 +41,29 @@ class HourlyWeatherTableCell: UITableViewCell {
         let constraints = [
             oneDayWeatherCollection.topAnchor.constraint(equalTo: contentView.topAnchor),
             oneDayWeatherCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            oneDayWeatherCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            oneDayWeatherCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: sideInset),
             oneDayWeatherCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            oneDayWeatherCollection.heightAnchor.constraint(equalToConstant: 83)
+            oneDayWeatherCollection.heightAnchor.constraint(equalToConstant: height)
         ]
         
         NSLayoutConstraint.activate(constraints)
     }
+    
+    // MARK: - Insets
+    
+    private var height: CGFloat { return 83 }
+    
+    private var width: CGFloat { return 42 }
+    
+    private var sideInset: CGFloat { return 16 }
+    
+    private var inset: CGFloat { return 8 }
 
 }
 
 
 // MARK: - CollectionViewDataSource, CollectionViewDelegate
+
 extension HourlyWeatherTableCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -59,13 +77,11 @@ extension HourlyWeatherTableCell: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 42, height: 83)
+        return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return inset
     }
-    
-    private var inset: CGFloat {return 8}
     
 }

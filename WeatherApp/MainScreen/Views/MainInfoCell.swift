@@ -26,6 +26,8 @@ class MainInfoCell: UICollectionViewCell {
         return stack
     }()
     
+    // MARK: - MainInfo
+    
     private let generalTemperatureLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
@@ -69,6 +71,8 @@ class MainInfoCell: UICollectionViewCell {
         return stack
     }()
     
+    // MARK: - Clouds
+    
     private let cloudsStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -93,6 +97,8 @@ class MainInfoCell: UICollectionViewCell {
         label.toAutoLayout()
         return label
     }()
+    
+    // MARK: - Wind
     
     private let windStack: UIStackView = {
         let stack = UIStackView()
@@ -119,6 +125,8 @@ class MainInfoCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Himodity
+    
     private let humidityStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -144,6 +152,8 @@ class MainInfoCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Date and time
+    
     private let dateLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
@@ -155,6 +165,8 @@ class MainInfoCell: UICollectionViewCell {
         label.toAutoLayout()
         return label
     }()
+    
+    // MARK: - Sunrise
     
     private let sunriseStack: UIStackView = {
         let stack = UIStackView()
@@ -181,6 +193,8 @@ class MainInfoCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Sunset
+    
     private let sunsetStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -206,6 +220,8 @@ class MainInfoCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Semicircle
+    
     private func drawSemicircle() {
         let path = UIBezierPath(arcCenter: CGPoint(x: (contentView.layer.frame.width) / 2, y: (contentView.layer.frame.width) / 2 - 20), radius: (contentView.layer.frame.width / 5) * 2, startAngle: (-CGFloat.pi + 0.2), endAngle: -0.2, clockwise: true)
         let shapeLayer = CAShapeLayer()
@@ -226,6 +242,14 @@ class MainInfoCell: UICollectionViewCell {
         super.init(frame: frame)
 
         contentView.backgroundColor = .clear
+        configureLayout()
+        
+    }
+    
+    // MARK: - Configure Layout
+
+    private func configureLayout(){
+        
         contentView.addSubview(backgroundLabel)
         drawSemicircle()
         backgroundLabel.addSubview(contentStack)
@@ -249,11 +273,9 @@ class MainInfoCell: UICollectionViewCell {
         backgroundLabel.addSubview(sunsetStack)
         sunsetStack.addArrangedSubview(sunsetImage)
         sunsetStack.addArrangedSubview(sunsetLabel)
-
-        
  
         let constraints = [
-            backgroundLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            backgroundLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backgroundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -262,17 +284,20 @@ class MainInfoCell: UICollectionViewCell {
             contentStack.centerYAnchor.constraint(equalTo: backgroundLabel.centerYAnchor),
             contentStack.widthAnchor.constraint(equalToConstant: contentView.frame.width / 3 * 2),
             
-            sunriseStack.bottomAnchor.constraint(equalTo: backgroundLabel.bottomAnchor, constant: -25),
-            sunriseStack.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: inset - 15),
+            sunriseStack.bottomAnchor.constraint(equalTo: backgroundLabel.bottomAnchor, constant: -bottomInset),
+            sunriseStack.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: inset),
             
-            sunsetStack.bottomAnchor.constraint(equalTo: backgroundLabel.bottomAnchor, constant: -25),
-            sunsetStack.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -inset + 15)
+            sunsetStack.bottomAnchor.constraint(equalTo: backgroundLabel.bottomAnchor, constant: -bottomInset),
+            sunsetStack.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -inset)
         ]
         
         NSLayoutConstraint.activate(constraints)
-
     }
     
-    private var inset: CGFloat { return (contentView.layer.frame.width / 10) }
-
+    // MARK: - Insets
+    
+    private var inset: CGFloat { return (contentView.layer.frame.width / 10) - 15 }
+    
+    private var bottomInset: CGFloat { return 25 }
+    
 }

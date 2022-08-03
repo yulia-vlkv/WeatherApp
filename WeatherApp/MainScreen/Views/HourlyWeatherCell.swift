@@ -66,6 +66,13 @@ class HourlyWeatherCell: UICollectionViewCell {
         super.init(frame: frame)
         
         contentView.backgroundColor = .clear
+        
+        configureLayout()
+    }
+    
+    // MARK: - Configure Layout
+
+    private func configureLayout(){
         contentView.addSubview(backgroundLabel)
         backgroundLabel.addSubview(stackView)
         stackView.addArrangedSubview(timeLabel)
@@ -78,13 +85,19 @@ class HourlyWeatherCell: UICollectionViewCell {
             backgroundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backgroundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            stackView.topAnchor.constraint(equalTo: backgroundLabel.topAnchor, constant: 7),
-            stackView.bottomAnchor.constraint(equalTo: backgroundLabel.bottomAnchor, constant: -7),
-            stackView.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: 5),
-            stackView.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -5)
+            stackView.topAnchor.constraint(equalTo: backgroundLabel.topAnchor, constant: topBottomInset),
+            stackView.bottomAnchor.constraint(equalTo: backgroundLabel.bottomAnchor, constant: -topBottomInset),
+            stackView.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: sideInset),
+            stackView.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -sideInset)
         ]
         
         NSLayoutConstraint.activate(constraints)
     }
+    
+    // MARK: - Insets
+    
+    private var sideInset: CGFloat { return 5 }
+    
+    private var topBottomInset: CGFloat { return 7 }
 
 }

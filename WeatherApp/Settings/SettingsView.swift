@@ -17,10 +17,12 @@ class SettingsView: UIViewController {
         return view
     }()
     
+    // MARK: - Top Part
+    
     private let topCloudsStack: UIStackView = {
         let stack = UIStackView()
         stack.toAutoLayout()
-        stack.distribution = .equalSpacing
+        stack.distribution = .fillProportionally
         stack.axis = .vertical
         return stack
     }()
@@ -28,7 +30,6 @@ class SettingsView: UIViewController {
     private let topCloudImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "topCloud")
-        image.contentMode = .scaleAspectFill
         image.contentMode = .left
         image.alpha = 0.3
         image.toAutoLayout()
@@ -38,28 +39,12 @@ class SettingsView: UIViewController {
     private let middleCloudImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "middleCloud")
-        image.contentMode = .scaleAspectFill
         image.contentMode = .right
         image.toAutoLayout()
         return image
     }()
     
-    private let bottomCloudStack: UIStackView = {
-        let stack = UIStackView()
-        stack.toAutoLayout()
-        stack.distribution = .equalSpacing
-        stack.axis = .vertical
-        return stack
-    }()
-    
-    private let bottomCloudImage: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(named: "bottomCloud")
-        image.contentMode = .scaleAspectFit
-        image.contentMode = .center
-        image.toAutoLayout()
-        return image
-    }()
+        // MARK: - Middle Part
     
     private let settingsView: UIView = {
         let view = UIView()
@@ -86,6 +71,8 @@ class SettingsView: UIViewController {
         return stack
     }()
     
+        // MARK: - Temperature
+    
     private let temperatureStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -102,6 +89,8 @@ class SettingsView: UIViewController {
         let segmented = CustomSegmented(items: ["F", "C"])
         return segmented
     }()
+    
+    // MARK: - Wind
     
     private let windSpeedStack: UIStackView = {
         let stack = UIStackView()
@@ -120,6 +109,8 @@ class SettingsView: UIViewController {
         return segmented
     }()
     
+    // MARK: - Time
+    
     private let timeFormatStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -136,6 +127,8 @@ class SettingsView: UIViewController {
         let segmented = CustomSegmented(items: ["12", "24"])
         return segmented
     }()
+    
+    // MARK: - Notifications
 
     private let notificationsStack: UIStackView = {
         let stack = UIStackView()
@@ -154,6 +147,8 @@ class SettingsView: UIViewController {
         return segmented
     }()
     
+    // MARK: - Button
+    
     private let setNewSettingsButton: UIButton = {
         let button = CustomButton(
             text: "Установить",
@@ -163,12 +158,32 @@ class SettingsView: UIViewController {
         return button
     }()
     
+    // MARK: - Bottom Part
+    
+    private let bottomCloudStack: UIStackView = {
+        let stack = UIStackView()
+        stack.toAutoLayout()
+        stack.distribution = .equalSpacing
+        stack.axis = .vertical
+        return stack
+    }()
+    
+    private let bottomCloudImage: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "bottomCloud")
+        image.contentMode = .scaleAspectFit
+        image.contentMode = .center
+        image.toAutoLayout()
+        return image
+    }()
+    
     override func viewDidLoad() {
         self.view.backgroundColor = .cyan
         
         configureLayout()
     }
     
+    // MARK: - configureLayout
     
     private func configureLayout(){
         
@@ -205,25 +220,25 @@ class SettingsView: UIViewController {
             topCloudsStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             topCloudsStack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topCloudsStack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topCloudsStack.bottomAnchor.constraint(equalTo: settingsView.topAnchor, constant: -25),
+            topCloudsStack.bottomAnchor.constraint(equalTo: settingsView.topAnchor, constant: -topInset),
             
             settingsView.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
             settingsView.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
-            settingsView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 30),
-            settingsView.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -30),
-            settingsView.heightAnchor.constraint(equalToConstant: 330),
+            settingsView.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: bigInset),
+            settingsView.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -bigInset),
+            settingsView.heightAnchor.constraint(equalToConstant: height),
             
-            settingsTitleLabel.topAnchor.constraint(equalTo: settingsView.topAnchor, constant: 20),
-            settingsTitleLabel.leadingAnchor.constraint(equalTo: settingsView.leadingAnchor, constant: 20),
+            settingsTitleLabel.topAnchor.constraint(equalTo: settingsView.topAnchor, constant: regularInset),
+            settingsTitleLabel.leadingAnchor.constraint(equalTo: settingsView.leadingAnchor, constant: regularInset),
             
-            settingsSegmentedStackView.topAnchor.constraint(equalTo: settingsTitleLabel.bottomAnchor, constant: 20),
-            settingsSegmentedStackView.leadingAnchor.constraint(equalTo: settingsView.leadingAnchor, constant: 20),
-            settingsSegmentedStackView.trailingAnchor.constraint(equalTo: settingsView.trailingAnchor, constant: -20),
-            settingsSegmentedStackView.bottomAnchor.constraint(equalTo: setNewSettingsButton.topAnchor, constant: -30),
+            settingsSegmentedStackView.topAnchor.constraint(equalTo: settingsTitleLabel.bottomAnchor, constant: regularInset),
+            settingsSegmentedStackView.leadingAnchor.constraint(equalTo: settingsView.leadingAnchor, constant: regularInset),
+            settingsSegmentedStackView.trailingAnchor.constraint(equalTo: settingsView.trailingAnchor, constant: -regularInset),
+            settingsSegmentedStackView.bottomAnchor.constraint(equalTo: setNewSettingsButton.topAnchor, constant: -bigInset),
             
-            setNewSettingsButton.bottomAnchor.constraint(equalTo: settingsView.bottomAnchor, constant: -16),
-            setNewSettingsButton.leadingAnchor.constraint(equalTo: settingsView.leadingAnchor, constant: 35),
-            setNewSettingsButton.trailingAnchor.constraint(equalTo: settingsView.trailingAnchor, constant: -35),
+            setNewSettingsButton.bottomAnchor.constraint(equalTo: settingsView.bottomAnchor, constant: -bottomButtonInset),
+            setNewSettingsButton.leadingAnchor.constraint(equalTo: settingsView.leadingAnchor, constant: buttonInset),
+            setNewSettingsButton.trailingAnchor.constraint(equalTo: settingsView.trailingAnchor, constant: -buttonInset),
 
             bottomCloudStack.topAnchor.constraint(equalTo: settingsView.bottomAnchor),
             bottomCloudStack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -234,4 +249,18 @@ class SettingsView: UIViewController {
         
         NSLayoutConstraint.activate(constraints)
     }
+    
+    // MARK: - Insets
+    
+    private var regularInset: CGFloat { return 20 }
+    
+    private var bigInset: CGFloat { return 20 }
+    
+    private var buttonInset: CGFloat { return 35 }
+    
+    private var bottomButtonInset: CGFloat { return 16 }
+    
+    private var topInset: CGFloat { return 25 }
+    
+    private var height: CGFloat { return 330 }
 }

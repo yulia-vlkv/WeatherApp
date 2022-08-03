@@ -26,6 +26,8 @@ class DailyWeatherTableCell: UITableViewCell {
         return label
     }()
     
+    // MARK: - Left content
+    
     private let leftStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -71,6 +73,8 @@ class DailyWeatherTableCell: UITableViewCell {
         return label
     }()
     
+    // MARK: - Middle content
+    
     private let detailsLabel: UILabel = {
         let label = UILabel()
         label.text = "Облачно, солнечно и дождливо"
@@ -81,6 +85,8 @@ class DailyWeatherTableCell: UITableViewCell {
         label.toAutoLayout()
         return label
     }()
+    
+    // MARK: - Right content
     
     private let rightStackView: UIStackView = {
         let stack = UIStackView()
@@ -104,7 +110,6 @@ class DailyWeatherTableCell: UITableViewCell {
     private let rightChevronLabel: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "chevron.right"))
         image.tintColor = .black
-//        image.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         image.contentMode = .scaleAspectFit
         image.toAutoLayout()
         return image
@@ -120,6 +125,12 @@ class DailyWeatherTableCell: UITableViewCell {
         
         contentView.backgroundColor = .clear
         
+        configureLayout()
+    }
+    
+    // MARK: - Configure Layout
+
+    private func configureLayout(){
         contentView.addSubview(backgroundLabel)
         backgroundLabel.addSubview(frameLabel)
         frameLabel.addSubview(leftStackView)
@@ -137,26 +148,38 @@ class DailyWeatherTableCell: UITableViewCell {
             backgroundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backgroundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            backgroundLabel.heightAnchor.constraint(equalToConstant: 66),
+            backgroundLabel.heightAnchor.constraint(equalToConstant: backgroundHeight),
             
             frameLabel.topAnchor.constraint(equalTo: backgroundLabel.topAnchor),
-            frameLabel.heightAnchor.constraint(equalToConstant: 56),
-            frameLabel.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: 16),
-            frameLabel.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -16),
+            frameLabel.heightAnchor.constraint(equalToConstant: labelHeight),
+            frameLabel.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: sideInset),
+            frameLabel.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -sideInset),
             
-            leftStackView.topAnchor.constraint(equalTo: frameLabel.topAnchor, constant: 6),
-            leftStackView.bottomAnchor.constraint(equalTo: frameLabel.bottomAnchor, constant: -6),
-            leftStackView.leadingAnchor.constraint(equalTo: frameLabel.leadingAnchor, constant: 10),
+            leftStackView.centerYAnchor.constraint(equalTo: frameLabel.centerYAnchor),
+            leftStackView.leadingAnchor.constraint(equalTo: frameLabel.leadingAnchor, constant: smallSideInset),
             
             detailsLabel.centerYAnchor.constraint(equalTo: frameLabel.centerYAnchor),
-            detailsLabel.leadingAnchor.constraint(equalTo: leftStackView.trailingAnchor, constant: 13),
-            detailsLabel.trailingAnchor.constraint(equalTo: rightStackView.leadingAnchor, constant: -13),
+            detailsLabel.leadingAnchor.constraint(equalTo: leftStackView.trailingAnchor, constant: regularSideInset),
+            detailsLabel.trailingAnchor.constraint(equalTo: rightStackView.leadingAnchor, constant: -regularSideInset),
             
             rightStackView.centerYAnchor.constraint(equalTo: frameLabel.centerYAnchor),
-            rightStackView.trailingAnchor.constraint(equalTo: frameLabel.trailingAnchor, constant: -10),
+            rightStackView.trailingAnchor.constraint(equalTo: frameLabel.trailingAnchor, constant: -smallSideInset),
         ]
         
         NSLayoutConstraint.activate(constraints)
     }
+    
+    // MARK: - Insets
+    
+    private var backgroundHeight: CGFloat { return 66 }
+    
+    private var labelHeight: CGFloat { return 56 }
+    
+    private var sideInset: CGFloat { return 16 }
+    
+    private var regularSideInset: CGFloat { return 13 }
+    
+    private var smallSideInset: CGFloat { return 10 }
+    
 
 }

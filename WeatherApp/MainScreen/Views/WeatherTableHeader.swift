@@ -42,20 +42,23 @@ class MyCustomHeader: UITableViewHeaderFooterView {
     }
     
     func configureContents() {
+        
         contentView.backgroundColor = .white
         
         contentView.addSubview(titleLabel)
         contentView.addSubview(toDetailsButton)
 
         let constraints = [
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: sideInset),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
-            toDetailsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            toDetailsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -sideInset),
             toDetailsButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ]
         
         NSLayoutConstraint.activate(constraints)
     }
+    
+    private var sideInset: CGFloat { return 16 }
 
 }
