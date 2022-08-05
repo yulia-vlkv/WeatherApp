@@ -54,6 +54,7 @@ class OnboardingView: UIViewController {
         let button = CustomButton(
             text: OnboardingText.addText(text: .onBoardingGrantAccessButton),
             buttonAction: {
+                Location().checkUserLocationPermissions()
                 print("button is tapped")
             })
         return button

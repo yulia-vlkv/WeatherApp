@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        window?.makeKeyAndVisible()
         
         
-        let vc = MainScreenView()
+        let vc = OnboardingView()
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = UINavigationController(rootViewController: vc)
         window?.makeKeyAndVisible()

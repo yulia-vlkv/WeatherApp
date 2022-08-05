@@ -13,6 +13,8 @@ class MainScreenView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        ForecastService().currentWeatherRequest()
 
         configureTableView()
         configureNavigationBar()
@@ -69,6 +71,8 @@ class MainScreenView: UIViewController {
     }
     
     @objc private func toOnboarding(){
+        
+        // Add Alert to add now location
         print("toOnboarding in pressed")
         let vc = OnboardingView()
         navigationController?.pushViewController(vc, animated: true)
