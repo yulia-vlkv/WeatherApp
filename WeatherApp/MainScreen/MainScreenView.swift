@@ -15,6 +15,7 @@ class MainScreenView: UIViewController {
         super.viewDidLoad()
         
         ForecastService().currentWeatherRequest()
+        ForecastService().hourlyWeatherRequest()
 
         configureTableView()
         configureNavigationBar()
@@ -81,6 +82,7 @@ class MainScreenView: UIViewController {
     @objc private func toSettings(){
         print("toSettings in pressed")
         let vc = SettingsView()
+        vc.configure(with: SettingsViewModel())
         navigationController?.pushViewController(vc, animated: true)
     }
     

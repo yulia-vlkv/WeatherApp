@@ -8,7 +8,10 @@
 import Foundation
 import UIKit
 
+
 class SettingsView: UIViewController {
+    
+    private let viewModel = SettingsViewModel()
     
     private let backgroundView: UIView = {
         let view = UIView()
@@ -71,83 +74,10 @@ class SettingsView: UIViewController {
         return stack
     }()
     
-        // MARK: - Temperature
-    
-    private let temperatureStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.distribution = .equalSpacing
-        return stack
-    }()
-    
-    private let temperatureLabel: UILabel = {
-        let label = CustomSegmentedLabel(text: "Температура")
-        return label
-    }()
-
-    private let temperatureSegmented: UISegmentedControl = {
-        let segmented = CustomSegmented(items: ["F", "C"])
-        return segmented
-    }()
-    
-    // MARK: - Wind
-    
-    private let windSpeedStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.distribution = .equalSpacing
-        return stack
-    }()
-
-    private let windSpeedLabel: UILabel = {
-        let label = CustomSegmentedLabel(text: "Скорость ветра")
-        return label
-    }()
-    
-    private let windSpeedSegmented: UISegmentedControl = {
-        let segmented = CustomSegmented(items: ["Mi", "Km"])
-        return segmented
-    }()
-    
-    // MARK: - Time
-    
-    private let timeFormatStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.distribution = .equalSpacing
-        return stack
-    }()
-
-    private let timeFormatLabel: UILabel = {
-        let label = CustomSegmentedLabel(text: "Формат времени")
-        return label
-    }()
-
-    private let timeFormatSegmented: UISegmentedControl = {
-        let segmented = CustomSegmented(items: ["12", "24"])
-        return segmented
-    }()
-    
-    // MARK: - Notifications
-
-    private let notificationsStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.distribution = .equalSpacing
-        return stack
-    }()
-    
-    private let notificationsLabel: UILabel = {
-        let label = CustomSegmentedLabel(text: "Уведомления")
-        return label
-    }()
-
-    private let notificationsSegmented: UISegmentedControl = {
-        let segmented = CustomSegmented(items: ["On", "Off"])
-        return segmented
-    }()
-    
-    // MARK: - Button
+    private let temperatureOptionView = SettingsOptionView()
+    private let windSpeedOptionView = SettingsOptionView()
+    private let timeFormateOptionView = SettingsOptionView()
+    private let notificationsOptionView = SettingsOptionView()
     
     private let setNewSettingsButton: UIButton = {
         let button = CustomButton(
@@ -194,18 +124,10 @@ class SettingsView: UIViewController {
         view.addSubview(settingsView)
         settingsView.addSubview(settingsTitleLabel)
         settingsView.addSubview(settingsSegmentedStackView)
-        settingsSegmentedStackView.addArrangedSubview(temperatureStack)
-        temperatureStack.addArrangedSubview(temperatureLabel)
-        temperatureStack.addArrangedSubview(temperatureSegmented)
-        settingsSegmentedStackView.addArrangedSubview(windSpeedStack)
-        windSpeedStack.addArrangedSubview(windSpeedLabel)
-        windSpeedStack.addArrangedSubview(windSpeedSegmented)
-        settingsSegmentedStackView.addArrangedSubview(timeFormatStack)
-        timeFormatStack.addArrangedSubview(timeFormatLabel)
-        timeFormatStack.addArrangedSubview(timeFormatSegmented)
-        settingsSegmentedStackView.addArrangedSubview(notificationsStack)
-        notificationsStack.addArrangedSubview(notificationsLabel)
-        notificationsStack.addArrangedSubview(notificationsSegmented)
+        settingsSegmentedStackView.addArrangedSubview(temperatureOptionView)
+        settingsSegmentedStackView.addArrangedSubview(windSpeedOptionView)
+        settingsSegmentedStackView.addArrangedSubview(timeFormateOptionView)
+        settingsSegmentedStackView.addArrangedSubview(notificationsOptionView)
         settingsView.addSubview(setNewSettingsButton)
         view.addSubview(bottomCloudStack)
         bottomCloudStack.addArrangedSubview(bottomCloudImage)
@@ -263,4 +185,16 @@ class SettingsView: UIViewController {
     private var topInset: CGFloat { return 25 }
     
     private var height: CGFloat { return 330 }
+}
+
+// MARK: - Configure SettingsOptionView
+
+extension SettingsView: ConfigurableView {
+    
+    func configure(with model: SettingsViewModel) {
+        temperatureOptionView.configure(with: model.temperatureOption)
+        windSpeedOptionView.configure(with: model.windSpeedOption)
+        timeFormateOptionView.configure(with: model.timeFormatOption)
+        notificationsOptionView.configure(with: model.notificationsOption)
+    }
 }

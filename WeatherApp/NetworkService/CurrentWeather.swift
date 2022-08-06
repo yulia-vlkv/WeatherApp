@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct WeatherResponse: Codable {
+struct CurrentWeatherResponse: Codable {
     var data: [CurrentWeather]
 }
 
@@ -26,6 +26,7 @@ struct CurrentWeather: Codable {
     var sunrise: String
     var sunset: String
     var date: String
+    var description: Icon
 //    // Время указывает не текущее время, а время прогноза. Нужно для отражения погоды каждые 3 часа
 //    var time: String
 //    var icon: String
@@ -61,6 +62,7 @@ struct CurrentWeather: Codable {
         case sunrise
         case sunset 
         case date = "datetime"
+        case description = "weather"
     }
     
     init(from decoder: Decoder) throws {
@@ -73,6 +75,12 @@ struct CurrentWeather: Codable {
         sunrise = try container.decode(String.self, forKey: .sunrise)
         sunset = try container.decode(String.self, forKey: .sunset)
         date = try container.decode(String.self, forKey: .date)
+        description = try container.decode(Icon.self, forKey: .description)
     }
+    
 }
+
+
+
+
 
