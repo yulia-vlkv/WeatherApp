@@ -1,5 +1,5 @@
 //
-//  Location.swift
+//  LocationService.swift
 //  WeatherApp
 //
 //  Created by Iuliia Volkova on 05.08.2022.

@@ -35,9 +35,9 @@ class ForecastService {
 //    public var hourlyWeather: [HourlyWeather]?
 //    public var dailyWeather: [DailyWeather]?
     
-    lazy var coordinates = LocationService().currentLocation
-    lazy var lon = coordinates?.longitude
-    lazy var lat = coordinates?.latitude
+//    lazy var coordinates = LocationService().currentLocation
+//    lazy var lon = coordinates?.longitude
+//    lazy var lat = coordinates?.latitude
     
     private let baseURL = "https://weatherbit-v1-mashape.p.rapidapi.com"
     

@@ -16,12 +16,9 @@ class OnboardingCoordinator: Coordinator {
     
     func start() {}
 
-    func startPush() -> UINavigationController {
-        
-        let onboardingController = OnboardingView()
-
-        navigationController.setViewControllers([onboardingController], animated: false)
-
-        return navigationController
-    }
+//    func startPush() -> UINavigationController {
+//        let onboardingController = OnboardingView()
+//        navigationController.setViewControllers([onboardingController], animated: false)
+//        return navigationController
+//    }
 }

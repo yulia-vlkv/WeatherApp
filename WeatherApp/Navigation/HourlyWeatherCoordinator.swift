@@ -16,13 +16,13 @@ class HourlyWeatherCoordinator: Coordinator {
     
     func start() {}
 
-    func startPush() -> UINavigationController {
-        
-        let hourlyWeatherController = HourlyWeatherView()
-
-        navigationController.setViewControllers([hourlyWeatherController], animated: false)
-
-        return navigationController
-    }
+//    func startPush() -> UINavigationController {
+//        
+//        let hourlyWeatherController = HourlyWeatherView()
+//
+//        navigationController.setViewControllers([hourlyWeatherController], animated: false)
+//
+//        return navigationController
+//    }
 }
 
