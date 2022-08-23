@@ -24,12 +24,29 @@ struct MainInfoCellModel {
     
     init(with currentWeather: CurrentWeather, dailyWeather: DailyWeather, currentDate: Date) {
         
-        self.currentTemperature = String(currentWeather.currentTemperature)
-        self.lowestTemperature = String(dailyWeather.lowestTemperature)
-        self.highestTemperature = String(dailyWeather.highestTemperature)
+        self.currentTemperature = {
+            let tempInCelsius = currentWeather.currentTemperature
+            return convertTemperature(tempInCelsius: tempInCelsius)
+        }()
+        
+        self.lowestTemperature = {
+            let tempInCelsius = dailyWeather.lowestTemperature
+            return convertTemperature(tempInCelsius: tempInCelsius)
+        }()
+        
+        self.highestTemperature = {
+            let tempInCelsius = dailyWeather.highestTemperature
+            return convertTemperature(tempInCelsius: tempInCelsius)
+        }()
+        
         self.verbalDescription = currentWeather.description.verbalDesctiption
         self.clouds = String(Int(currentWeather.clouds))
-        self.windSpeed = String(Int(currentWeather.windSpeed))
+        
+        self.windSpeed = {
+            let speedInMetric = currentWeather.windSpeed
+            return convertSpeed(speedInMetric: speedInMetric)
+        }()
+        
         self.humidity = String(Int(currentWeather.humidity))
         self.sunriseTime = currentWeather.sunrise
         self.sunsetTime = currentWeather.sunset
@@ -52,5 +69,25 @@ struct MainInfoCellModel {
             let result = dateFormatter.string(from: date)
             return result.lowercased()
         }()
+    }
+}
+
+public func convertTemperature(tempInCelsius: Float) -> String {
+    let currentSettings = SettingsModel.shared.temperatureSettings
+    if currentSettings == .celsius {
+            return String(Int(tempInCelsius.rounded()))
+        } else {
+            let fahrenheit =  tempInCelsius * 1.8 + 32
+            return String(Int(fahrenheit.rounded()))
+        }
+}
+
+public func convertSpeed(speedInMetric: Float) -> String {
+    let currentSettings = SettingsModel.shared.windSpeedSettingss
+    if currentSettings == .metric {
+        return "\(Int((speedInMetric * 3600).rounded())) км/ч"
+    } else {
+        let milesPerHour =  Int((speedInMetric * 2.236942).rounded())
+        return "\(milesPerHour) mph"
     }
 }

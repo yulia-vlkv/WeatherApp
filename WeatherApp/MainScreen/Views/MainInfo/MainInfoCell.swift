@@ -20,9 +20,9 @@ extension MainInfoCell: ConfigurableView {
         
         commentLabel.text = model.verbalDescription
         
-        cloudsLabel.text = model.clouds
+        cloudsLabel.text = "\(model.clouds)%"
         
-        windLabel.text = "\(model.windSpeed) м/с"
+        windLabel.text = model.windSpeed
         
         humidityLabel.text = "\(model.humidity)%"
         
