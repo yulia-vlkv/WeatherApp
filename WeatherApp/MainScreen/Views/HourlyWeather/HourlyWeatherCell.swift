@@ -7,14 +7,26 @@
 
 import UIKit
 
+extension HourlyWeatherCell: ConfigurableView {
+    
+    typealias Model = HourlyWeatherCellModel
+    
+    func configure(with model: Model) {
+        timeLabel.text = model.time
+        weatherImage.image = model.icon
+        temperatureLabel.text = "\(model.temperature)°"
+    }
+    
+}
+
 class HourlyWeatherCell: UICollectionViewCell {
     
     private let backgroundLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .clear
-        label.layer.cornerRadius = 22
+        label.backgroundColor = CustomColors.setColor(style: .lightBlue)
+        label.layer.cornerRadius = 8
         label.layer.masksToBounds = true
-        label.layer.borderColor = CustomColors.setColor(style: .lightBlue).cgColor
+        label.layer.borderColor = CustomColors.setColor(style: .deepBlue).cgColor
         label.layer.borderWidth = 0.6
         label.toAutoLayout()
         return label
@@ -31,7 +43,7 @@ class HourlyWeatherCell: UICollectionViewCell {
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
-        label.text = "12.00"
+//        label.text = "12.00"
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.textColor = .gray
@@ -40,7 +52,7 @@ class HourlyWeatherCell: UICollectionViewCell {
     }()
     
     private let weatherImage: UIImageView = {
-        let image = UIImageView(image: UIImage(systemName: "sun.max"))
+        let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.toAutoLayout()
         return image
@@ -50,7 +62,7 @@ class HourlyWeatherCell: UICollectionViewCell {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .center
-        label.text = "24°"
+//        label.text = "24°"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = .black
         label.toAutoLayout()

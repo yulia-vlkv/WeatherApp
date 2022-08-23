@@ -7,6 +7,33 @@
 
 import UIKit
 
+
+extension MainInfoCell: ConfigurableView {
+    
+    typealias Model = MainInfoCellModel
+    
+    public func configure(with model: Model) {
+        
+        generalTemperatureLabel.text = "\(model.highestTemperature)°/\(model.lowestTemperature)°"
+        
+        currentTemperatureLabel.text = "\(model.currentTemperature)°"
+        
+        commentLabel.text = model.verbalDescription
+        
+        cloudsLabel.text = model.clouds
+        
+        windLabel.text = "\(model.windSpeed) м/с"
+        
+        humidityLabel.text = "\(model.humidity)%"
+        
+        sunsetLabel.text = model.sunsetTime
+        
+        sunriseLabel.text = model.sunriseTime
+        
+        dateLabel.text = "\(model.dateTime), \(model.dayOfWeek)"
+    }
+}
+
 class MainInfoCell: UICollectionViewCell {
     
     private let backgroundLabel: UILabel = {
@@ -32,7 +59,6 @@ class MainInfoCell: UICollectionViewCell {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .center
-        label.text = "7°/13°"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = .white
         label.toAutoLayout()
@@ -43,7 +69,6 @@ class MainInfoCell: UICollectionViewCell {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .center
-        label.text = "13°"
         label.font = UIFont.systemFont(ofSize: 36, weight: .medium)
         label.textColor = .white
         label.toAutoLayout()
@@ -55,7 +80,6 @@ class MainInfoCell: UICollectionViewCell {
         label.backgroundColor = .clear
         label.textAlignment = .center
         label.numberOfLines = 1
-        label.text = "Возможен небольшой дождь"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = .white
         label.toAutoLayout()
@@ -83,6 +107,7 @@ class MainInfoCell: UICollectionViewCell {
     
     private let cloudsImage: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "cloud"))
+        image.tintColor = .white
         image.contentMode = .scaleAspectFill
         image.toAutoLayout()
         return image
@@ -90,7 +115,6 @@ class MainInfoCell: UICollectionViewCell {
     
     private let cloudsLabel: UILabel = {
         let label = UILabel()
-        label.text = "0"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 11, weight: .regular)
         label.textAlignment = .center
@@ -110,6 +134,7 @@ class MainInfoCell: UICollectionViewCell {
     
     private let windImage: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "wind"))
+        image.tintColor = .white
         image.contentMode = .scaleAspectFill
         image.toAutoLayout()
         return image
@@ -117,7 +142,6 @@ class MainInfoCell: UICollectionViewCell {
     
     private let windLabel: UILabel = {
         let label = UILabel()
-        label.text = "3 м/с"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 11, weight: .regular)
         label.textAlignment = .center
@@ -137,6 +161,7 @@ class MainInfoCell: UICollectionViewCell {
     
     private let humidityImage: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "humidity"))
+        image.tintColor = .white
         image.contentMode = .scaleAspectFill
         image.toAutoLayout()
         return image
@@ -144,7 +169,6 @@ class MainInfoCell: UICollectionViewCell {
     
     private let humidityLabel: UILabel = {
         let label = UILabel()
-        label.text = "75%"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 11, weight: .regular)
         label.textAlignment = .center
@@ -159,7 +183,6 @@ class MainInfoCell: UICollectionViewCell {
         label.backgroundColor = .clear
         label.textAlignment = .center
         label.numberOfLines = 1
-        label.text = "17:48,  пт 16 апреля"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = CustomColors.setColor(style: .brightYellow)
         label.toAutoLayout()
@@ -178,6 +201,7 @@ class MainInfoCell: UICollectionViewCell {
     
     private let sunriseImage: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "sunrise"))
+        image.tintColor = .white
         image.contentMode = .scaleAspectFit
         image.toAutoLayout()
         return image
@@ -185,7 +209,6 @@ class MainInfoCell: UICollectionViewCell {
     
     private let sunriseLabel: UILabel = {
         let label = UILabel()
-        label.text = "05:41"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.textAlignment = .center
@@ -205,6 +228,7 @@ class MainInfoCell: UICollectionViewCell {
     
     private let sunsetImage: UIImageView = {
         let image = UIImageView(image: UIImage(systemName: "sunset"))
+        image.tintColor = .white
         image.contentMode = .scaleAspectFit
         image.toAutoLayout()
         return image
@@ -212,7 +236,6 @@ class MainInfoCell: UICollectionViewCell {
     
     private let sunsetLabel: UILabel = {
         let label = UILabel()
-        label.text = "19:31"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.textAlignment = .center
@@ -301,3 +324,4 @@ class MainInfoCell: UICollectionViewCell {
     private var bottomInset: CGFloat { return 25 }
     
 }
+

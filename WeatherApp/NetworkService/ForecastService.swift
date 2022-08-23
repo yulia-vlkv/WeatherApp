@@ -6,25 +6,144 @@
 //
 
 import Foundation
+import MapKit
 import Alamofire
 
-class ForecastService {
-        
-    let forecastAPIKey = "0000000"
-
-    let forecastBaseURL: String = "https://api.openweathermap.org/data/3.0/onecall?"
-    let latitude: Double = 44.8125
-    let longitude: Double = 20.4612
-    let exclude: String = "hourly,daily"
+enum ForecastServiceError: Error {
     
-    func getCurrentWeather(latitude: Double, longitude: Double, completion: @escaping (CurrentWeather?) -> Void) {
-        if let forecastURL = URL(string: "\(forecastBaseURL)/lat=\(latitude)&lon=\(longitude)&exclude=\(exclude)&appid=\(forecastAPIKey)") {
-            
-            AF.request(forecastURL).responseJSON(completionHandler: { (response) in
-                print(response)
+    case noData
+    case unknown(Error)
+}
+
+struct ForecastWeatherReqObj {
+    
+    enum Units: String {
+        
+        case metric
+    }
+    
+    let longitude: Double
+    let latitude: Double
+    let units: Units
+    let lang: String = "ru"
+    let hours: String = "24"
+}
+
+class ForecastService {
+    
+//    public var currentWeather: CurrentWeather?
+//    public var hourlyWeather: [HourlyWeather]?
+//    public var dailyWeather: [DailyWeather]?
+    
+    lazy var coordinates = LocationService().currentLocation
+    lazy var lon = coordinates?.longitude
+    lazy var lat = coordinates?.latitude
+    
+    private let baseURL = "https://weatherbit-v1-mashape.p.rapidapi.com"
+    
+    private var apiKey: String {
+      get {
+        guard let filePath = Bundle.main.path(forResource: "Keys", ofType: "plist") else {
+          fatalError("Couldn't find file 'Keys.plist'.")
+        }
+        let plist = NSDictionary(contentsOfFile: filePath)
+        guard let value = plist?.object(forKey: "weatherApiKey") as? String else {
+          fatalError("Couldn't find key 'weatherApiKey' in 'Keys.plist'.")
+        }
+        return value
+      }
+    }
+    
+    func getCurrentWeather(
+        with parameters: ForecastWeatherReqObj,
+        completion: @escaping (Result<CurrentWeather, ForecastServiceError>) -> Void
+    ) {
+        let url: String = "\(baseURL)/current/"
+        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
+        let parameters = [  "lon" : String(parameters.longitude),
+                            "lat" : String(parameters.latitude),
+                          "units" : parameters.units.rawValue,
+                           "lang" : parameters.lang ]
+        
+        AF.request(url,
+                   method: .get,
+                   parameters: parameters,
+                   headers: header
+        ).responseDecodable(of: CurrentWeatherResponse.self){ (response) in
+            switch response.result {
+            case .success(let weather):
+                guard let currentWeather = weather.data.first else {
+                    completion(.failure(ForecastServiceError.noData))
+                    return
+                }
+                completion(.success(currentWeather))
+            case .failure(let error):
+                print("Probably ran out of free api requests")
+                completion(.failure(ForecastServiceError.unknown(error)))
             }
-                                                 
-            )
         }
     }
+    
+    func getHourlyWeather(
+        with parameters: ForecastWeatherReqObj,
+        completion: @escaping (Result<[HourlyWeather], ForecastServiceError>) -> Void
+    ) {
+        let url: String = "\(baseURL)/forecast/hourly/"
+        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
+        let parameters = [  "lon" : String(parameters.longitude),
+                            "lat" : String(parameters.latitude),
+                          "units" : parameters.units.rawValue,
+                           "lang" : parameters.lang,
+                           "hours": parameters.hours ]
+        
+        AF.request(url,
+                   method: .get,
+                   parameters: parameters,
+                   headers: header
+        ).responseDecodable(of: HourlyWeatherResponse.self){ (response) in
+            switch response.result {
+            case .success(let weather):
+                let hourlyWeather = weather.data
+                guard hourlyWeather != nil else {
+                    completion(.failure(ForecastServiceError.noData))
+                    return
+                }
+                completion(.success(hourlyWeather))
+            case .failure(let error):
+                completion(.failure(ForecastServiceError.unknown(error)))
+            }
+        }
+    }
+
+    
+    func getDailyWeather(
+        with parameters: ForecastWeatherReqObj,
+        completion: @escaping (Result<[DailyWeather], ForecastServiceError>) -> Void
+    ) {
+        let url: String = "\(baseURL)/forecast/daily/"
+        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
+        let parameters = [  "lon" : String(parameters.longitude),
+                            "lat" : String(parameters.latitude),
+                          "units" : parameters.units.rawValue,
+                           "lang" : parameters.lang ]
+        
+        AF.request(url,
+                   method: .get,
+                   parameters: parameters,
+                   headers: header
+        ).responseDecodable(of: DailyWeatherResponse.self){ (response) in
+            switch response.result {
+            case .success(let weather):
+                let dailyWeather = weather.data
+                guard dailyWeather != nil else {
+                    completion(.failure(ForecastServiceError.noData))
+                    return
+                }
+                completion(.success(dailyWeather))
+            case .failure(let error):
+                completion(.failure(ForecastServiceError.unknown(error)))
+            }
+        }
+    }
+
 }

@@ -7,7 +7,16 @@
 
 import UIKit
 
-class MyCustomHeader: UITableViewHeaderFooterView {
+
+struct WeatherTableHeaderModel {
+    
+    let titleText: String?
+    let buttonText: String
+    
+}
+
+
+class WeatherTableHeader: UITableViewHeaderFooterView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -61,4 +70,18 @@ class MyCustomHeader: UITableViewHeaderFooterView {
     
     private var sideInset: CGFloat { return 16 }
 
+}
+
+extension WeatherTableHeader: ConfigurableView {
+    
+    func configure(with model: WeatherTableHeaderModel) {
+        let attributes: [NSAttributedString.Key: Any] = [.underlineStyle: NSUnderlineStyle.single.rawValue]
+                    let attributedString = NSMutableAttributedString(
+                        string: model.buttonText,
+                        attributes: attributes
+                    )
+                    toDetailsButton.setAttributedTitle(attributedString, for: .normal)
+        
+        titleLabel.text = model.titleText
+    }
 }

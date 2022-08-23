@@ -9,6 +9,8 @@ import UIKit
 
 class MainInfoTableCell: UITableViewCell {
 
+    private var cells: [MainInfoCellModel] = []
+    
     private let layout = UICollectionViewFlowLayout()
     private let collectionCellID = "CellID"
     
@@ -95,13 +97,17 @@ class MainInfoTableCell: UITableViewCell {
 extension MainInfoTableCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let count = 4
+        let count = cells.count
         pageControl.numberOfPages = count
         return count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellID, for: indexPath) as! MainInfoCell
+        if indexPath.item < cells.count {
+            let model = cells[indexPath.item]
+            cell.configure(with: model)
+        }
         cell.backgroundColor = .white
         return cell
     }
@@ -138,3 +144,10 @@ extension MainInfoTableCell: UIScrollViewDelegate {
    }
 }
 
+extension MainInfoTableCell: ConfigurableView {
+    
+    func configure(with model: MainInfoTableCellModel) {
+        self.cells = model.cells
+        self.mainInfoCollection.reloadData()
+    }
+}

@@ -7,18 +7,30 @@
 
 import UIKit
 
+extension MainScreenView: ConfigurableView {
+    
+    func configure(with model: MainScreenViewModel) {
+        navigationItem.title = model.city
+        
+        mainTableView.reloadData()
+    }
+}
+
 class MainScreenView: UIViewController {
+    
+    private var cells: [DailyWeatherTableCellModel] = []
+    
+    lazy var model = MainScreenViewModel(view: self)
     
     private let mainTableView = UITableView(frame: .zero, style: .grouped)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        ForecastService().currentWeatherRequest()
-        ForecastService().hourlyWeatherRequest()
 
         configureTableView()
         configureNavigationBar()
+        
+        model.fetchData()
     }
     
     // MARK: - Configure TableView
@@ -34,7 +46,7 @@ class MainScreenView: UIViewController {
         mainTableView.register(DailyWeatherTableCell.self, forCellReuseIdentifier: String(describing: DailyWeatherTableCell.self))
         mainTableView.register(HourlyWeatherTableCell.self, forCellReuseIdentifier: String(describing: HourlyWeatherTableCell.self))
         mainTableView.register(MainInfoTableCell.self, forCellReuseIdentifier: String(describing: MainInfoTableCell.self))
-        mainTableView.register(MyCustomHeader.self,
+        mainTableView.register(WeatherTableHeader.self,
                forHeaderFooterViewReuseIdentifier: "sectionHeader")
         
         let constraints = [
@@ -93,53 +105,39 @@ class MainScreenView: UIViewController {
 extension MainScreenView: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return model.sections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            return 1
-        default:
-            return 25
+        let sectionModel = model.sections[section]
+        switch sectionModel{
+        case .basic(let items):
+            return items.count
+        case .withHeader(_, let items):
+            return  items.count
         }
     }
     
     func tableView(_ tableView: UITableView,
                    viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 1:
-            let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! MyCustomHeader
-            let attributes: [NSAttributedString.Key: Any] = [.underlineStyle: NSUnderlineStyle.single.rawValue]
-            let attributedString = NSMutableAttributedString(
-                string: "Подробнее на 24 часа",
-                attributes: attributes
-            )
-            view.toDetailsButton.setAttributedTitle(attributedString, for: .normal)
-            return view
-        case 2:
-            let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! MyCustomHeader
-            view.titleLabel.text = "Ежедневный прогноз"
-            let attributes: [NSAttributedString.Key: Any] = [.underlineStyle: NSUnderlineStyle.single.rawValue]
-            let attributedString = NSMutableAttributedString(
-                string: "25 дней",
-                attributes: attributes
-            )
-            view.toDetailsButton.setAttributedTitle(attributedString, for: .normal)
+        let sectionModel = model.sections[section]
+        switch sectionModel{
+        case .withHeader(let header, _):
+            let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! WeatherTableHeader
+            view.configure(with: header)
             return view
         default:
-            return nil
+           return nil
         }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 20
-        default:
+        let sectionModel = model.sections[section]
+        switch sectionModel{
+        case .withHeader:
             return 40
+        default:
+           return 20
         }
     }
     
@@ -148,17 +146,31 @@ extension MainScreenView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
+        let sectionModel = model.sections[indexPath.section]
+        switch sectionModel{
+        case .basic(let items):
+            return cellForItem(items[indexPath.row], indexPath: indexPath, tableView: tableView)
+        case .withHeader(_, let items):
+            return cellForItem(items[indexPath.row], indexPath: indexPath, tableView: tableView)
+        }
+    }
+    
+    private func cellForItem(_ item: MainScreenDataSourceItem, indexPath: IndexPath, tableView: UITableView) -> UITableViewCell {
+        switch item {
+        case .currentWeatherCard(let cellModel):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MainInfoTableCell.self), for: indexPath) as! MainInfoTableCell
+            cell.configure(with: cellModel)
             return cell
-        case 1:
+        case .hourlyWeather(let cellModel):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: HourlyWeatherTableCell.self), for: indexPath) as! HourlyWeatherTableCell
+            cell.configure(with: cellModel)
             return cell
-        default:
+        case .dailyWeather(let cellModel):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: DailyWeatherTableCell.self), for: indexPath) as! DailyWeatherTableCell
+            cell.configure(with: cellModel)
             return cell
         }
     }
 }
+
 

@@ -7,16 +7,16 @@
 
 import Foundation
 import CoreLocation
-import UIKit
 
-class Location: UIViewController {
+class LocationService: NSObject {
     
-    static var currentLocation: CLLocationCoordinate2D?
+    static var shared = LocationService()
+    
+    public var currentLocation: CLLocationCoordinate2D?
     
     private lazy var locationManager = CLLocationManager()
     
     func checkUserLocationPermissions() {
-        
         locationManager.delegate = self
         locationManager.desiredAccuracy
         locationManager.startUpdatingLocation()
@@ -28,9 +28,7 @@ class Location: UIViewController {
             
         case .authorizedAlways, .authorizedWhenInUse:
             if let location = locationManager.location {
-                Location.currentLocation = location.coordinate
-                print(Location.currentLocation?.latitude)
-                print(Location.currentLocation?.longitude)
+                self.currentLocation = location.coordinate
             }
             
         case .denied, .restricted:
@@ -50,17 +48,17 @@ class Location: UIViewController {
     
 }
 
-extension Location: CLLocationManagerDelegate {
+extension LocationService: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locationManager.location {
-            Location.currentLocation = location.coordinate
+            self.currentLocation = location.coordinate
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-              print("Failed to find user's location: \(error.localizedDescription)")
-              manager.stopUpdatingLocation()
+          print("Failed to find user's location: \(error.localizedDescription)")
+          manager.stopUpdatingLocation()
     }
     
 }

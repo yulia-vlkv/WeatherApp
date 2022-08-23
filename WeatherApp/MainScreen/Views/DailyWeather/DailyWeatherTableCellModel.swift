@@ -1,0 +1,43 @@
+//
+//  DailyWeatherTableCellModel.swift
+//  WeatherApp
+//
+//  Created by Iuliia Volkova on 19.08.2022.
+//
+
+import Foundation
+import UIKit
+
+
+struct DailyWeatherTableCellModel {
+    
+    let date: String
+    let icon: UIImage
+    let description: String
+    let lowestTemperature: String
+    let highestTemperature: String
+    
+}
+
+extension DailyWeatherTableCellModel  {
+    
+    init(with dailyWeather: DailyWeather) {
+        self.date = {
+            let stringToFormat = dailyWeather.time
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale(identifier: "ru_RU")
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let date = dateFormatter.date(from: stringToFormat)
+            dateFormatter.dateFormat = "MM/dd"
+            return dateFormatter.string(from: date!)
+        }()
+        self.icon = {
+            let code = dailyWeather.description.iconCode
+            let icon = WeatherIcon(code: code)
+            return icon.iconImage.dayImage
+        }()
+        self.description = dailyWeather.description.verbalDesctiption
+        self.lowestTemperature = String(Int(dailyWeather.lowestTemperature))
+        self.highestTemperature = String(Int(dailyWeather.highestTemperature))
+    }
+}

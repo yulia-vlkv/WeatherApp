@@ -9,9 +9,11 @@ import UIKit
 
 class HourlyWeatherTableCell: UITableViewCell {
     
+    private var cells: [HourlyWeatherCellModel] = []
+    
     private let layout = UICollectionViewFlowLayout()
     private let collectionCellID = "collectionCellID"
-    private lazy var oneDayWeatherCollection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    private lazy var hourlyWeatherCollection = UICollectionView(frame: .zero, collectionViewLayout: layout)
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
@@ -29,21 +31,21 @@ class HourlyWeatherTableCell: UITableViewCell {
     // MARK: - Configure Layout
 
     private func configureLayout(){
-        contentView.addSubview(oneDayWeatherCollection)
-        oneDayWeatherCollection.toAutoLayout()
-        oneDayWeatherCollection.showsHorizontalScrollIndicator = false
+        contentView.addSubview(hourlyWeatherCollection)
+        hourlyWeatherCollection.toAutoLayout()
+        hourlyWeatherCollection.showsHorizontalScrollIndicator = false
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = CGFloat.greatestFiniteMagnitude
-        oneDayWeatherCollection.dataSource = self
-        oneDayWeatherCollection.delegate = self
-        oneDayWeatherCollection.register(HourlyWeatherCell.self, forCellWithReuseIdentifier: collectionCellID)
+        hourlyWeatherCollection.dataSource = self
+        hourlyWeatherCollection.delegate = self
+        hourlyWeatherCollection.register(HourlyWeatherCell.self, forCellWithReuseIdentifier: collectionCellID)
         
         let constraints = [
-            oneDayWeatherCollection.topAnchor.constraint(equalTo: contentView.topAnchor),
-            oneDayWeatherCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            oneDayWeatherCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: sideInset),
-            oneDayWeatherCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            oneDayWeatherCollection.heightAnchor.constraint(equalToConstant: height)
+            hourlyWeatherCollection.topAnchor.constraint(equalTo: contentView.topAnchor),
+            hourlyWeatherCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            hourlyWeatherCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: sideInset),
+            hourlyWeatherCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            hourlyWeatherCollection.heightAnchor.constraint(equalToConstant: height)
         ]
         
         NSLayoutConstraint.activate(constraints)
@@ -53,7 +55,7 @@ class HourlyWeatherTableCell: UITableViewCell {
     
     private var height: CGFloat { return 83 }
     
-    private var width: CGFloat { return 42 }
+    private var width: CGFloat { return 48 }
     
     private var sideInset: CGFloat { return 16 }
     
@@ -73,6 +75,11 @@ extension HourlyWeatherTableCell: UICollectionViewDataSource, UICollectionViewDe
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellID, for: indexPath) as! HourlyWeatherCell
+        if indexPath.item < cells.count {
+            let model = cells[indexPath.item]
+            cell.configure(with: model)
+        }
+//        cell.backgroundColor = CustomColors.setColor(style: .lightBlue)
         return cell
     }
     
@@ -84,4 +91,13 @@ extension HourlyWeatherTableCell: UICollectionViewDataSource, UICollectionViewDe
         return inset
     }
     
+}
+
+
+extension HourlyWeatherTableCell: ConfigurableView {
+    
+    func configure(with model: HourlyWeatherTableCellModel) {
+        self.cells = model.cells
+        self.hourlyWeatherCollection.reloadData()
+    }
 }

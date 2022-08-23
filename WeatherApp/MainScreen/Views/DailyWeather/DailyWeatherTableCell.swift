@@ -7,7 +7,20 @@
 
 import UIKit
 
+
+extension DailyWeatherTableCell: ConfigurableView {
+    
+    func configure(with model: DailyWeatherTableCellModel) {
+        dateLabel.text = model.date
+        weatherImage.image = model.icon
+        detailsLabel.text = model.description
+        temperatureLabel.text = "\(model.lowestTemperature)°-\(model.highestTemperature)°"
+    }
+}
+
 class DailyWeatherTableCell: UITableViewCell {
+    
+    private var cells: [DailyWeatherTableCellModel] = []
     
     private let backgroundLabel: UILabel = {
         let label = UILabel()
@@ -18,7 +31,6 @@ class DailyWeatherTableCell: UITableViewCell {
     
     private let frameLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .clear
         label.backgroundColor = CustomColors.setColor(style: .lightBlue)
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
@@ -31,6 +43,7 @@ class DailyWeatherTableCell: UITableViewCell {
     private let leftStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
+        stack.distribution = .fillEqually
         stack.spacing = 6
         stack.alignment = .center
         stack.toAutoLayout()
@@ -39,7 +52,7 @@ class DailyWeatherTableCell: UITableViewCell {
     
     private let dateLabel: UILabel = {
         let label = UILabel()
-        label.text = "30/07"
+//        label.text = "30/07"
         label.textColor = .gray
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .center
@@ -47,37 +60,37 @@ class DailyWeatherTableCell: UITableViewCell {
         return label
     }()
     
-    private let stackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.spacing = 6
-        stack.contentMode = .scaleAspectFit
-        stack.toAutoLayout()
-        return stack
-    }()
+//    private let stackView: UIStackView = {
+//        let stack = UIStackView()
+//        stack.axis = .horizontal
+//        stack.spacing = 6
+//        stack.contentMode = .scaleAspectFit
+//        stack.toAutoLayout()
+//        return stack
+//    }()
     
     private let weatherImage: UIImageView = {
-        let image = UIImageView(image: UIImage(systemName: "cloud.sun.rain"))
+        let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.toAutoLayout()
         return image
     }()
     
-    private let humidityLabel: UILabel = {
-        let label = UILabel()
-        label.text = "37%"
-        label.textColor = CustomColors.setColor(style: .deepBlue)
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        label.textAlignment = .center
-        label.toAutoLayout()
-        return label
-    }()
+//    private let humidityLabel: UILabel = {
+//        let label = UILabel()
+//        label.text = "37%"
+//        label.textColor = CustomColors.setColor(style: .deepBlue)
+//        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+//        label.textAlignment = .center
+//        label.toAutoLayout()
+//        return label
+//    }()
     
     // MARK: - Middle content
     
     private let detailsLabel: UILabel = {
         let label = UILabel()
-        label.text = "Облачно, солнечно и дождливо"
+//        label.text = "Облачно, солнечно и дождливо"
         label.numberOfLines = 1
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -99,7 +112,7 @@ class DailyWeatherTableCell: UITableViewCell {
     
     private let temperatureLabel: UILabel = {
         let label = UILabel()
-        label.text = "4-11°"
+//        label.text = "4-11°"
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         label.textAlignment = .center
@@ -135,9 +148,9 @@ class DailyWeatherTableCell: UITableViewCell {
         backgroundLabel.addSubview(frameLabel)
         frameLabel.addSubview(leftStackView)
         leftStackView.addArrangedSubview(dateLabel)
-        leftStackView.addArrangedSubview(stackView)
-        stackView.addArrangedSubview(weatherImage)
-        stackView.addArrangedSubview(humidityLabel)
+        leftStackView.addArrangedSubview(weatherImage)
+//        stackView.addArrangedSubview(weatherImage)
+//        stackView.addArrangedSubview(humidityLabel)
         frameLabel.addSubview(detailsLabel)
         frameLabel.addSubview(rightStackView)
         rightStackView.addArrangedSubview(temperatureLabel)
@@ -157,6 +170,7 @@ class DailyWeatherTableCell: UITableViewCell {
             
             leftStackView.centerYAnchor.constraint(equalTo: frameLabel.centerYAnchor),
             leftStackView.leadingAnchor.constraint(equalTo: frameLabel.leadingAnchor, constant: smallSideInset),
+            leftStackView.widthAnchor.constraint(equalToConstant: 50),
             
             detailsLabel.centerYAnchor.constraint(equalTo: frameLabel.centerYAnchor),
             detailsLabel.leadingAnchor.constraint(equalTo: leftStackView.trailingAnchor, constant: regularSideInset),
@@ -164,6 +178,8 @@ class DailyWeatherTableCell: UITableViewCell {
             
             rightStackView.centerYAnchor.constraint(equalTo: frameLabel.centerYAnchor),
             rightStackView.trailingAnchor.constraint(equalTo: frameLabel.trailingAnchor, constant: -smallSideInset),
+            
+            rightChevronLabel.widthAnchor.constraint(equalToConstant: 30)
         ]
         
         NSLayoutConstraint.activate(constraints)
@@ -183,3 +199,5 @@ class DailyWeatherTableCell: UITableViewCell {
     
 
 }
+
+
