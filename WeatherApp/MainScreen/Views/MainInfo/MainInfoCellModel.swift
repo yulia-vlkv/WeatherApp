@@ -40,6 +40,7 @@ struct MainInfoCellModel {
         }()
         
         self.verbalDescription = currentWeather.description.verbalDesctiption
+        
         self.clouds = String(Int(currentWeather.clouds))
         
         self.windSpeed = {
@@ -48,8 +49,11 @@ struct MainInfoCellModel {
         }()
         
         self.humidity = String(Int(currentWeather.humidity))
+        
         self.sunriseTime = currentWeather.sunrise
+        
         self.sunsetTime = currentWeather.sunset
+        
         self.dateTime =  {
             let date = currentDate
             let dateFormatter = DateFormatter()
@@ -61,6 +65,7 @@ struct MainInfoCellModel {
             }
             return dateFormatter.string(from: date)
         }()
+        
         self.dayOfWeek = {
             let date = Date()
             let dateFormatter = DateFormatter()
@@ -75,11 +80,11 @@ struct MainInfoCellModel {
 public func convertTemperature(tempInCelsius: Float) -> String {
     let currentSettings = SettingsModel.shared.temperatureSettings
     if currentSettings == .celsius {
-            return String(Int(tempInCelsius.rounded()))
-        } else {
-            let fahrenheit =  tempInCelsius * 1.8 + 32
-            return String(Int(fahrenheit.rounded()))
-        }
+        return String(Int(tempInCelsius.rounded()))
+    } else {
+        let fahrenheit = tempInCelsius * 1.8 + 32
+        return String(Int(fahrenheit.rounded()))
+    }
 }
 
 public func convertSpeed(speedInMetric: Float) -> String {

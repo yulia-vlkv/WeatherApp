@@ -7,6 +7,56 @@
 
 import UIKit
 
+
+extension HourlyWeatherDetailsTableCell: ConfigurableView {
+    
+    func configure(with model: HourlyWeatherDetailsTableCellModel) {
+        
+        dateLabel.text = model.date
+        timeLabel.text = model.time
+        temperatureLabel.text = "\(model.currentTemperature)°"
+        weatherImage.image = model.icon
+        descriptionLabel.attributedText = {
+            let text = "\(model.description). По ощущениям \(model.feelsLikeTemperature)°"
+            let textToHighlight = "\(model.feelsLikeTemperature)°"
+            let range = (text as NSString).range(of: textToHighlight)
+            let mutableAttributedString = NSMutableAttributedString.init(string: text)
+            mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
+            return mutableAttributedString
+        }()
+        windLabel.attributedText = {
+            let text = "Ветер \(model.windDirection), \(model.windSpeed)"
+            let textToHighlight = "\(model.windDirection)"
+            let anotherTextToHighlight = "\(model.windSpeed)"
+            let firstRange = (text as NSString).range(of: textToHighlight)
+            let secondRange = (text as NSString).range(of: anotherTextToHighlight)
+            let mutableAttributedString = NSMutableAttributedString.init(string: text)
+            mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: firstRange)
+            mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: secondRange)
+            return mutableAttributedString
+        }()
+        humidityLabel.attributedText = {
+            let text = "Влажность \(model.probabilityOfRain)%"
+            let textToHighlight = "\(model.probabilityOfRain)%"
+            let range = (text as NSString).range(of: textToHighlight)
+            let mutableAttributedString = NSMutableAttributedString.init(string: text)
+            mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
+            return mutableAttributedString
+        }()
+        cloudsLabel.attributedText = {
+            let text = "Облачность \(model.clouds)%"
+            let textToHighlight = "\(model.clouds)%"
+            let range = (text as NSString).range(of: textToHighlight)
+            let mutableAttributedString = NSMutableAttributedString.init(string: text)
+            mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
+            return mutableAttributedString
+        }()
+        
+    }
+    
+}
+
+
 class HourlyWeatherDetailsTableCell: UITableViewCell {
     
     private let backgroundLabel: UILabel = {
@@ -26,7 +76,7 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     
     private let dateLabel: UILabel = {
         let label = UILabel()
-        label.text = "30/07"
+//        label.text = "30/07"
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         label.textAlignment = .left
@@ -36,7 +86,7 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     
     private let timeLabel: UILabel = {
         let label = UILabel()
-        label.text = "14:26"
+//        label.text = "14:26"
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         label.textAlignment = .right
@@ -66,7 +116,7 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .center
-        label.text = "24°"
+//        label.text = "24°"
         label.font = UIFont.systemFont(ofSize: 22, weight: .regular)
         label.textColor = .black
         label.toAutoLayout()
@@ -74,7 +124,7 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     }()
     
     private let weatherImage: UIImageView = {
-        let image = UIImageView(image: UIImage(systemName: "cloud.sun.rain"))
+        let image = UIImageView()
         image.contentMode = .scaleAspectFit
         image.clipsToBounds = true
         image.toAutoLayout()
@@ -93,12 +143,12 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGray
-        let text = "Облачно, солнечно и дождливо. По ощущениям 10°"
-        let textToHighlight = "10°"
-        let range = (text as NSString).range(of: textToHighlight)
-        let mutableAttributedString = NSMutableAttributedString.init(string: text)
-        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
-        label.attributedText = mutableAttributedString
+//        let text = "Облачно, солнечно и дождливо. По ощущениям 10°"
+//        let textToHighlight = "10°"
+//        let range = (text as NSString).range(of: textToHighlight)
+//        let mutableAttributedString = NSMutableAttributedString.init(string: text)
+//        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
+//        label.attributedText = mutableAttributedString
         label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
@@ -110,15 +160,15 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let windLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGray
-        let text = "Ветер северо-западный, 2 м/с"
-        let textToHighlight = "северо-западный"
-        let anotherTextToHighlight = "2"
-        let firstRange = (text as NSString).range(of: textToHighlight)
-        let secondRange = (text as NSString).range(of: anotherTextToHighlight)
-        let mutableAttributedString = NSMutableAttributedString.init(string: text)
-        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: firstRange)
-        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: secondRange)
-        label.attributedText = mutableAttributedString
+//        let text = "Ветер северо-западный, 2 м/с"
+//        let textToHighlight = "северо-западный"
+//        let anotherTextToHighlight = "2"
+//        let firstRange = (text as NSString).range(of: textToHighlight)
+//        let secondRange = (text as NSString).range(of: anotherTextToHighlight)
+//        let mutableAttributedString = NSMutableAttributedString.init(string: text)
+//        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: firstRange)
+//        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: secondRange)
+//        label.attributedText = mutableAttributedString
         label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
@@ -130,12 +180,12 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let humidityLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGray
-        let text = "Влажность 13%"
-        let textToHighlight = "13%"
-        let range = (text as NSString).range(of: textToHighlight)
-        let mutableAttributedString = NSMutableAttributedString.init(string: text)
-        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
-        label.attributedText = mutableAttributedString
+//        let text = "Влажность 13%"
+//        let textToHighlight = "13%"
+//        let range = (text as NSString).range(of: textToHighlight)
+//        let mutableAttributedString = NSMutableAttributedString.init(string: text)
+//        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
+//        label.attributedText = mutableAttributedString
         label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
@@ -147,12 +197,12 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let cloudsLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGray
-        let text = "Облачность 13%"
-        let textToHighlight = "13%"
-        let range = (text as NSString).range(of: textToHighlight)
-        let mutableAttributedString = NSMutableAttributedString.init(string: text)
-        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
-        label.attributedText = mutableAttributedString
+//        let text = "Облачность 13%"
+//        let textToHighlight = "13%"
+//        let range = (text as NSString).range(of: textToHighlight)
+//        let mutableAttributedString = NSMutableAttributedString.init(string: text)
+//        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
+//        label.attributedText = mutableAttributedString
         label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left

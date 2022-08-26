@@ -50,16 +50,16 @@ class LineChart: UIView {
 //        PointEntry(temperature: -65, icon: "sun", time: "09.00"),
 //    ]
     
-    var dataEntries: [PointEntry]? = [
-        PointEntry(temperature: -90, icon: "sun", time: "12.00"),
-        PointEntry(temperature: 70, icon: "sun", time: "15.00"),
-        PointEntry(temperature: 90, icon: "sun", time: "18.00"),
-        PointEntry(temperature: -20, icon: "sun", time: "21.00"),
-        PointEntry(temperature: 0, icon: "sun", time: "00.00"),
-        PointEntry(temperature: -50, icon: "sun", time: "03.00"),
-        PointEntry(temperature: 0, icon: "sun", time: "06.00"),
-        PointEntry(temperature: 90, icon: "sun", time: "09.00"),
-    ]
+//    var dataEntries: [PointEntry]? = [
+//        PointEntry(temperature: -90, icon: "sun", time: "12.00"),
+//        PointEntry(temperature: 70, icon: "sun", time: "15.00"),
+//        PointEntry(temperature: 90, icon: "sun", time: "18.00"),
+//        PointEntry(temperature: -20, icon: "sun", time: "21.00"),
+//        PointEntry(temperature: 0, icon: "sun", time: "00.00"),
+//        PointEntry(temperature: -50, icon: "sun", time: "03.00"),
+//        PointEntry(temperature: 0, icon: "sun", time: "06.00"),
+//        PointEntry(temperature: 90, icon: "sun", time: "09.00"),
+//    ]
     
 //    var dataEntries: [PointEntry]? = [
 //        PointEntry(temperature: -20, icon: "sun", time: "12.00"),
@@ -83,16 +83,16 @@ class LineChart: UIView {
 //        PointEntry(temperature: -25, icon: "sun", time: "09.00"),
 //    ]
     
-//    var dataEntries: [PointEntry]? = [
-//        PointEntry(temperature: 26, icon: "sun", time: "12.00"),
-//        PointEntry(temperature: 25, icon: "sun", time: "15.00"),
-//        PointEntry(temperature: 26, icon: "sun", time: "18.00"),
-//        PointEntry(temperature: 27, icon: "sun", time: "21.00"),
-//        PointEntry(temperature: 28, icon: "sun", time: "00.00"),
-//        PointEntry(temperature: 27, icon: "sun", time: "03.00"),
-//        PointEntry(temperature: 26, icon: "sun", time: "06.00"),
-//        PointEntry(temperature: 25, icon: "sun", time: "09.00"),
-//    ]
+    var dataEntries: [PointEntry]? = [
+        PointEntry(temperature: -19, icon: "sun", time: "12.00"),
+        PointEntry(temperature: 21, icon: "sun", time: "15.00"),
+        PointEntry(temperature: 26, icon: "sun", time: "18.00"),
+        PointEntry(temperature: 27, icon: "sun", time: "21.00"),
+        PointEntry(temperature: 26, icon: "sun", time: "00.00"),
+        PointEntry(temperature: 27, icon: "sun", time: "03.00"),
+        PointEntry(temperature: 29, icon: "sun", time: "06.00"),
+        PointEntry(temperature: 30, icon: "sun", time: "09.00"),
+    ]
     
    // Слои
     private let scrollView: UIScrollView = {
@@ -162,19 +162,22 @@ class LineChart: UIView {
         let diff = numMax - numMin
         switch diff{
         case 0...5:
-            let difference = 3.0
+            let difference = 8.0
             return Float(difference)
         case 6...10:
-            let difference = 2
+            let difference = 4.0
             return Float(difference)
-        case 11...20:
+        case 11...15:
+            let difference = 2.0
+            return Float(difference)
+        case 16...20:
+            let difference = 1.5
+            return Float(difference)
+        case 21...40:
             let difference = 1
             return Float(difference)
-        case 20...40:
-            let difference = 0.2
-            return Float(difference)
         case 40...:
-            let difference = 0.05
+            let difference = 0.5
             return Float(difference)
         default:
             let difference = 1

@@ -12,6 +12,7 @@ import UIKit
 class SettingsView: UIViewController {
     
     private let viewModel = SettingsViewModel()
+    weak var coordinator: SettingsCoordinator?
     
     private let backgroundView: UIView = {
         let view = UIView()

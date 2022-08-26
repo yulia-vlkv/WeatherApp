@@ -23,7 +23,7 @@ enum HourlyWeatherDataSourceItem {
 }
 
 
-class HourlyWeatherViewModel {
+class HourlyWeatherViewModel: HourlyWeatherScreenViewOutput {
     
     private let forecastService = ForecastService()
     private let locationService = LocationService.shared
@@ -31,7 +31,7 @@ class HourlyWeatherViewModel {
     
     private weak var view: HourlyWeatherView!
     
-    init(view: HourlyWeatherView) {
+    init(view: HourlyWeatherView, model: [HourlyWeather]) {
         self.view = view
     }
     
@@ -43,7 +43,5 @@ class HourlyWeatherViewModel {
             view?.configure(with: self)
         }
     }
-
-
     
 }

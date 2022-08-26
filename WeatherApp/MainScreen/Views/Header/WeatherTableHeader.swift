@@ -12,7 +12,7 @@ struct WeatherTableHeaderModel {
     
     let titleText: String?
     let buttonText: String
-    
+    let onButtonTap: (() -> Void)?
 }
 
 
@@ -37,8 +37,10 @@ class WeatherTableHeader: UITableViewHeaderFooterView {
         return button
     }()
     
+    private var onButtonTap: (() -> Void)?
+    
     @objc func buttonIsTapped(){
-        print("button is tapped")
+        self.onButtonTap?()
     }
 
     override init(reuseIdentifier: String?) {
@@ -83,5 +85,6 @@ extension WeatherTableHeader: ConfigurableView {
                     toDetailsButton.setAttributedTitle(attributedString, for: .normal)
         
         titleLabel.text = model.titleText
+        onButtonTap = model.onButtonTap
     }
 }

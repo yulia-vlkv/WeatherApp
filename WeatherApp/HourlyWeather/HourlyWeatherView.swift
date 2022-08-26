@@ -21,7 +21,7 @@ extension HourlyWeatherView: ConfigurableView {
 
 class HourlyWeatherView: UIViewController {
     
-    private let coordinator = HourlyWeatherCoordinator()
+    public var model: HourlyWeatherViewModel?
     
     private let tableView = UITableView(frame: .zero, style: .grouped)
     

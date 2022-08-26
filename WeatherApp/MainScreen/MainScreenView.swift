@@ -18,10 +18,9 @@ extension MainScreenView: ConfigurableView {
 
 class MainScreenView: UIViewController {
     
+    public var model: MainScreenViewModel!
+    
     private var cells: [DailyWeatherTableCellModel] = []
-    
-    lazy var model = MainScreenViewModel(view: self)
-    
     private let mainTableView = UITableView(frame: .zero, style: .grouped)
 
     override func viewDidLoad() {

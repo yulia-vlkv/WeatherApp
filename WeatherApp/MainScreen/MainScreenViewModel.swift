@@ -23,7 +23,9 @@ enum MainScreenDataSourceItem {
 }
 
 
-class MainScreenViewModel {
+class MainScreenViewModel: MainScreenViewOutput {
+    
+    public var onOpenHourlyWeather: (([HourlyWeather]) -> Void)?
     
     private let forecastService = ForecastService()
     private let locationService = LocationService.shared
@@ -146,7 +148,10 @@ class MainScreenViewModel {
             .withHeader(
                 WeatherTableHeaderModel(
                     titleText: nil,
-                    buttonText: "Подробнее на 24 часа"
+                    buttonText: "Подробнее на 24 часа",
+                    onButtonTap: { [weak self] in
+                        self?.onOpenHourlyWeather?(hourlyWeather)
+                    }
                 ),
                 [
                     .hourlyWeather(
@@ -162,7 +167,10 @@ class MainScreenViewModel {
             .withHeader(
                     WeatherTableHeaderModel(
                         titleText: "Ежедневный прогноз",
-                        buttonText: "16 дней"
+                        buttonText: "16 дней",
+                        onButtonTap: { [weak self] in
+                            self?.onOpenHourlyWeather?(hourlyWeather)
+                        }
                     ),
                     getEveryDailyCell(cellsArray: dailyWeather)
             )
@@ -171,6 +179,7 @@ class MainScreenViewModel {
         return resultSections
     }
     
+    // To do 
     private func getEveryThirdCell(cellsArray: [HourlyWeather]) -> [HourlyWeatherCellModel] {
         var newArray: [HourlyWeatherCellModel] = []
         var i = 0

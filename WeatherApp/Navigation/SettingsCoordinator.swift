@@ -1,5 +1,5 @@
 //
-//  HourlyWeatherCoordinator.swift
+//  SettingsCoordinator.swift
 //  WeatherApp
 //
 //  Created by Iuliia Volkova on 24.08.2022.
@@ -8,7 +8,7 @@
 import UIKit
 
 
-class HourlyWeatherCoordinator: Coordinator {
+class SettingsCoordinator: Coordinator {
     
     var childCoordinator: [Coordinator] = []
     var parentCoordinator: Coordinator?
@@ -16,5 +16,9 @@ class HourlyWeatherCoordinator: Coordinator {
     
     func start() {}
 
+    func showSettings() {
+        let settingsVS = SettingsView()
+        settingsVS.coordinator = self
+        navigationController.pushViewController(settingsVS, animated: false)
+    }
 }
-

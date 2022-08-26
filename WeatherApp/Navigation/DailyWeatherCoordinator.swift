@@ -2,7 +2,18 @@
 //  DailyWeatherCoordinator.swift
 //  WeatherApp
 //
-//  Created by Iuliia Volkova on 15.08.2022.
+//  Created by Iuliia Volkova on 24.08.2022.
 //
 
-import Foundation
+import UIKit
+
+
+class DailyWeatherCoordinator: Coordinator {
+    
+    var childCoordinator: [Coordinator] = []
+    var parentCoordinator: Coordinator?
+    var navigationController = UINavigationController()
+    
+    func start() {}
+
+}

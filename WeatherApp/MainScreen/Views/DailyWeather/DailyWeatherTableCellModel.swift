@@ -22,6 +22,7 @@ struct DailyWeatherTableCellModel {
 extension DailyWeatherTableCellModel  {
     
     init(with dailyWeather: DailyWeather) {
+        
         self.date = {
             let stringToFormat = dailyWeather.time
             let dateFormatter = DateFormatter()
@@ -31,13 +32,24 @@ extension DailyWeatherTableCellModel  {
             dateFormatter.dateFormat = "MM/dd"
             return dateFormatter.string(from: date!)
         }()
+        
         self.icon = {
             let code = dailyWeather.description.iconCode
             let icon = WeatherIcon(code: code)
             return icon.iconImage.dayImage
         }()
+        
         self.description = dailyWeather.description.verbalDesctiption
-        self.lowestTemperature = String(Int(dailyWeather.lowestTemperature))
-        self.highestTemperature = String(Int(dailyWeather.highestTemperature))
+        
+        self.lowestTemperature = {
+            let tempInCelsius = dailyWeather.lowestTemperature
+            return convertTemperature(tempInCelsius: tempInCelsius)
+        }()
+        
+        self.highestTemperature = {
+            let tempInCelsius = dailyWeather.highestTemperature
+            return convertTemperature(tempInCelsius: tempInCelsius)
+        }()
+        
     }
 }

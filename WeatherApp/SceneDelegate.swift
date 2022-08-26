@@ -16,18 +16,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
-    
-//        self.appCoordinator = AppCoordinator(window)
-//        appCoordinator?.start()
+        
+        let window = UIWindow(windowScene: windowScene)
+        self.appCoordinator = MainCoordinator(window, fabric: MainFabric())
+        appCoordinator?.start()
+        
+        self.window = window
 //        window = UIWindow(windowScene: windowScene)
 //        window?.rootViewController = UINavigationController()
 //        window?.makeKeyAndVisible()
         
         
-        let vc = MainScreenView()
-        window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: vc)
-        window?.makeKeyAndVisible()
+//        let vc = MainScreenView()
+//        let vc = HourlyWeatherView()
+//        window = UIWindow(windowScene: windowScene)
+//        window?.rootViewController = UINavigationController(rootViewController: vc)
+//        window?.makeKeyAndVisible()
         
     }
 

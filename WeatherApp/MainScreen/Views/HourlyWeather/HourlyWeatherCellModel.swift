@@ -37,6 +37,10 @@ extension HourlyWeatherCellModel  {
             return icon.iconImage.dayImage
         }()
         
-        self.temperature = String(Int(hourlyWeather.currentTemperature))
+        self.temperature = {
+            let tempInCelsius = hourlyWeather.currentTemperature
+            return convertTemperature(tempInCelsius: tempInCelsius)
+        }()
+        
     }
 }
