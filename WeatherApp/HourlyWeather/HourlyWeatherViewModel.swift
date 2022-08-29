@@ -5,21 +5,16 @@
 //  Created by Iuliia Volkova on 21.08.2022.
 //
 
+import UIKit
 import Foundation
 import CoreLocation
 
 
 enum HourlyWeatherDataSourceSection {
     
-    case basic([HourlyWeatherDataSourceItem])
-    case withHeader(WeatherTableHeaderModel, [HourlyWeatherDataSourceItem])
-}
-
-enum HourlyWeatherDataSourceItem {
+    case temperatureChart([PointEntry])
+    case hourlyWeatherDetails([HourlyWeatherDetailsTableCellModel])
     
-    case temperatureChart(MainInfoTableCellModel)
-    case hourlyWeatherDetails(HourlyWeatherTableCellModel)
-
 }
 
 
@@ -30,18 +25,36 @@ class HourlyWeatherViewModel: HourlyWeatherScreenViewOutput {
     private let settings = SettingsModel.shared
     
     private weak var view: HourlyWeatherView!
+    private var hourlyWeather: [HourlyWeather]
     
     init(view: HourlyWeatherView, model: [HourlyWeather]) {
         self.view = view
+        self.hourlyWeather = model
     }
-    
-    private let currentDate = Date()
     
     var city: String = "Город, страна"
     var sections: [HourlyWeatherDataSourceSection] = [] {
         didSet {
             view?.configure(with: self)
         }
+    }
+    
+    func mapToViewModel() -> [HourlyWeatherDataSourceSection] {
+        var resultSections: [HourlyWeatherDataSourceSection] = []
+        
+        resultSections.append(
+            .temperatureChart(
+                hourlyWeather.map { PointEntry(with: $0) }
+            )
+        )
+        
+        resultSections.append(
+            .hourlyWeatherDetails(
+                hourlyWeather.map { HourlyWeatherDetailsTableCellModel(with: $0)}
+            )
+        )
+        
+        return resultSections
     }
     
 }

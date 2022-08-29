@@ -20,15 +20,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         self.appCoordinator = MainCoordinator(window, fabric: MainFabric())
         appCoordinator?.start()
-        
+
         self.window = window
+        
+        
 //        window = UIWindow(windowScene: windowScene)
 //        window?.rootViewController = UINavigationController()
 //        window?.makeKeyAndVisible()
-        
-        
-//        let vc = MainScreenView()
-//        let vc = HourlyWeatherView()
+//
+//
+////        let vc = MainScreenView()
+//        let vc = DailyWeatherView()
 //        window = UIWindow(windowScene: windowScene)
 //        window?.rootViewController = UINavigationController(rootViewController: vc)
 //        window?.makeKeyAndVisible()

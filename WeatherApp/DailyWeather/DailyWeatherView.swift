@@ -8,7 +8,19 @@
 import Foundation
 import UIKit
 
+
+extension DailyWeatherView: ConfigurableView {
+    
+    func configure(with model: DailyWeatherViewModel) {
+        navigationItem.title = model.city
+        
+        tableView.reloadData()
+    }
+}
+
 class DailyWeatherView: UIViewController {
+    
+    public var model: DailyWeatherViewModel!
     
     private let tableView = UITableView(frame: .zero, style: .grouped)
     
@@ -17,6 +29,7 @@ class DailyWeatherView: UIViewController {
         
         configureTableView()
         configureNavigationBar()
+        self.model.sections = self.model.mapToViewModel()
     }
     
     // MARK: - Configure TableView
@@ -65,37 +78,19 @@ class DailyWeatherView: UIViewController {
 extension DailyWeatherView: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return model.sections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
+        
+        let sectionModel = model.sections[section]
+        switch sectionModel{
+        case .dateScroll(_):
             return 1
-        default:
-            return 1
+        case .dailyWeatherDetails(_):
+            return  1
         }
-    }
-    
-    func tableView(_ tableView: UITableView,
-                   viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 0:
-            let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! WeatherTableHeader
-            view.titleLabel.text = "Страна, город"
-            return view
-        default:
-            return nil
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 40
-        default:
-            return 20
-        }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -103,12 +98,15 @@ extension DailyWeatherView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
+        let sectionModel = model.sections[indexPath.section]
+        switch sectionModel{
+        case .dateScroll(let cellModel):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: DateScrollTableCell.self), for: indexPath) as! DateScrollTableCell
+            cell.configure(with: cellModel)
             return cell
-        default:
+        case .dailyWeatherDetails(let items):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: DailyWeatherDetailTableCell.self), for: indexPath) as! DailyWeatherDetailTableCell
+            cell.configure(with: items[indexPath.row])
             return cell
         }
     }

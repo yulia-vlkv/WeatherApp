@@ -149,7 +149,7 @@ class MainInfoCell: UICollectionViewCell {
         return label
     }()
     
-    // MARK: - Himodity
+    // MARK: - Humidity
     
     private let humidityStack: UIStackView = {
         let stack = UIStackView()

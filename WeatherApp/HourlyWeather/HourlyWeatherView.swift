@@ -21,7 +21,7 @@ extension HourlyWeatherView: ConfigurableView {
 
 class HourlyWeatherView: UIViewController {
     
-    public var model: HourlyWeatherViewModel?
+    public var model: HourlyWeatherViewModel!
     
     private let tableView = UITableView(frame: .zero, style: .grouped)
     
@@ -30,6 +30,7 @@ class HourlyWeatherView: UIViewController {
         
         configureTableView()
         configureNavigationBar()
+        self.model.sections = self.model.mapToViewModel()
     }
     
     // MARK: - Configure TableView
@@ -81,53 +82,40 @@ class HourlyWeatherView: UIViewController {
 extension HourlyWeatherView: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return model.sections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-        default:
-            return 8
-        }
-    }
-    
-    func tableView(_ tableView: UITableView,
-                   viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 0:
-            let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! WeatherTableHeader
-            view.titleLabel.text = "Страна, город"
-            return view
-        default:
-            return nil
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 40
-        default:
-            return 20
+        
+        let sectionModel = model.sections[section]
+        switch sectionModel{
+        case .temperatureChart(let items):
+            if items.isEmpty {
+                return 0
+            } else {
+                return 1
+            }
+        case .hourlyWeatherDetails(let items):
+            return  items.count
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
+        let sectionModel = model.sections[indexPath.section]
+        switch sectionModel{
+        case .temperatureChart(let points):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: WeatherChartTableCell.self), for: indexPath) as! WeatherChartTableCell
             return cell
-        default:
+        case .hourlyWeatherDetails(let items):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: HourlyWeatherDetailsTableCell.self), for: indexPath) as! HourlyWeatherDetailsTableCell
-            tableView.separatorStyle = .singleLine
+            cell.configure(with: items[indexPath.row])
             return cell
         }
     }
+    
 }
 

@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import CoreLocation
 
+
 enum MainScreenDataSourceSection {
     
     case basic([MainScreenDataSourceItem])
@@ -25,7 +26,9 @@ enum MainScreenDataSourceItem {
 
 class MainScreenViewModel: MainScreenViewOutput {
     
+    public var onOpenSettings: (() -> Void)?
     public var onOpenHourlyWeather: (([HourlyWeather]) -> Void)?
+    public var onOpenDailyWeather: (([DailyWeather]) -> Void)?
     
     private let forecastService = ForecastService()
     private let locationService = LocationService.shared
@@ -39,20 +42,24 @@ class MainScreenViewModel: MainScreenViewOutput {
     
     private let currentDate = Date()
     
-    var city: String = "Город, страна"
     var sections: [MainScreenDataSourceSection] = [] {
         didSet {
             view?.configure(with: self)
         }
     }
-
+    
+    var city: String = {
+        let location = LocationService.shared.locations?[0] ?? Location(city: "Белград", country: "Сербия", longitude: "44.787197", latitude: "20.457273")
+        return "\(location.city), \(location.country)"
+    }()
+    
     func fetchData() {
 //        guard let location = locationService.currentLocation else {
 //            print("No current location!")
 //            return
 //        }
         
-        let location = locationService.currentLocation ?? CLLocationCoordinate2D(latitude: 20.457273, longitude: 44.787197)
+        let location = locationService.locations?[0] ?? Location(city: "Белград", country: "Сербия", longitude: "44.787197", latitude: "20.457273")
         
         let group = DispatchGroup()
         
@@ -156,7 +163,7 @@ class MainScreenViewModel: MainScreenViewOutput {
                 [
                     .hourlyWeather(
                         HourlyWeatherTableCellModel(cells:
-                            getEveryThirdCell(cellsArray: hourlyWeather)
+                                                        hourlyWeather.map { HourlyWeatherCellModel(with: $0) }
                         )
                     )
                 ]
@@ -169,10 +176,10 @@ class MainScreenViewModel: MainScreenViewOutput {
                         titleText: "Ежедневный прогноз",
                         buttonText: "16 дней",
                         onButtonTap: { [weak self] in
-                            self?.onOpenHourlyWeather?(hourlyWeather)
+                            self?.onOpenDailyWeather?(dailyWeather)
                         }
                     ),
-                    getEveryDailyCell(cellsArray: dailyWeather)
+                    dailyWeather.map { MainScreenDataSourceItem.dailyWeather(DailyWeatherTableCellModel(with: $0)) }
             )
         )
         
@@ -180,24 +187,25 @@ class MainScreenViewModel: MainScreenViewOutput {
     }
     
     // To do 
-    private func getEveryThirdCell(cellsArray: [HourlyWeather]) -> [HourlyWeatherCellModel] {
-        var newArray: [HourlyWeatherCellModel] = []
-        var i = 0
-        while i < cellsArray.count {
-            let item = HourlyWeatherCellModel(with: cellsArray[i])
-            i += 3
-            newArray.append(item)
-        }
-        return newArray
-    }
+//    private func getEveryThirdCell(cellsArray: [HourlyWeather]) -> [HourlyWeatherCellModel] {
+//        var newArray: [HourlyWeatherCellModel] = []
+//        var i = 0
+//        while i < cellsArray.count {
+//            let item = HourlyWeatherCellModel(with: cellsArray[i])
+//            i += 3
+//            newArray.append(item)
+//        }
+//        return newArray
+//    }
     
-    private func getEveryDailyCell(cellsArray: [DailyWeather]) -> [MainScreenDataSourceItem] {
-        var newArray: [MainScreenDataSourceItem] = []
-        for i in cellsArray {
-            let item = MainScreenDataSourceItem.dailyWeather(DailyWeatherTableCellModel(with: i))
-            newArray.append(item)
-        }
-        return newArray
-    }
+//    private func getEveryDailyCell(cellsArray: [DailyWeather]) -> [MainScreenDataSourceItem] {
+//        var newArray: [MainScreenDataSourceItem] = []
+//        for i in cellsArray {
+//            let item = MainScreenDataSourceItem.dailyWeather(DailyWeatherTableCellModel(with: i))
+//            newArray.append(item)
+//        }
+//        let result = cellsArray.map { MainScreenDataSourceItem.dailyWeather(DailyWeatherTableCellModel(with: $0)) }
+//        return result
+//    }
     
 }

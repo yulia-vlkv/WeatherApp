@@ -19,8 +19,7 @@ extension MainScreenView: ConfigurableView {
 class MainScreenView: UIViewController {
     
     public var model: MainScreenViewModel!
-    
-    private var cells: [DailyWeatherTableCellModel] = []
+
     private let mainTableView = UITableView(frame: .zero, style: .grouped)
 
     override func viewDidLoad() {
@@ -58,17 +57,15 @@ class MainScreenView: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
-    // MARK: - move to MainCoordinator
     private func configureNavigationBar(){
         
         navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.backgroundColor = .white
-        navigationItem.title = "Город, страна"
         navigationController?.navigationBar.tintColor = .black
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "mappin.circle"),
-                                                            style: .plain,
-                                                            target: self,
-                                                            action:  #selector(toOnboarding))
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "mappin.circle"),
+//                                                            style: .plain,
+//                                                            target: self,
+//                                                            action:  #selector(toOnboarding))
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "line.3.horizontal"),
                                                             style: .plain,
@@ -82,19 +79,16 @@ class MainScreenView: UIViewController {
 
     }
     
-    @objc private func toOnboarding(){
-        
-        // Add Alert to add now location
-        print("toOnboarding in pressed")
-        let vc = OnboardingView()
-        navigationController?.pushViewController(vc, animated: true)
-    }
+//    @objc private func toOnboarding(){
+//
+//        // Add Alert to add now location
+//        print("toOnboarding in pressed")
+//        let vc = OnboardingView()
+//        navigationController?.pushViewController(vc, animated: true)
+//    }
     
     @objc private func toSettings(){
-        print("toSettings in pressed")
-        let vc = SettingsView()
-        vc.configure(with: SettingsViewModel())
-        navigationController?.pushViewController(vc, animated: true)
+        model.onOpenSettings
     }
     
 }
@@ -117,8 +111,7 @@ extension MainScreenView: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView,
-                   viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionModel = model.sections[section]
         switch sectionModel{
         case .withHeader(let header, _):

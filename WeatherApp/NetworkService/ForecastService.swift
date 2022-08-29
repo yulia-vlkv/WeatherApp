@@ -22,8 +22,8 @@ struct ForecastWeatherReqObj {
         case metric
     }
     
-    let longitude: Double
-    let latitude: Double
+    let longitude: String
+    let latitude: String
     let units: Units
     let lang: String = "ru"
     let hours: String = "24"

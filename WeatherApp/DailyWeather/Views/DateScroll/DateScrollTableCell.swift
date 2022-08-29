@@ -8,13 +8,22 @@
 import Foundation
 import UIKit
 
+
+extension DateScrollTableCell: ConfigurableView {
+    
+    func configure(with model: DateScrollTableCellModel) {
+        self.cells = model.cells
+        self.dailyWeatherCollection.reloadData()
+    }
+}
+
 class DateScrollTableCell: UITableViewCell {
     
-    private var cells: [DateScrollCell] = []
+    private var cells: [DateScrollCellModel] = []
     
     private let layout = UICollectionViewFlowLayout()
     private let collectionCellID = "collectionCellID"
-    private lazy var hourlyWeatherCollection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    private lazy var dailyWeatherCollection = UICollectionView(frame: .zero, collectionViewLayout: layout)
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
@@ -32,21 +41,21 @@ class DateScrollTableCell: UITableViewCell {
     // MARK: - Configure Layout
 
     private func configureLayout(){
-        contentView.addSubview(hourlyWeatherCollection)
-        hourlyWeatherCollection.toAutoLayout()
-        hourlyWeatherCollection.showsHorizontalScrollIndicator = false
+        contentView.addSubview(dailyWeatherCollection)
+        dailyWeatherCollection.toAutoLayout()
+        dailyWeatherCollection.showsHorizontalScrollIndicator = false
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = CGFloat.greatestFiniteMagnitude
-        hourlyWeatherCollection.dataSource = self
-        hourlyWeatherCollection.delegate = self
-        hourlyWeatherCollection.register(DateScrollCell.self, forCellWithReuseIdentifier: collectionCellID)
+        dailyWeatherCollection.dataSource = self
+        dailyWeatherCollection.delegate = self
+        dailyWeatherCollection.register(DateScrollCell.self, forCellWithReuseIdentifier: collectionCellID)
         
         let constraints = [
-            hourlyWeatherCollection.topAnchor.constraint(equalTo: contentView.topAnchor),
-            hourlyWeatherCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            hourlyWeatherCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: sideInset),
-            hourlyWeatherCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            hourlyWeatherCollection.heightAnchor.constraint(equalToConstant: height)
+            dailyWeatherCollection.topAnchor.constraint(equalTo: contentView.topAnchor),
+            dailyWeatherCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            dailyWeatherCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: sideInset),
+            dailyWeatherCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            dailyWeatherCollection.heightAnchor.constraint(equalToConstant: height)
         ]
         
         NSLayoutConstraint.activate(constraints)
@@ -76,10 +85,10 @@ extension DateScrollTableCell: UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellID, for: indexPath) as! DateScrollCell
-//        if indexPath.item < cells.count {
-//            let model = cells[indexPath.item]
-//            cell.configure(with: model)
-//        }
+        if indexPath.item < cells.count {
+            let model = cells[indexPath.item]
+            cell.configure(with: model)
+        }
         cell.backgroundColor = .clear
         return cell
     }

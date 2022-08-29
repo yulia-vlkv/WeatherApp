@@ -7,12 +7,27 @@
 
 import UIKit
 
+
+struct WeatherChartTableCellModel {
+    
+    let points: [PointEntry]
+    
+}
+
+extension WeatherChartTableCell: ConfigurableView {
+    
+    func configure(with model: WeatherChartTableCellModel) {
+        self.lineChartView.dataEntries = model.points
+        self.lineChartView.reloadInputViews()
+    }
+}
+
+
 class WeatherChartTableCell: UITableViewCell {
     
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
         view.toAutoLayout()
-        view.backgroundColor = .red
         return view
     }()
     

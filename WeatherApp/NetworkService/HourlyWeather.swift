@@ -31,7 +31,7 @@ struct HourlyWeather: Codable {
         case probabilityOfRain = "pop"
         case clouds
         case windSpeed = "wind_spd"
-        case windDirection = "wind_cdir_full"
+        case windDirection = "wind_cdir"
         case description = "weather"
       
     }

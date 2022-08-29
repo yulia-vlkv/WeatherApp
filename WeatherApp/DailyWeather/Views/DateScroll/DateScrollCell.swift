@@ -9,31 +9,13 @@ import Foundation
 import UIKit
 
 
-//extension DateScrollCell: ConfigurableView {
-//
-//    typealias Model = MainInfoCellModel
-//
-//    public func configure(with model: Model) {
-//
-//        generalTemperatureLabel.text = "\(model.highestTemperature)°/\(model.lowestTemperature)°"
-//
-//        currentTemperatureLabel.text = "\(model.currentTemperature)°"
-//
-//        commentLabel.text = model.verbalDescription
-//
-//        cloudsLabel.text = model.clouds
-//
-//        windLabel.text = "\(model.windSpeed) м/с"
-//
-//        humidityLabel.text = "\(model.humidity)%"
-//
-//        sunsetLabel.text = model.sunsetTime
-//
-//        sunriseLabel.text = model.sunriseTime
-//
-//        dateLabel.text = "\(model.dateTime), \(model.dayOfWeek)"
-//    }
-//}
+extension DateScrollCell: ConfigurableView {
+
+    public func configure(with model: DateScrollCellModel) {
+
+        dateLabel.text = model.date
+    }
+}
 
 class DateScrollCell: UICollectionViewCell {
     
@@ -41,7 +23,7 @@ class DateScrollCell: UICollectionViewCell {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .center
-        label.text = "18/08"
+//        label.text = "18/08"
         label.backgroundColor = CustomColors.setColor(style: .lightBlue)
         label.layer.cornerRadius = 12
         label.clipsToBounds = true
@@ -70,8 +52,6 @@ class DateScrollCell: UICollectionViewCell {
         
         contentView.addSubview(dateLabel)
         
-
- 
         let constraints = [
             dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

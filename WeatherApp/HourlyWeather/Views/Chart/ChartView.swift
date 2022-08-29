@@ -10,10 +10,44 @@ import UIKit
 
 
 struct PointEntry {
+    
     let temperature: Float
-    let icon: String
+    let icon: UIImage
     let time: String
+    
 }
+
+extension PointEntry {
+
+    init(with hourlyWeather: HourlyWeather) {
+        self.temperature = Float(Int((hourlyWeather.currentTemperature).rounded()))
+
+        self.icon = {
+            let code = hourlyWeather.description.iconCode
+            let icon = WeatherIcon(code: code)
+            return icon.iconImage.dayImage
+        }()
+
+        self.time = {
+            let stringToFormat = hourlyWeather.time
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale(identifier: "ru_RU")
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            let date = dateFormatter.date(from: stringToFormat)
+            dateFormatter.dateFormat = "HH"
+            let time = dateFormatter.string(from: date!)
+            return time
+        }()
+    }
+}
+
+extension LineChart: ConfigurableView {
+    
+    func configure(with model: PointEntry) {
+        dataEntries?.append(model)
+    }
+}
+
 
 class LineChart: UIView {
     
@@ -25,7 +59,7 @@ class LineChart: UIView {
     
     // Данные для построения графика
 
-//    var dataEntries: [PointEntry]?
+    var dataEntries: [PointEntry]?
     
     
 //    var dataEntries: [PointEntry]? = [
@@ -83,16 +117,16 @@ class LineChart: UIView {
 //        PointEntry(temperature: -25, icon: "sun", time: "09.00"),
 //    ]
     
-    var dataEntries: [PointEntry]? = [
-        PointEntry(temperature: -19, icon: "sun", time: "12.00"),
-        PointEntry(temperature: 21, icon: "sun", time: "15.00"),
-        PointEntry(temperature: 26, icon: "sun", time: "18.00"),
-        PointEntry(temperature: 27, icon: "sun", time: "21.00"),
-        PointEntry(temperature: 26, icon: "sun", time: "00.00"),
-        PointEntry(temperature: 27, icon: "sun", time: "03.00"),
-        PointEntry(temperature: 29, icon: "sun", time: "06.00"),
-        PointEntry(temperature: 30, icon: "sun", time: "09.00"),
-    ]
+//    var dataEntries: [PointEntry]? = [
+//        PointEntry(temperature: -19, icon: "sun", time: "12.00"),
+//        PointEntry(temperature: 21, icon: "sun", time: "15.00"),
+//        PointEntry(temperature: 26, icon: "sun", time: "18.00"),
+//        PointEntry(temperature: 27, icon: "sun", time: "21.00"),
+//        PointEntry(temperature: 26, icon: "sun", time: "00.00"),
+//        PointEntry(temperature: 27, icon: "sun", time: "03.00"),
+//        PointEntry(temperature: 29, icon: "sun", time: "06.00"),
+//        PointEntry(temperature: 30, icon: "sun", time: "09.00"),
+//    ]
     
    // Слои
     private let scrollView: UIScrollView = {
@@ -160,29 +194,31 @@ class LineChart: UIView {
         let numMax = temperature.reduce(temperature[0], { max($0, $1) })
         let numMin = temperature.reduce(temperature[0], { min ($0, $1) })
         let diff = numMax - numMin
-        switch diff{
-        case 0...5:
-            let difference = 8.0
-            return Float(difference)
-        case 6...10:
-            let difference = 4.0
-            return Float(difference)
-        case 11...15:
-            let difference = 2.0
-            return Float(difference)
-        case 16...20:
-            let difference = 1.5
-            return Float(difference)
-        case 21...40:
-            let difference = 1
-            return Float(difference)
-        case 40...:
-            let difference = 0.5
-            return Float(difference)
-        default:
-            let difference = 1
-            return Float(difference)
-        }
+        let difference = 70 / diff
+        return difference
+//        switch diff{
+//        case 0...5:
+//            let difference = 8.0
+//            return Float(difference)
+//        case 6...10:
+//            let difference = 4.0
+//            return Float(difference)
+//        case 11...15:
+//            let difference = 2.0
+//            return Float(difference)
+//        case 16...20:
+//            let difference = 1.5
+//            return Float(difference)
+//        case 21...40:
+//            let difference = 1
+//            return Float(difference)
+//        case 40...:
+//            let difference = 0.5
+//            return Float(difference)
+//        default:
+//            let difference = 1
+//            return Float(difference)
+//        }
     }
     
     // Найти медиану, чтобы определить на какой высоте рисовать график

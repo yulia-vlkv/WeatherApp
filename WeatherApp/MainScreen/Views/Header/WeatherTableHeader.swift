@@ -11,7 +11,7 @@ import UIKit
 struct WeatherTableHeaderModel {
     
     let titleText: String?
-    let buttonText: String
+    let buttonText: String?
     let onButtonTap: (() -> Void)?
 }
 
@@ -77,9 +77,11 @@ class WeatherTableHeader: UITableViewHeaderFooterView {
 extension WeatherTableHeader: ConfigurableView {
     
     func configure(with model: WeatherTableHeaderModel) {
+        guard let buttonText = model.buttonText else { return }
+        
         let attributes: [NSAttributedString.Key: Any] = [.underlineStyle: NSUnderlineStyle.single.rawValue]
                     let attributedString = NSMutableAttributedString(
-                        string: model.buttonText,
+                        string: buttonText,
                         attributes: attributes
                     )
                     toDetailsButton.setAttributedTitle(attributedString, for: .normal)

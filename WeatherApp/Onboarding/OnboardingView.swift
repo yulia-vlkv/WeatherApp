@@ -8,7 +8,11 @@
 import Foundation
 import UIKit
 
-class OnboardingView: UIViewController {
+class OnboardingView: UIViewController, OnboardingScreenViewOutput {
+    
+    public var onPermitAccess: (() -> Void)?
+    public var onDenyAccess: (() -> Void)?
+    public var model: LocationService!
     
     private let scroll: UIScrollView = {
         let scroll = UIScrollView()
@@ -55,6 +59,7 @@ class OnboardingView: UIViewController {
             text: OnboardingText.addText(text: .onBoardingGrantAccessButton),
             buttonAction: {
                 LocationService().checkUserLocationPermissions()
+                    // To main screen
                 print("button is tapped")
             })
         return button
@@ -75,6 +80,8 @@ class OnboardingView: UIViewController {
     }()
     
     @objc func buttonIsTapped(){
+        // Alert to add Location
+        // To main screen
         print("deny button is tapped")
     }
     

@@ -7,6 +7,15 @@
 
 import UIKit
 
+
+extension HourlyWeatherTableCell: ConfigurableView {
+    
+    func configure(with model: HourlyWeatherTableCellModel) {
+        self.cells = model.cells
+        self.hourlyWeatherCollection.reloadData()
+    }
+}
+
 class HourlyWeatherTableCell: UITableViewCell {
     
     private var cells: [HourlyWeatherCellModel] = []
@@ -93,11 +102,3 @@ extension HourlyWeatherTableCell: UICollectionViewDataSource, UICollectionViewDe
     
 }
 
-
-extension HourlyWeatherTableCell: ConfigurableView {
-    
-    func configure(with model: HourlyWeatherTableCellModel) {
-        self.cells = model.cells
-        self.hourlyWeatherCollection.reloadData()
-    }
-}

@@ -90,7 +90,7 @@ public func convertTemperature(tempInCelsius: Float) -> String {
 public func convertSpeed(speedInMetric: Float) -> String {
     let currentSettings = SettingsModel.shared.windSpeedSettingss
     if currentSettings == .metric {
-        return "\(Int((speedInMetric * 3600).rounded())) км/ч"
+        return "\(Int((speedInMetric * 3.6).rounded())) км/ч"
     } else {
         let milesPerHour =  Int((speedInMetric * 2.236942).rounded())
         return "\(milesPerHour) mph"

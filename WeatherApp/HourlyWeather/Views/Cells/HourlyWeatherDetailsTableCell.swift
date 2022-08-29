@@ -25,8 +25,8 @@ extension HourlyWeatherDetailsTableCell: ConfigurableView {
             return mutableAttributedString
         }()
         windLabel.attributedText = {
-            let text = "Ветер \(model.windDirection), \(model.windSpeed)"
-            let textToHighlight = "\(model.windDirection)"
+            let text = "Ветер \(model.windDirection.lowercased()), \(model.windSpeed)"
+            let textToHighlight = " \(model.windDirection)"
             let anotherTextToHighlight = "\(model.windSpeed)"
             let firstRange = (text as NSString).range(of: textToHighlight)
             let secondRange = (text as NSString).range(of: anotherTextToHighlight)
@@ -135,7 +135,8 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let detailsStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.distribution = .equalSpacing
+        stack.distribution = .fillProportionally
+        stack.spacing = 10
         stack.toAutoLayout()
         return stack
     }()
@@ -248,7 +249,7 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
             backgroundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backgroundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            backgroundLabel.heightAnchor.constraint(equalToConstant: 190),
+            backgroundLabel.heightAnchor.constraint(equalToConstant: 210),
             
 //            frameLabel.topAnchor.constraint(equalTo: backgroundLabel.topAnchor),
 //            frameLabel.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor),

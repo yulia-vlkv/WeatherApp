@@ -9,9 +9,7 @@ import UIKit
 
 extension HourlyWeatherCell: ConfigurableView {
     
-    typealias Model = HourlyWeatherCellModel
-    
-    func configure(with model: Model) {
+    func configure(with model: HourlyWeatherCellModel) {
         timeLabel.text = model.time
         weatherImage.image = model.icon
         temperatureLabel.text = "\(model.temperature)°"
