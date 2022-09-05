@@ -7,6 +7,16 @@
 
 import UIKit
 
+
+extension MainInfoTableCell: ConfigurableView {
+    
+    func configure(with model: MainInfoTableCellModel) {
+        self.cells = model.cells
+        self.mainInfoCollection.reloadData()
+    }
+}
+
+
 class MainInfoTableCell: UITableViewCell {
 
     private var cells: [MainInfoCellModel] = []
@@ -142,12 +152,4 @@ extension MainInfoTableCell: UIScrollViewDelegate {
        let roundedIndex = round(index)
        self.pageControl.currentPage = Int(roundedIndex)
    }
-}
-
-extension MainInfoTableCell: ConfigurableView {
-    
-    func configure(with model: MainInfoTableCellModel) {
-        self.cells = model.cells
-        self.mainInfoCollection.reloadData()
-    }
 }

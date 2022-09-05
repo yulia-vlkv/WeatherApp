@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		249C0268F0B528940ABFBFC6 /* Pods_WeatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B37971971FD04E10C5B95222 /* Pods_WeatherApp.framework */; };
+		EF62621C28C4D8080078176F /* WeatherChartTableCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF62621B28C4D8080078176F /* WeatherChartTableCellModel.swift */; };
 		EF7F3E2928BA575400F3682D /* DailyWeatherDetailTableCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7F3E2828BA575400F3682D /* DailyWeatherDetailTableCellModel.swift */; };
 		EF7F3E2B28BA5B0C00F3682D /* DateScrollTableCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7F3E2A28BA5B0C00F3682D /* DateScrollTableCellModel.swift */; };
 		EF7F3E2D28BA5B4800F3682D /* DateScrollCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7F3E2C28BA5B4800F3682D /* DateScrollCellModel.swift */; };
@@ -66,6 +67,7 @@
 		6489F1A30CB9C8EBDBDD5C17 /* Pods-WeatherApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.debug.xcconfig"; path = "Target Support Files/Pods-WeatherApp/Pods-WeatherApp.debug.xcconfig"; sourceTree = "<group>"; };
 		B37971971FD04E10C5B95222 /* Pods_WeatherApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA89595A6FB8D86DA7DA765 /* Pods-WeatherApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.release.xcconfig"; path = "Target Support Files/Pods-WeatherApp/Pods-WeatherApp.release.xcconfig"; sourceTree = "<group>"; };
+		EF62621B28C4D8080078176F /* WeatherChartTableCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherChartTableCellModel.swift; sourceTree = "<group>"; };
 		EF7F3E2828BA575400F3682D /* DailyWeatherDetailTableCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWeatherDetailTableCellModel.swift; sourceTree = "<group>"; };
 		EF7F3E2A28BA5B0C00F3682D /* DateScrollTableCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateScrollTableCellModel.swift; sourceTree = "<group>"; };
 		EF7F3E2C28BA5B4800F3682D /* DateScrollCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateScrollCellModel.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 			children = (
 				EFD23F6428B5464700F974AA /* WeatherChartTableCell.swift */,
 				EFD23F6628B5464700F974AA /* ChartView.swift */,
+				EF62621B28C4D8080078176F /* WeatherChartTableCellModel.swift */,
 			);
 			path = Chart;
 			sourceTree = "<group>";
@@ -561,6 +564,7 @@
 				EFD23F4728B5459A00F974AA /* MainInfoTableCellModel.swift in Sources */,
 				EFD23F6D28B5464700F974AA /* HourlyWeatherDetailsTableCell.swift in Sources */,
 				EFD23F7928B5467700F974AA /* SettingsModel.swift in Sources */,
+				EF62621C28C4D8080078176F /* WeatherChartTableCellModel.swift in Sources */,
 				EFD23F4A28B5459A00F974AA /* MainInfoTableCell.swift in Sources */,
 				EF7F3E2928BA575400F3682D /* DailyWeatherDetailTableCellModel.swift in Sources */,
 				EFD23F6828B5464700F974AA /* HourlyWeatherViewModel.swift in Sources */,

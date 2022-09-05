@@ -22,10 +22,11 @@ struct DailyWeatherDetailTableCellModel {
     let description: String
     let dayIcon: UIImage
     let nightIcon: UIImage
-//    let moonrise: String
-//    let moonset: String
-//    let sunrise: String
-//    let sunset: String
+    let uvIndex: String
+    let moonrise: String
+    let moonset: String
+    let sunrise: String
+    let sunset: String
     
 }
 
@@ -59,7 +60,7 @@ extension DailyWeatherDetailTableCellModel  {
         }()
         
         self.feelsLikeNight = {
-            let tempInCelsius = dailyWeather.feelsLikeMaxTemperature
+            let tempInCelsius = dailyWeather.feelsLikeMinTemperature
             return convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
@@ -88,12 +89,48 @@ extension DailyWeatherDetailTableCellModel  {
             return icon.iconImage.nightImage
         }()
         
-        // to do: timestamp
-//        self.moonrise = dailyWeather.moonrise
-//        self.moonset = dailyWeather.moonset
-//        self.sunrise = dailyWeather.sunrise
-//        self.sunset = dailyWeather.sunset
+        self.uvIndex = String(Int(dailyWeather.uvIndex.rounded()))
+        
+        self.moonrise = {
+            let timestamp = String(dailyWeather.moonrise)
+            let time = createDateTime(timestamp: timestamp)
+            return time
+        }()
+        
+        self.moonset = {
+            let timestamp = String(dailyWeather.moonset)
+            let time = createDateTime(timestamp: timestamp)
+            return time
+        }()
+        
+        self.sunrise = {
+            let timestamp = String(dailyWeather.sunrise)
+            let time = createDateTime(timestamp: timestamp)
+            return time
+        }()
+        
+        self.sunset = {
+            let timestamp = String(dailyWeather.sunset)
+            let time = createDateTime(timestamp: timestamp)
+            return time
+        }()
         
     }
     
+}
+
+public func createDateTime(timestamp: String) -> String {
+    var strDate = "undefined"
+        
+    if let unixTime = Double(timestamp) {
+        let date = Date(timeIntervalSince1970: unixTime)
+        let dateFormatter = DateFormatter()
+        let timezone = TimeZone.current.abbreviation() ?? "UTC"
+        dateFormatter.timeZone = TimeZone(abbreviation: timezone)
+        dateFormatter.locale = NSLocale.current
+        dateFormatter.dateFormat = "HH:mm"
+        strDate = dateFormatter.string(from: date)
+    }
+        
+    return strDate
 }

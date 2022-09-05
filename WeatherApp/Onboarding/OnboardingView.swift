@@ -80,6 +80,35 @@ class OnboardingView: UIViewController, OnboardingScreenViewOutput {
     }()
     
     @objc func buttonIsTapped(){
+        
+        let alert = UIAlertController(title: "Укажите вашу локацию", message: nil, preferredStyle: .alert)
+        alert.addTextField() { newTextField in
+            newTextField.placeholder = "Мой город"
+        }
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Ок", style: .default) { _ in
+            if let textFields = alert.textFields,
+               let tf = textFields.first,
+               let title = tf.text {
+                self.model.getPlace(for: self.model.currentLocation!) { placemark in
+                    
+                    guard let placemark = placemark else { return }
+                    
+                    let placeForWeather = Location(
+                        city: placemark.locality ?? "Неизвестно",
+                        country: placemark.country ?? "Неизвестно",
+                        longitude: String(self.model.currentLocation!.coordinate.longitude),
+                        latitude: String(self.model.currentLocation!.coordinate.latitude)
+                    )
+                    
+                    self.model.locations?.append(placeForWeather)
+                    // Отправить на главный экран 
+                }
+            } else {
+                print("Can't add an annotation")
+            }
+        })
+        navigationController?.present(alert, animated: true)
         // Alert to add Location
         // To main screen
         print("deny button is tapped")

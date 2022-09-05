@@ -27,6 +27,7 @@ struct DailyWeather: Codable {
     var windSpeed: Float
     var windDirection: String
     var description: Icon
+    var uvIndex: Float
     var moonPhase: Float
     var moonrise: Int
     var moonset: Int
@@ -46,6 +47,7 @@ struct DailyWeather: Codable {
         case windSpeed = "wind_spd"
         case windDirection = "wind_cdir"
         case description = "weather"
+        case uvIndex = "uv"
         case moonPhase = "moon_phase_lunation"
         case moonrise = "moonrise_ts"
         case moonset = "moonset_ts"

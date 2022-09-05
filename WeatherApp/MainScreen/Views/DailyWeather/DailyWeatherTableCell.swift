@@ -18,11 +18,12 @@ extension DailyWeatherTableCell: ConfigurableView {
     }
 }
 
+
 class DailyWeatherTableCell: UITableViewCell {
     
     private var cells: [DailyWeatherTableCellModel] = []
     
-    private let backgroundLabel: UILabel = {
+    private let backgroundLabel: UIView = {
         let label = UILabel()
         label.backgroundColor = .clear
         label.toAutoLayout()
@@ -34,6 +35,8 @@ class DailyWeatherTableCell: UITableViewCell {
         label.backgroundColor = CustomColors.setColor(style: .lightBlue)
         label.layer.cornerRadius = 5
         label.clipsToBounds = true
+        label.layer.borderColor = CustomColors.setColor(style: .deepBlue).cgColor
+        label.layer.borderWidth = 0.6
         label.toAutoLayout()
         return label
     }()
@@ -52,22 +55,12 @@ class DailyWeatherTableCell: UITableViewCell {
     
     private let dateLabel: UILabel = {
         let label = UILabel()
-//        label.text = "30/07"
         label.textColor = .gray
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .center
         label.toAutoLayout()
         return label
     }()
-    
-//    private let stackView: UIStackView = {
-//        let stack = UIStackView()
-//        stack.axis = .horizontal
-//        stack.spacing = 6
-//        stack.contentMode = .scaleAspectFit
-//        stack.toAutoLayout()
-//        return stack
-//    }()
     
     private let weatherImage: UIImageView = {
         let image = UIImageView()
@@ -76,21 +69,10 @@ class DailyWeatherTableCell: UITableViewCell {
         return image
     }()
     
-//    private let humidityLabel: UILabel = {
-//        let label = UILabel()
-//        label.text = "37%"
-//        label.textColor = CustomColors.setColor(style: .deepBlue)
-//        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-//        label.textAlignment = .center
-//        label.toAutoLayout()
-//        return label
-//    }()
-    
     // MARK: - Middle content
     
     private let detailsLabel: UILabel = {
         let label = UILabel()
-//        label.text = "Облачно, солнечно и дождливо"
         label.numberOfLines = 1
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -149,8 +131,6 @@ class DailyWeatherTableCell: UITableViewCell {
         frameLabel.addSubview(leftStackView)
         leftStackView.addArrangedSubview(dateLabel)
         leftStackView.addArrangedSubview(weatherImage)
-//        stackView.addArrangedSubview(weatherImage)
-//        stackView.addArrangedSubview(humidityLabel)
         frameLabel.addSubview(detailsLabel)
         frameLabel.addSubview(rightStackView)
         rightStackView.addArrangedSubview(temperatureLabel)

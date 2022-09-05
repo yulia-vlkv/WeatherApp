@@ -39,6 +39,14 @@ class HourlyWeatherViewModel: HourlyWeatherScreenViewOutput {
         }
     }
     
+    public func viewDidLoad() {
+        reloadData()
+    }
+    
+    private func reloadData() {
+        sections = mapToViewModel()
+    }
+    
     func mapToViewModel() -> [HourlyWeatherDataSourceSection] {
         var resultSections: [HourlyWeatherDataSourceSection] = []
         

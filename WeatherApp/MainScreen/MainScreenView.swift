@@ -19,6 +19,8 @@ extension MainScreenView: ConfigurableView {
 class MainScreenView: UIViewController {
     
     public var model: MainScreenViewModel!
+    
+//    private var cells: [DailyWeatherTableCellModel] = []
 
     private let mainTableView = UITableView(frame: .zero, style: .grouped)
 
@@ -62,11 +64,7 @@ class MainScreenView: UIViewController {
         navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.tintColor = .black
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "mappin.circle"),
-//                                                            style: .plain,
-//                                                            target: self,
-//                                                            action:  #selector(toOnboarding))
-        
+
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "line.3.horizontal"),
                                                             style: .plain,
                                                             target: self,
@@ -79,13 +77,6 @@ class MainScreenView: UIViewController {
 
     }
     
-//    @objc private func toOnboarding(){
-//
-//        // Add Alert to add now location
-//        print("toOnboarding in pressed")
-//        let vc = OnboardingView()
-//        navigationController?.pushViewController(vc, animated: true)
-//    }
     
     @objc private func toSettings(){
         model.onOpenSettings
@@ -162,6 +153,13 @@ extension MainScreenView: UITableViewDelegate, UITableViewDataSource {
             cell.configure(with: cellModel)
             return cell
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        if indexPath.item < cells.count {
+//            let model = cells[indexPath.row]
+//            model.onSelect?()
+//        }
     }
 }
 

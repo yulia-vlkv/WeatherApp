@@ -179,33 +179,20 @@ class MainScreenViewModel: MainScreenViewOutput {
                             self?.onOpenDailyWeather?(dailyWeather)
                         }
                     ),
-                    dailyWeather.map { MainScreenDataSourceItem.dailyWeather(DailyWeatherTableCellModel(with: $0)) }
+                    dailyWeather.map {
+                        MainScreenDataSourceItem.dailyWeather(
+                            DailyWeatherTableCellModel(
+                                with: $0,
+                                onSelect: { [weak self] in
+                                    self?.onOpenDailyWeather?(dailyWeather)
+                                    // To do? 
+                                }
+                            )
+                        )}
             )
         )
         
         return resultSections
     }
-    
-    // To do 
-//    private func getEveryThirdCell(cellsArray: [HourlyWeather]) -> [HourlyWeatherCellModel] {
-//        var newArray: [HourlyWeatherCellModel] = []
-//        var i = 0
-//        while i < cellsArray.count {
-//            let item = HourlyWeatherCellModel(with: cellsArray[i])
-//            i += 3
-//            newArray.append(item)
-//        }
-//        return newArray
-//    }
-    
-//    private func getEveryDailyCell(cellsArray: [DailyWeather]) -> [MainScreenDataSourceItem] {
-//        var newArray: [MainScreenDataSourceItem] = []
-//        for i in cellsArray {
-//            let item = MainScreenDataSourceItem.dailyWeather(DailyWeatherTableCellModel(with: i))
-//            newArray.append(item)
-//        }
-//        let result = cellsArray.map { MainScreenDataSourceItem.dailyWeather(DailyWeatherTableCellModel(with: $0)) }
-//        return result
-//    }
     
 }

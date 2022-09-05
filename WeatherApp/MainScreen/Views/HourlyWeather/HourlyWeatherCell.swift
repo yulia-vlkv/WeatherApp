@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 extension HourlyWeatherCell: ConfigurableView {
     
     func configure(with model: HourlyWeatherCellModel) {
@@ -14,8 +15,8 @@ extension HourlyWeatherCell: ConfigurableView {
         weatherImage.image = model.icon
         temperatureLabel.text = "\(model.temperature)°"
     }
-    
 }
+
 
 class HourlyWeatherCell: UICollectionViewCell {
     

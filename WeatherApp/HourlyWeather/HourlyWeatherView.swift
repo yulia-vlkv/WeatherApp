@@ -30,7 +30,7 @@ class HourlyWeatherView: UIViewController {
         
         configureTableView()
         configureNavigationBar()
-        self.model.sections = self.model.mapToViewModel()
+        model.viewDidLoad()
     }
     
     // MARK: - Configure TableView
@@ -109,6 +109,7 @@ extension HourlyWeatherView: UITableViewDelegate, UITableViewDataSource {
         switch sectionModel{
         case .temperatureChart(let points):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: WeatherChartTableCell.self), for: indexPath) as! WeatherChartTableCell
+            cell.configure(with: WeatherChartTableCellModel(points: points))
             return cell
         case .hourlyWeatherDetails(let items):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: HourlyWeatherDetailsTableCell.self), for: indexPath) as! HourlyWeatherDetailsTableCell

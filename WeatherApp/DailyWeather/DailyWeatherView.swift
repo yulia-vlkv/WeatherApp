@@ -29,7 +29,13 @@ class DailyWeatherView: UIViewController {
         
         configureTableView()
         configureNavigationBar()
-        self.model.sections = self.model.mapToViewModel()
+        self.model.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(true)
+        
+       // Set isSelected ot true for firstItem
     }
     
     // MARK: - Configure TableView
@@ -85,10 +91,8 @@ extension DailyWeatherView: UITableViewDelegate, UITableViewDataSource {
         
         let sectionModel = model.sections[section]
         switch sectionModel{
-        case .dateScroll(_):
+        case .dateScroll, .dailyWeatherDetails:
             return 1
-        case .dailyWeatherDetails(_):
-            return  1
         }
         
     }
@@ -104,9 +108,9 @@ extension DailyWeatherView: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: DateScrollTableCell.self), for: indexPath) as! DateScrollTableCell
             cell.configure(with: cellModel)
             return cell
-        case .dailyWeatherDetails(let items):
+        case .dailyWeatherDetails(let cellModel):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: DailyWeatherDetailTableCell.self), for: indexPath) as! DailyWeatherDetailTableCell
-            cell.configure(with: items[indexPath.row])
+            cell.configure(with: cellModel)
             return cell
         }
     }

@@ -25,8 +25,8 @@ extension HourlyWeatherDetailsTableCell: ConfigurableView {
             return mutableAttributedString
         }()
         windLabel.attributedText = {
-            let text = "Ветер \(model.windDirection.lowercased()), \(model.windSpeed)"
-            let textToHighlight = " \(model.windDirection)"
+            let text = "Ветер \(model.windDirection), \(model.windSpeed)"
+            let textToHighlight = "\(model.windDirection)"
             let anotherTextToHighlight = "\(model.windSpeed)"
             let firstRange = (text as NSString).range(of: textToHighlight)
             let secondRange = (text as NSString).range(of: anotherTextToHighlight)
@@ -59,48 +59,45 @@ extension HourlyWeatherDetailsTableCell: ConfigurableView {
 
 class HourlyWeatherDetailsTableCell: UITableViewCell {
     
-    private let backgroundLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = CustomColors.setColor(style: .lightBlue)
-        label.toAutoLayout()
-        return label
-    }()
-    
-    private let topStackView: UIStackView = {
+    private let stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.distribution = .equalSpacing
+        stack.distribution = .fill
+        stack.spacing = 20
+        stack.backgroundColor = CustomColors.setColor(style: .lightBlue)
+        stack.layoutMargins = UIEdgeInsets(top: 16, left: 30, bottom: 16, right: 30)
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.toAutoLayout()
+        return stack
+    }()
+    
+    private let dateStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .fill
+        stack.distribution = .fillProportionally
+        stack.layoutMargins = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+        stack.isLayoutMarginsRelativeArrangement = true
         stack.toAutoLayout()
         return stack
     }()
     
     private let dateLabel: UILabel = {
         let label = UILabel()
-//        label.text = "30/07"
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 22, weight: .regular)
+        label.textAlignment = .center
         label.toAutoLayout()
         return label
     }()
     
     private let timeLabel: UILabel = {
         let label = UILabel()
-//        label.text = "14:26"
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        label.textAlignment = .right
+        label.font = UIFont.systemFont(ofSize: 22, weight: .regular)
+        label.textAlignment = .center
         label.toAutoLayout()
         return label
-    }()
-    
-    private let bottomStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.distribution = .fill
-        stack.spacing = 10
-        stack.toAutoLayout()
-        return stack
     }()
     
     private let infoStackView: UIStackView = {
@@ -108,6 +105,8 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
         stack.axis = .vertical
         stack.alignment = .fill
         stack.distribution = .fillProportionally
+        stack.layoutMargins = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+        stack.isLayoutMarginsRelativeArrangement = true
         stack.toAutoLayout()
         return stack
     }()
@@ -116,7 +115,6 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .center
-//        label.text = "24°"
         label.font = UIFont.systemFont(ofSize: 22, weight: .regular)
         label.textColor = .black
         label.toAutoLayout()
@@ -144,14 +142,8 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGray
-//        let text = "Облачно, солнечно и дождливо. По ощущениям 10°"
-//        let textToHighlight = "10°"
-//        let range = (text as NSString).range(of: textToHighlight)
-//        let mutableAttributedString = NSMutableAttributedString.init(string: text)
-//        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
-//        label.attributedText = mutableAttributedString
         label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         label.textAlignment = .left
         label.lineBreakStrategy = .pushOut
         label.toAutoLayout()
@@ -161,17 +153,8 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let windLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGray
-//        let text = "Ветер северо-западный, 2 м/с"
-//        let textToHighlight = "северо-западный"
-//        let anotherTextToHighlight = "2"
-//        let firstRange = (text as NSString).range(of: textToHighlight)
-//        let secondRange = (text as NSString).range(of: anotherTextToHighlight)
-//        let mutableAttributedString = NSMutableAttributedString.init(string: text)
-//        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: firstRange)
-//        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: secondRange)
-//        label.attributedText = mutableAttributedString
         label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         label.textAlignment = .left
         label.lineBreakStrategy = .pushOut
         label.toAutoLayout()
@@ -181,14 +164,8 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let humidityLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGray
-//        let text = "Влажность 13%"
-//        let textToHighlight = "13%"
-//        let range = (text as NSString).range(of: textToHighlight)
-//        let mutableAttributedString = NSMutableAttributedString.init(string: text)
-//        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
-//        label.attributedText = mutableAttributedString
         label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         label.textAlignment = .left
         label.lineBreakStrategy = .pushOut
         label.toAutoLayout()
@@ -198,14 +175,8 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let cloudsLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGray
-//        let text = "Облачность 13%"
-//        let textToHighlight = "13%"
-//        let range = (text as NSString).range(of: textToHighlight)
-//        let mutableAttributedString = NSMutableAttributedString.init(string: text)
-//        mutableAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: CustomColors.setColor(style: .deepBlue), range: range)
-//        label.attributedText = mutableAttributedString
         label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         label.textAlignment = .left
         label.lineBreakStrategy = .pushOut
         label.toAutoLayout()
@@ -229,54 +200,31 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
 
     private func configureLayout(){
         self.separatorInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
-        contentView.addSubview(backgroundLabel)
-        backgroundLabel.addSubview(topStackView)
-//        frameLabel.addSubview(topStackView)
-        topStackView.addArrangedSubview(dateLabel)
-        topStackView.addArrangedSubview(timeLabel)
-        backgroundLabel.addSubview(bottomStackView)
-        bottomStackView.addArrangedSubview(infoStackView)
-        infoStackView.addArrangedSubview(temperatureLabel)
-        infoStackView.addArrangedSubview(weatherImage)
-        bottomStackView.addArrangedSubview(detailsStackView)
+        contentView.addSubview(stackView)
+//        backgroundLabel.addSubview(stackView)
+        
+        stackView.addArrangedSubview(dateStackView)
+        dateStackView.addArrangedSubview(dateLabel)
+        dateStackView.addArrangedSubview(timeLabel)
+        
+        stackView.addArrangedSubview(detailsStackView)
         detailsStackView.addArrangedSubview(descriptionLabel)
         detailsStackView.addArrangedSubview(windLabel)
         detailsStackView.addArrangedSubview(humidityLabel)
         detailsStackView.addArrangedSubview(cloudsLabel)
         
+        stackView.addArrangedSubview(infoStackView)
+        infoStackView.addArrangedSubview(temperatureLabel)
+        infoStackView.addArrangedSubview(weatherImage)
+
+        
         let constraints = [
-            backgroundLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            backgroundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            backgroundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            backgroundLabel.heightAnchor.constraint(equalToConstant: 210),
-            
-//            frameLabel.topAnchor.constraint(equalTo: backgroundLabel.topAnchor),
-//            frameLabel.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor),
-//            frameLabel.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor),
-//            frameLabel.heightAnchor.constraint(equalToConstant: 170),
-            
-            topStackView.topAnchor.constraint(equalTo: backgroundLabel.topAnchor, constant: inset),
-            topStackView.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: sideInset),
-            topStackView.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -sideInset),
-            topStackView.heightAnchor.constraint(equalToConstant: 26),
-            
-            temperatureLabel.topAnchor.constraint(equalTo: topStackView.bottomAnchor, constant: inset),
-            temperatureLabel.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: sideInset),
-            temperatureLabel.heightAnchor.constraint(equalToConstant: 28),
-            temperatureLabel.widthAnchor.constraint(equalToConstant: 50),
-            
-            bottomStackView.topAnchor.constraint(equalTo: topStackView.bottomAnchor, constant: inset),
-            bottomStackView.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: sideInset),
-            bottomStackView.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -sideInset),
-            bottomStackView.bottomAnchor.constraint(equalTo: backgroundLabel.bottomAnchor, constant: -inset),
-            
-//            temperatureLabel.heightAnchor.constraint(equalToConstant: 30),
-//            weatherImage.heightAnchor.constraint(equalToConstant: 50)
-            
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            stackView.heightAnchor.constraint(equalToConstant: height),
         ]
-            
-            
         
         NSLayoutConstraint.activate(constraints)
     }
@@ -286,6 +234,8 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private var inset: CGFloat { return 16 }
     
     private var sideInset: CGFloat { return 30 }
+    
+    private var height: CGFloat { return 210 }
     
 
 }

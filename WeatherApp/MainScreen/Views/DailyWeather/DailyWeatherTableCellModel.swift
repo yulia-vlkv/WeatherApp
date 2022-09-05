@@ -16,12 +16,13 @@ struct DailyWeatherTableCellModel {
     let description: String
     let lowestTemperature: String
     let highestTemperature: String
+    let onSelect: (() -> Void)?
     
 }
 
 extension DailyWeatherTableCellModel  {
     
-    init(with dailyWeather: DailyWeather) {
+    init(with dailyWeather: DailyWeather, onSelect: (() -> Void)?) {
         
         self.date = {
             let stringToFormat = dailyWeather.time
@@ -50,6 +51,8 @@ extension DailyWeatherTableCellModel  {
             let tempInCelsius = dailyWeather.highestTemperature
             return convertTemperature(tempInCelsius: tempInCelsius)
         }()
+        
+        self.onSelect = onSelect
         
     }
 }

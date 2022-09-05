@@ -16,6 +16,7 @@ extension HourlyWeatherTableCell: ConfigurableView {
     }
 }
 
+
 class HourlyWeatherTableCell: UITableViewCell {
     
     private var cells: [HourlyWeatherCellModel] = []
@@ -78,7 +79,7 @@ class HourlyWeatherTableCell: UITableViewCell {
 extension HourlyWeatherTableCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+        return cells.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -88,7 +89,6 @@ extension HourlyWeatherTableCell: UICollectionViewDataSource, UICollectionViewDe
             let model = cells[indexPath.item]
             cell.configure(with: model)
         }
-//        cell.backgroundColor = CustomColors.setColor(style: .lightBlue)
         return cell
     }
     

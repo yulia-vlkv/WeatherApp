@@ -11,7 +11,7 @@ import Foundation
 enum DailyWeatherDataSourceSection {
     
     case dateScroll(DateScrollTableCellModel)
-    case dailyWeatherDetails([DailyWeatherDetailTableCellModel])
+    case dailyWeatherDetails(DailyWeatherDetailTableCellModel)
 }
 
 class DailyWeatherViewModel: DailyWeatherScreenViewOutput {
@@ -22,10 +22,13 @@ class DailyWeatherViewModel: DailyWeatherScreenViewOutput {
     
     private weak var view: DailyWeatherView!
     private var dailyWeather: [DailyWeather]
+    private var selectedWeather: DailyWeather?
     
     init(view: DailyWeatherView, model: [DailyWeather]) {
         self.view = view
         self.dailyWeather = model
+        // Weather selected from previous screen
+        self.selectedWeather = model.first
     }
     
     private let currentDate = Date()
@@ -38,23 +41,37 @@ class DailyWeatherViewModel: DailyWeatherScreenViewOutput {
         }
     }
     
-    func mapToViewModel() -> [DailyWeatherDataSourceSection] {
+    public func viewDidLoad() {
+        reloadData()
+    }
+    
+    private func reloadData() {
+        sections = mapToViewModel()
+    }
+    
+    private func mapToViewModel() -> [DailyWeatherDataSourceSection] {
         var resultSections: [DailyWeatherDataSourceSection] = []
         
         resultSections.append(
             .dateScroll(
                 DateScrollTableCellModel(
-                    cells:
-                        dailyWeather.map { DateScrollCellModel(with: $0) }
+                    cells: dailyWeather.map { currentWeather in
+                        DateScrollCellModel(with: currentWeather, onSelect: { [weak self] in
+                            self?.selectedWeather = currentWeather
+                            self?.reloadData()
+                        })
+                    }
                 )
             )
         )
         
-        resultSections.append(
-            .dailyWeatherDetails(
-                dailyWeather.map { DailyWeatherDetailTableCellModel(with: $0) }
+        if let selectedWeather = selectedWeather {
+            resultSections.append(
+                .dailyWeatherDetails(
+                    DailyWeatherDetailTableCellModel(with: selectedWeather)
+                )
             )
-        )
+        }
         
         return resultSections
     }

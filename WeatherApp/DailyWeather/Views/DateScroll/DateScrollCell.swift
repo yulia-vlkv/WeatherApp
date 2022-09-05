@@ -19,12 +19,41 @@ extension DateScrollCell: ConfigurableView {
 
 class DateScrollCell: UICollectionViewCell {
     
-    private let dateLabel: UILabel = {
+    override var isSelected: Bool {
+        didSet {
+            if self.isSelected {
+                self.dateLabel.backgroundColor = CustomColors.setColor(style: .deepBlue)
+                print("selected")
+            } else {
+                self.dateLabel.backgroundColor = CustomColors.setColor(style: .lightBlue)
+                print("deselected")
+            }
+//            self.dateLabel.backgroundColor = isSelected ? CustomColors.setColor(style: .deepBlue) : CustomColors.setColor(style: .lightBlue)
+        }
+    }
+    
+//    override var isSelected: Bool {
+//        get {
+//            return super.isSelected
+//        }
+//        set {
+//            if newValue {
+//                super.isSelected = true
+//                self.dateLabel.backgroundColor = CustomColors.setColor(style: .deepBlue)
+//                print("selected")
+//            } else if newValue == false {
+//                super.isSelected = false
+//                self.dateLabel.backgroundColor = CustomColors.setColor(style: .lightBlue)
+//                print("deselected")
+//            }
+//        }
+//    }
+    
+    let dateLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .center
-//        label.text = "18/08"
-        label.backgroundColor = CustomColors.setColor(style: .lightBlue)
+//        label.backgroundColor = CustomColors.setColor(style: .lightBlue)
         label.layer.cornerRadius = 12
         label.clipsToBounds = true
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)

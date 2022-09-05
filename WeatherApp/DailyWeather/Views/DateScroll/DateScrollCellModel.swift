@@ -11,12 +11,13 @@ import Foundation
 struct DateScrollCellModel {
     
     let date: String
+    let onSelect: (() -> Void)?
     
 }
 
 extension DateScrollCellModel  {
     
-    init(with dailyWeather: DailyWeather) {
+    init(with dailyWeather: DailyWeather, onSelect: (() -> Void)?) {
         
         self.date = {
             let stringToFormat = dailyWeather.time
@@ -27,6 +28,8 @@ extension DateScrollCellModel  {
             dateFormatter.dateFormat = "MM/dd"
             return dateFormatter.string(from: date!)
         }()
+        
+        self.onSelect = onSelect
         
     }
 }

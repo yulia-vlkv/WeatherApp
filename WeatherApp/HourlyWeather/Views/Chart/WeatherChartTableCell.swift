@@ -8,17 +8,10 @@
 import UIKit
 
 
-struct WeatherChartTableCellModel {
-    
-    let points: [PointEntry]
-    
-}
-
 extension WeatherChartTableCell: ConfigurableView {
     
     func configure(with model: WeatherChartTableCellModel) {
-        self.lineChartView.dataEntries = model.points
-        self.lineChartView.reloadInputViews()
+        self.lineChartView.configure(with: model.points)
     }
 }
 
@@ -27,6 +20,7 @@ class WeatherChartTableCell: UITableViewCell {
     
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
+        view.backgroundColor = CustomColors.setColor(style: .lightBlue)
         view.toAutoLayout()
         return view
     }()
@@ -51,9 +45,7 @@ class WeatherChartTableCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-//        self.separatorInset = UIEdgeInsets.zero
-        
+
         configureLayout()
     }
     
@@ -79,7 +71,7 @@ class WeatherChartTableCell: UITableViewCell {
             backgroundLabel.bottomAnchor.constraint(equalTo: scrollContantGuide.bottomAnchor),
             backgroundLabel.topAnchor.constraint(equalTo: scrollFrameGuide.topAnchor),
             backgroundLabel.bottomAnchor.constraint(equalTo: scrollFrameGuide.bottomAnchor),
-            backgroundLabel.widthAnchor.constraint(equalToConstant: 640),
+            backgroundLabel.widthAnchor.constraint(equalToConstant: 80 * 24 ),
             
             lineChartView.topAnchor.constraint(equalTo: backgroundLabel.topAnchor),
             lineChartView.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor),

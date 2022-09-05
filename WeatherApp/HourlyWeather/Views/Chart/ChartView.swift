@@ -43,8 +43,9 @@ extension PointEntry {
 
 extension LineChart: ConfigurableView {
     
-    func configure(with model: PointEntry) {
-        dataEntries?.append(model)
+    func configure(with model: [PointEntry]) {
+        dataEntries = model
+        
     }
 }
 
@@ -139,7 +140,8 @@ class LineChart: UIView {
     private let mainLayer: CALayer = CALayer()
     private let gridLayer: CALayer = CALayer()
 
-    /// An array of CGPoint on dataLayer coordinate system that the main line will go through. These points will be calculated from dataEntries array
+    
+    // Точки для графика на слое dataLayer, считаются из dataEntries
     private var temperatureDataPoint: [CGPoint]?
 
     override init(frame: CGRect) {
@@ -183,8 +185,7 @@ class LineChart: UIView {
         }
     }
     
-    // Посчитать разничу между максимальной и минимальной температурами, найти коэффицент для того, чтобы скейлить график
-    
+    // Посчитать разниwу между максимальной и минимальной температурами, найти коэффицент для того, чтобы скейлить график
     private func getDifference(entries: [PointEntry]) -> Float {
         var temperature: [Float] = []
         for value in entries {
@@ -194,31 +195,8 @@ class LineChart: UIView {
         let numMax = temperature.reduce(temperature[0], { max($0, $1) })
         let numMin = temperature.reduce(temperature[0], { min ($0, $1) })
         let diff = numMax - numMin
-        let difference = 70 / diff
+        let difference = 30 / diff
         return difference
-//        switch diff{
-//        case 0...5:
-//            let difference = 8.0
-//            return Float(difference)
-//        case 6...10:
-//            let difference = 4.0
-//            return Float(difference)
-//        case 11...15:
-//            let difference = 2.0
-//            return Float(difference)
-//        case 16...20:
-//            let difference = 1.5
-//            return Float(difference)
-//        case 21...40:
-//            let difference = 1
-//            return Float(difference)
-//        case 40...:
-//            let difference = 0.5
-//            return Float(difference)
-//        default:
-//            let difference = 1
-//            return Float(difference)
-//        }
     }
     
     // Найти медиану, чтобы определить на какой высоте рисовать график
@@ -356,7 +334,7 @@ class LineChart: UIView {
     
     // Ось х, на которой отмечеается время
     private func drawHorizontalLine() {
-        let width = 620
+        let width = Int(lineGap) * (dataEntries?.count ?? 0)
 
         let path = UIBezierPath()
         path.move(to: CGPoint(x: 30, y: 100))
