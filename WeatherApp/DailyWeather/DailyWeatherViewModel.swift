@@ -24,16 +24,15 @@ class DailyWeatherViewModel: DailyWeatherScreenViewOutput {
     private var dailyWeather: [DailyWeather]
     private var selectedWeather: DailyWeather?
     
-    init(view: DailyWeatherView, model: [DailyWeather]) {
+    init(view: DailyWeatherView, model: [DailyWeather], selectedModel: DailyWeather?) {
         self.view = view
         self.dailyWeather = model
-        // Weather selected from previous screen
-        self.selectedWeather = model.first
+        self.selectedWeather = selectedModel ?? model.first
     }
     
     private let currentDate = Date()
     
-    var city: String = "Город, страна"
+//    var city: String = "Город, страна"
     
     var sections: [DailyWeatherDataSourceSection] = [] {
         didSet {

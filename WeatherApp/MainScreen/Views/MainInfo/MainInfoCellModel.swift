@@ -26,17 +26,17 @@ struct MainInfoCellModel {
         
         self.currentTemperature = {
             let tempInCelsius = currentWeather.currentTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+            return Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
         self.lowestTemperature = {
             let tempInCelsius = dailyWeather.lowestTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+            return  Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
         self.highestTemperature = {
             let tempInCelsius = dailyWeather.highestTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+            return Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
         self.verbalDescription = currentWeather.description.verbalDesctiption
@@ -45,7 +45,7 @@ struct MainInfoCellModel {
         
         self.windSpeed = {
             let speedInMetric = currentWeather.windSpeed
-            return convertSpeed(speedInMetric: speedInMetric)
+            return Converter.shared.convertSpeed(speedInMetric: speedInMetric)
         }()
         
         self.humidity = String(Int(currentWeather.humidity))
@@ -77,22 +77,4 @@ struct MainInfoCellModel {
     }
 }
 
-public func convertTemperature(tempInCelsius: Float) -> String {
-    let currentSettings = SettingsModel.shared.temperatureSettings
-    if currentSettings == .celsius {
-        return String(Int(tempInCelsius.rounded()))
-    } else {
-        let fahrenheit = tempInCelsius * 1.8 + 32
-        return String(Int(fahrenheit.rounded()))
-    }
-}
 
-public func convertSpeed(speedInMetric: Float) -> String {
-    let currentSettings = SettingsModel.shared.windSpeedSettingss
-    if currentSettings == .metric {
-        return "\(Int((speedInMetric * 3.6).rounded())) км/ч"
-    } else {
-        let milesPerHour =  Int((speedInMetric * 2.236942).rounded())
-        return "\(milesPerHour) mph"
-    }
-}

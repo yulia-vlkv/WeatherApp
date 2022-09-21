@@ -14,8 +14,8 @@ struct DailyWeatherTableCellModel {
     let date: String
     let icon: UIImage
     let description: String
-    let lowestTemperature: String
-    let highestTemperature: String
+    let nightTemperature: String
+    let dayTemperature: String
     let onSelect: (() -> Void)?
     
 }
@@ -42,14 +42,14 @@ extension DailyWeatherTableCellModel  {
         
         self.description = dailyWeather.description.verbalDesctiption
         
-        self.lowestTemperature = {
-            let tempInCelsius = dailyWeather.lowestTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+        self.nightTemperature = {
+            let tempInCelsius = dailyWeather.nightTemperature
+            return Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
-        self.highestTemperature = {
-            let tempInCelsius = dailyWeather.highestTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+        self.dayTemperature = {
+            let tempInCelsius = dailyWeather.dayTemperature
+            return Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
         self.onSelect = onSelect

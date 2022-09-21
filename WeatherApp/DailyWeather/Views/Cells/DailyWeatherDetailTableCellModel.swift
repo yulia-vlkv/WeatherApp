@@ -46,22 +46,22 @@ extension DailyWeatherDetailTableCellModel  {
         
         self.dayTemperature = {
             let tempInCelsius = dailyWeather.dayTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+            return Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
         self.nightTemperature = {
             let tempInCelsius = dailyWeather.nightTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+            return Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
         self.feelsLikeDay = {
             let tempInCelsius = dailyWeather.feelsLikeMaxTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+            return Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
         self.feelsLikeNight = {
             let tempInCelsius = dailyWeather.feelsLikeMinTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+            return Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
         self.probabilityOfRain = String(Int(dailyWeather.probabilityOfRain))
@@ -70,7 +70,7 @@ extension DailyWeatherDetailTableCellModel  {
         
         self.windSpeed = {
             let speedInMetric = dailyWeather.windSpeed
-            return convertSpeed(speedInMetric: speedInMetric)
+            return Converter.shared.convertSpeed(speedInMetric: speedInMetric)
         }()
 
         self.windDirection = dailyWeather.windDirection

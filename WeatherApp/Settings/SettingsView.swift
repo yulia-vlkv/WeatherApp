@@ -8,6 +8,18 @@
 import Foundation
 import UIKit
 
+// MARK: - Configure SettingsOptionView
+
+extension SettingsView: ConfigurableView {
+    
+    func configure(with model: SettingsViewModel) {
+        temperatureOptionView.configure(with: model.temperatureOption)
+        windSpeedOptionView.configure(with: model.windSpeedOption)
+        timeFormateOptionView.configure(with: model.timeFormatOption)
+        notificationsOptionView.configure(with: model.notificationsOption)
+    }
+}
+
 
 class SettingsView: UIViewController {
     
@@ -188,14 +200,3 @@ class SettingsView: UIViewController {
     private var height: CGFloat { return 280 }
 }
 
-// MARK: - Configure SettingsOptionView
-
-extension SettingsView: ConfigurableView {
-    
-    func configure(with model: SettingsViewModel) {
-        temperatureOptionView.configure(with: model.temperatureOption)
-        windSpeedOptionView.configure(with: model.windSpeedOption)
-        timeFormateOptionView.configure(with: model.timeFormatOption)
-        notificationsOptionView.configure(with: model.notificationsOption)
-    }
-}

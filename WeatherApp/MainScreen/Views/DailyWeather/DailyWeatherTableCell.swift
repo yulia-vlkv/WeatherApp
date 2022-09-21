@@ -14,7 +14,7 @@ extension DailyWeatherTableCell: ConfigurableView {
         dateLabel.text = model.date
         weatherImage.image = model.icon
         detailsLabel.text = model.description
-        temperatureLabel.text = "\(model.lowestTemperature)°-\(model.highestTemperature)°"
+        temperatureLabel.text = "\(model.nightTemperature)°-\(model.dayTemperature)°"
     }
 }
 
@@ -23,22 +23,20 @@ class DailyWeatherTableCell: UITableViewCell {
     
     private var cells: [DailyWeatherTableCellModel] = []
     
-    private let backgroundLabel: UIView = {
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.toAutoLayout()
-        return label
+    private let cellBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.toAutoLayout()
+        return view
     }()
-    
-    private let frameLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = CustomColors.setColor(style: .lightBlue)
-        label.layer.cornerRadius = 5
-        label.clipsToBounds = true
-        label.layer.borderColor = CustomColors.setColor(style: .deepBlue).cgColor
-        label.layer.borderWidth = 0.6
-        label.toAutoLayout()
-        return label
+
+    private let frameView: UIView = {
+        let view = UIView()
+        view.backgroundColor = CustomColors.setColor(style: .lightBlue)
+        view.layer.cornerRadius = 5
+        view.clipsToBounds = true
+        view.toAutoLayout()
+        return view
     }()
     
     // MARK: - Left content
@@ -88,16 +86,16 @@ class DailyWeatherTableCell: UITableViewCell {
         stack.axis = .horizontal
         stack.spacing = 10
         stack.contentMode = .scaleAspectFit
+        stack.alignment = .trailing
         stack.toAutoLayout()
         return stack
     }()
     
     private let temperatureLabel: UILabel = {
         let label = UILabel()
-//        label.text = "4-11°"
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        label.textAlignment = .center
+        label.textAlignment = .right
         label.toAutoLayout()
         return label
     }()
@@ -126,38 +124,38 @@ class DailyWeatherTableCell: UITableViewCell {
     // MARK: - Configure Layout
 
     private func configureLayout(){
-        contentView.addSubview(backgroundLabel)
-        backgroundLabel.addSubview(frameLabel)
-        frameLabel.addSubview(leftStackView)
+        contentView.addSubview(cellBackgroundView)
+        cellBackgroundView.addSubview(frameView)
+        frameView.addSubview(leftStackView)
         leftStackView.addArrangedSubview(dateLabel)
         leftStackView.addArrangedSubview(weatherImage)
-        frameLabel.addSubview(detailsLabel)
-        frameLabel.addSubview(rightStackView)
+        frameView.addSubview(detailsLabel)
+        frameView.addSubview(rightStackView)
         rightStackView.addArrangedSubview(temperatureLabel)
         rightStackView.addArrangedSubview(rightChevronLabel)
         
         let constraints = [
-            backgroundLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
-            backgroundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            backgroundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            backgroundLabel.heightAnchor.constraint(equalToConstant: backgroundHeight),
+            cellBackgroundView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            cellBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            cellBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            cellBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            cellBackgroundView.heightAnchor.constraint(equalToConstant: backgroundHeight),
             
-            frameLabel.topAnchor.constraint(equalTo: backgroundLabel.topAnchor),
-            frameLabel.heightAnchor.constraint(equalToConstant: labelHeight),
-            frameLabel.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: sideInset),
-            frameLabel.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -sideInset),
+            frameView.topAnchor.constraint(equalTo: cellBackgroundView.topAnchor),
+            frameView.heightAnchor.constraint(equalToConstant: labelHeight),
+            frameView.leadingAnchor.constraint(equalTo: cellBackgroundView.leadingAnchor, constant: sideInset),
+            frameView.trailingAnchor.constraint(equalTo: cellBackgroundView.trailingAnchor, constant: -sideInset),
             
-            leftStackView.centerYAnchor.constraint(equalTo: frameLabel.centerYAnchor),
-            leftStackView.leadingAnchor.constraint(equalTo: frameLabel.leadingAnchor, constant: smallSideInset),
+            leftStackView.centerYAnchor.constraint(equalTo: frameView.centerYAnchor),
+            leftStackView.leadingAnchor.constraint(equalTo: frameView.leadingAnchor, constant: smallSideInset),
             leftStackView.widthAnchor.constraint(equalToConstant: 50),
             
-            detailsLabel.centerYAnchor.constraint(equalTo: frameLabel.centerYAnchor),
+            detailsLabel.centerYAnchor.constraint(equalTo: frameView.centerYAnchor),
             detailsLabel.leadingAnchor.constraint(equalTo: leftStackView.trailingAnchor, constant: regularSideInset),
             detailsLabel.trailingAnchor.constraint(equalTo: rightStackView.leadingAnchor, constant: -regularSideInset),
             
-            rightStackView.centerYAnchor.constraint(equalTo: frameLabel.centerYAnchor),
-            rightStackView.trailingAnchor.constraint(equalTo: frameLabel.trailingAnchor, constant: -smallSideInset),
+            rightStackView.centerYAnchor.constraint(equalTo: frameView.centerYAnchor),
+            rightStackView.trailingAnchor.constraint(equalTo: frameView.trailingAnchor, constant: -smallSideInset),
             
             rightChevronLabel.widthAnchor.constraint(equalToConstant: 30)
         ]

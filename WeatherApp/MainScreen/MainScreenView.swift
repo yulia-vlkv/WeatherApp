@@ -20,7 +20,7 @@ class MainScreenView: UIViewController {
     
     public var model: MainScreenViewModel!
     
-//    private var cells: [DailyWeatherTableCellModel] = []
+    private var cells: [DailyWeatherTableCellModel] = []
 
     private let mainTableView = UITableView(frame: .zero, style: .grouped)
 
@@ -30,7 +30,7 @@ class MainScreenView: UIViewController {
         configureTableView()
         configureNavigationBar()
         
-        model.fetchData()
+        model.onViewDidLoad()
     }
     
     // MARK: - Configure TableView
@@ -70,6 +70,11 @@ class MainScreenView: UIViewController {
                                                             target: self,
                                                             action:  #selector(toSettings))
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "map.fill"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(toLocationSelection))
+        
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         navigationController?.navigationBar.scrollEdgeAppearance  = appearance
@@ -79,7 +84,11 @@ class MainScreenView: UIViewController {
     
     
     @objc private func toSettings(){
-        model.onOpenSettings
+        model.showSettings()
+    }
+    
+    @objc private func toLocationSelection(){
+        model.showLocationSelection()
     }
     
 }
@@ -98,7 +107,7 @@ extension MainScreenView: UITableViewDelegate, UITableViewDataSource {
         case .basic(let items):
             return items.count
         case .withHeader(_, let items):
-            return  items.count
+            return items.count
         }
     }
     
@@ -120,7 +129,7 @@ extension MainScreenView: UITableViewDelegate, UITableViewDataSource {
         case .withHeader:
             return 40
         default:
-           return 20
+           return 0
         }
     }
     
@@ -146,16 +155,28 @@ extension MainScreenView: UITableViewDelegate, UITableViewDataSource {
             return cell
         case .hourlyWeather(let cellModel):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: HourlyWeatherTableCell.self), for: indexPath) as! HourlyWeatherTableCell
+            cell.selectionStyle = .none
             cell.configure(with: cellModel)
             return cell
         case .dailyWeather(let cellModel):
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: DailyWeatherTableCell.self), for: indexPath) as! DailyWeatherTableCell
             cell.configure(with: cellModel)
+            cell.selectionStyle = .none
             return cell
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let sectionModel = model.sections[indexPath.section]
+        switch sectionModel {
+        case .withHeader(_, let items), .basic(let items):
+            if case let .dailyWeather(model) = items[indexPath.row] {
+                model.onSelect?()
+            }
+        }
+//        let sectionModel = model.sections[section]
+//        switch sectionModel{
+//
 //        if indexPath.item < cells.count {
 //            let model = cells[indexPath.row]
 //            model.onSelect?()

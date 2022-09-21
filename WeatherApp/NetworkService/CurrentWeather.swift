@@ -8,6 +8,11 @@
 import Foundation
 
 
+struct GenericWeatherResponse<T: Codable>: Codable {
+    var data: T
+}
+
+
 struct CurrentWeatherResponse: Codable {
     var data: [CurrentWeather]
 }

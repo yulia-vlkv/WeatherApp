@@ -12,7 +12,7 @@ import UIKit
 extension HourlyWeatherView: ConfigurableView {
     
     func configure(with model: HourlyWeatherViewModel) {
-        navigationItem.title = model.city
+//        navigationItem.title = model.city
         
         tableView.reloadData()
     }
@@ -40,7 +40,6 @@ class HourlyWeatherView: UIViewController {
         tableView.backgroundColor = .white
         tableView.toAutoLayout()
         tableView.showsVerticalScrollIndicator = false
-//        tableView.separatorStyle = .none
         tableView.separatorColor = CustomColors.setColor(style: .deepBlue)
         tableView.dataSource = self
         tableView.delegate = self
@@ -64,7 +63,6 @@ class HourlyWeatherView: UIViewController {
         
         navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.backgroundColor = .white
-        navigationItem.title = "Город, страна"
         navigationController?.navigationBar.tintColor = .black
         
         let appearance = UINavigationBarAppearance()

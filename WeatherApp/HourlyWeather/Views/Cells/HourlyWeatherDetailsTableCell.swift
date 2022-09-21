@@ -62,8 +62,9 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.distribution = .fill
-        stack.spacing = 20
+        stack.alignment = .fill
+        stack.distribution = .fillProportionally
+        stack.spacing = 15
         stack.backgroundColor = CustomColors.setColor(style: .lightBlue)
         stack.layoutMargins = UIEdgeInsets(top: 16, left: 30, bottom: 16, right: 30)
         stack.isLayoutMarginsRelativeArrangement = true
@@ -85,7 +86,7 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let dateLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 22, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         label.textAlignment = .center
         label.toAutoLayout()
         return label
@@ -94,7 +95,7 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 22, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         label.textAlignment = .center
         label.toAutoLayout()
         return label
@@ -115,7 +116,7 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 22, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         label.textColor = .black
         label.toAutoLayout()
         return label
@@ -123,8 +124,9 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     
     private let weatherImage: UIImageView = {
         let image = UIImageView()
-        image.contentMode = .scaleAspectFit
         image.clipsToBounds = true
+//        image.frame.size = CGSize(width: 50, height: 50)
+        image.contentMode = .scaleAspectFit
         image.toAutoLayout()
         return image
     }()
@@ -142,8 +144,8 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGray
-        label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.numberOfLines = 3
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
         label.lineBreakStrategy = .pushOut
         label.toAutoLayout()
@@ -154,7 +156,7 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .darkGray
         label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
         label.lineBreakStrategy = .pushOut
         label.toAutoLayout()
@@ -165,7 +167,7 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .darkGray
         label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
         label.lineBreakStrategy = .pushOut
         label.toAutoLayout()
@@ -176,7 +178,7 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .darkGray
         label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
         label.lineBreakStrategy = .pushOut
         label.toAutoLayout()
@@ -224,6 +226,9 @@ class HourlyWeatherDetailsTableCell: UITableViewCell {
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             stackView.heightAnchor.constraint(equalToConstant: height),
+            
+            dateStackView.widthAnchor.constraint(equalToConstant: 50),
+            infoStackView.widthAnchor.constraint(equalToConstant: 50)
         ]
         
         NSLayoutConstraint.activate(constraints)

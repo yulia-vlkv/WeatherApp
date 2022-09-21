@@ -19,13 +19,17 @@ extension DateScrollCell: ConfigurableView {
 
 class DateScrollCell: UICollectionViewCell {
     
+    // Not Working
     override var isSelected: Bool {
         didSet {
+            print(isSelected.description)
             if self.isSelected {
-                self.dateLabel.backgroundColor = CustomColors.setColor(style: .deepBlue)
+                self.dateLabel.backgroundColor = .blue
+                self.dateLabel.textColor = .white
                 print("selected")
             } else {
-                self.dateLabel.backgroundColor = CustomColors.setColor(style: .lightBlue)
+                self.dateLabel.backgroundColor = .green
+                self.dateLabel.textColor = .black
                 print("deselected")
             }
 //            self.dateLabel.backgroundColor = isSelected ? CustomColors.setColor(style: .deepBlue) : CustomColors.setColor(style: .lightBlue)
@@ -48,12 +52,22 @@ class DateScrollCell: UICollectionViewCell {
 //            }
 //        }
 //    }
+//    override func updateConfiguration(using state: UICellConfigurationState) {
+//        if state.isSelected {
+//            self.dateLabel.backgroundColor = CustomColors.setColor(style: .deepBlue)
+//            print("selected")
+//        } else {
+//            self.dateLabel.backgroundColor = CustomColors.setColor(style: .lightBlue)
+//            print("deselected")
+//        }
+//        super.updateConfiguration(using:state)
+//    }
     
     let dateLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textAlignment = .center
-//        label.backgroundColor = CustomColors.setColor(style: .lightBlue)
+        label.backgroundColor = CustomColors.setColor(style: .lightBlue)
         label.layer.cornerRadius = 12
         label.clipsToBounds = true
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)

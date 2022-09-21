@@ -12,7 +12,7 @@ import UIKit
 extension DailyWeatherView: ConfigurableView {
     
     func configure(with model: DailyWeatherViewModel) {
-        navigationItem.title = model.city
+//        navigationItem.title = model.city
         
         tableView.reloadData()
     }
@@ -68,7 +68,6 @@ class DailyWeatherView: UIViewController {
         
         navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.backgroundColor = .white
-        navigationItem.title = "Город, страна"
         navigationController?.navigationBar.tintColor = .black
         
         let appearance = UINavigationBarAppearance()

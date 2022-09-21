@@ -23,12 +23,23 @@ enum MainScreenDataSourceItem {
     case dailyWeather(DailyWeatherTableCellModel)
 }
 
+struct MainScreenWeatherFetchResponse: Codable {
+    
+    var currentWeather: CurrentWeather
+    var hourlyWeather: [HourlyWeather]
+    var dailyWeather: [DailyWeather]
+    
+}
 
 class MainScreenViewModel: MainScreenViewOutput {
     
+    private let userDefaults = UserDefaults.standard
+    private let key = "savedWeather"
+    
     public var onOpenSettings: (() -> Void)?
+    public var onOpenLocationSelection: (() -> Void)?
     public var onOpenHourlyWeather: (([HourlyWeather]) -> Void)?
-    public var onOpenDailyWeather: (([DailyWeather]) -> Void)?
+    public var onOpenDailyWeather: (([DailyWeather], DailyWeather) -> Void)?
     
     private let forecastService = ForecastService()
     private let locationService = LocationService.shared
@@ -36,8 +47,17 @@ class MainScreenViewModel: MainScreenViewOutput {
     
     private weak var view: MainScreenView!
     
-    init(view: MainScreenView) {
+    private var location: Location {
+        return staticLocation ?? locationService.currentLocation ?? Location(city: "000", country: "000", longitude: "0000", latitude: "0000")
+    }
+    
+    private var staticLocation: Location?
+    
+    init(view: MainScreenView, location: Location?) {
         self.view = view
+        self.staticLocation = location
+        
+        subscribeToSettingsUpdates()
     }
     
     private let currentDate = Date()
@@ -48,18 +68,69 @@ class MainScreenViewModel: MainScreenViewOutput {
         }
     }
     
-    var city: String = {
-        let location = LocationService.shared.locations?[0] ?? Location(city: "Белград", country: "Сербия", longitude: "44.787197", latitude: "20.457273")
-        return "\(location.city), \(location.country)"
-    }()
+    private var fetchResults: MainScreenWeatherFetchResponse? {
+        didSet {
+            if let fetchResults = fetchResults {
+                sections = mapToViewModel(fetchResults: fetchResults)
+            } else {
+                sections = []
+            }
+        }
+    }
     
-    func fetchData() {
-//        guard let location = locationService.currentLocation else {
-//            print("No current location!")
-//            return
-//        }
+    var city: String {
+        return "\(location.city), \(location.country)"
+    }
+    
+    public func showSettings(){
+        onOpenSettings?()
+    }
+    
+    public func showLocationSelection(){
+        onOpenLocationSelection?()
+    }
+    
+    private func subscribeToSettingsUpdates() {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("SettingsUpdated"), object: nil, queue: .main) { notification in
+            guard
+                let fetchResults = self.fetchResults else {
+                return
+            }
+            
+            self.sections = self.mapToViewModel(fetchResults: fetchResults)
+        }
+    }
+    
+    func onViewDidLoad() {
+        configureDataFromCache()
+        fetchData()
+    }
+    
+    private func configureDataFromCache() {
+        if let savedWeather = userDefaults.object(forKey: key) {
+            
+            do {
+                let savedWeather = try JSONDecoder().decode(MainScreenWeatherFetchResponse.self, from: savedWeather as! Data)
+                self.sections = self.mapToViewModel(fetchResults: savedWeather)
+            } catch {
+                print("Unable to decode weather (\(error))")
+            }
+        }
+    }
+    
+    
+    private func fetchData() {
+        //        guard let _ = locationService.currentLocation else {
+        //            print("[DEBUG] No current location!")
+        //            return
+        //        }
         
-        let location = locationService.locations?[0] ?? Location(city: "Белград", country: "Сербия", longitude: "44.787197", latitude: "20.457273")
+        //       if locationService.currentLocation == nil  {
+        //           print("[DEBUG] No current location!")
+        //       }
+        
+//        let location = locationService.locations?.first ?? Location(city: "000", country: "000", longitude: "20.457273", latitude: "44.787197")
+        
         
         let group = DispatchGroup()
         
@@ -96,7 +167,7 @@ class MainScreenViewModel: MainScreenViewOutput {
                 }
                 group.leave()
             }
-
+        
         group.enter()
         var resultDailyWeather: [DailyWeather]?
         forecastService.getDailyWeather(
@@ -113,28 +184,43 @@ class MainScreenViewModel: MainScreenViewOutput {
                 }
                 group.leave()
             }
-
+        
         group.notify(queue: .main) {
             guard let resultCurrentWeather = resultCurrentWeather else {
-                self.sections = []
+                self.fetchResults = nil
                 return
             }
             
             guard let resultHourlyWeather = resultHourlyWeather else {
-                self.sections = []
+                self.fetchResults = nil
                 return
             }
             
             guard let resultDailyWeather = resultDailyWeather else {
-                self.sections = []
+                self.fetchResults = nil
                 return
             }
             
-            self.sections = self.mapToViewModel(currentWeather: resultCurrentWeather, hourlyWeather: resultHourlyWeather, dailyWeather: resultDailyWeather)
+            self.fetchResults = MainScreenWeatherFetchResponse(
+                currentWeather: resultCurrentWeather,
+                hourlyWeather:resultHourlyWeather,
+                dailyWeather: resultDailyWeather
+            )
+            
+            self.saveDataToCache()
         }
     }
     
-    func mapToViewModel(currentWeather: CurrentWeather, hourlyWeather: [HourlyWeather], dailyWeather: [DailyWeather]) -> [MainScreenDataSourceSection] {
+    private func saveDataToCache() {
+        do {
+            let data = try JSONEncoder().encode(fetchResults)
+            userDefaults.set(data, forKey: key)
+        } catch {
+            print("Unable to encode weather (\(error))")
+        }
+    }
+    
+    private func mapToViewModel(fetchResults: MainScreenWeatherFetchResponse) -> [MainScreenDataSourceSection] {
         var resultSections: [MainScreenDataSourceSection] = []
         
         resultSections.append(.basic([
@@ -142,8 +228,8 @@ class MainScreenViewModel: MainScreenViewOutput {
                 MainInfoTableCellModel(
                     cells: [
                         MainInfoCellModel(
-                            with: currentWeather,
-                            dailyWeather: dailyWeather[0],
+                            with: fetchResults.currentWeather,
+                            dailyWeather: fetchResults.dailyWeather[0],
                             currentDate: currentDate
                         )
                     ]
@@ -157,13 +243,13 @@ class MainScreenViewModel: MainScreenViewOutput {
                     titleText: nil,
                     buttonText: "Подробнее на 24 часа",
                     onButtonTap: { [weak self] in
-                        self?.onOpenHourlyWeather?(hourlyWeather)
+                        self?.onOpenHourlyWeather?(fetchResults.hourlyWeather)
                     }
                 ),
                 [
                     .hourlyWeather(
-                        HourlyWeatherTableCellModel(cells:
-                                                        hourlyWeather.map { HourlyWeatherCellModel(with: $0) }
+                        HourlyWeatherTableCellModel(
+                            cells: fetchResults.hourlyWeather.map { HourlyWeatherCellModel(with: $0) }
                         )
                     )
                 ]
@@ -172,23 +258,23 @@ class MainScreenViewModel: MainScreenViewOutput {
         
         resultSections.append(
             .withHeader(
-                    WeatherTableHeaderModel(
-                        titleText: "Ежедневный прогноз",
-                        buttonText: "16 дней",
-                        onButtonTap: { [weak self] in
-                            self?.onOpenDailyWeather?(dailyWeather)
-                        }
-                    ),
-                    dailyWeather.map {
-                        MainScreenDataSourceItem.dailyWeather(
-                            DailyWeatherTableCellModel(
-                                with: $0,
-                                onSelect: { [weak self] in
-                                    self?.onOpenDailyWeather?(dailyWeather)
-                                    // To do? 
-                                }
-                            )
-                        )}
+                WeatherTableHeaderModel(
+                    titleText: "Ежедневный прогноз",
+                    buttonText: "16 дней",
+                    onButtonTap: { [weak self] in
+                        self?.onOpenDailyWeather?(fetchResults.dailyWeather, fetchResults.dailyWeather[0])
+                    }
+                ),
+                fetchResults.dailyWeather.map { model in
+                    MainScreenDataSourceItem.dailyWeather(
+                        DailyWeatherTableCellModel(
+                            with: model,
+                            onSelect: { [weak self] in
+                                self?.onOpenDailyWeather?(fetchResults.dailyWeather, model)
+                                // To do?
+                            }
+                        )
+                    )}
             )
         )
         

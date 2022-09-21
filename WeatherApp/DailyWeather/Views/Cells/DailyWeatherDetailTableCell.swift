@@ -69,11 +69,11 @@ extension DailyWeatherDetailTableCell: ConfigurableView {
 
 class DailyWeatherDetailTableCell: UITableViewCell {
     
-    private let backgroundLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = .white
-        label.toAutoLayout()
-        return label
+    private let cellBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.toAutoLayout()
+        return view
     }()
     
     private let topStackView: UIStackView = {
@@ -257,7 +257,6 @@ class DailyWeatherDetailTableCell: UITableViewCell {
     private let windLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGray
-        let text = "Ветер северо-западный, 2 м/с"
         label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         label.textAlignment = .left
@@ -325,13 +324,14 @@ class DailyWeatherDetailTableCell: UITableViewCell {
     // MARK: - Astronomical Info
     private let astronomicalInfoStack: UIStackView = {
         let stack = UIStackView()
-        let gradient = CAGradientLayer()
-        gradient.frame = stack.bounds
-        gradient.colors = [CustomColors.setColor(style: .lightBlue).cgColor, CustomColors.setColor(style: .deepBlue).cgColor]
-        gradient.startPoint = CGPoint(x: 0.0, y: 1.0)
-        gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
-        stack.layer.insertSublayer(gradient, at: 0)
-//        stack.backgroundColor =  CustomColors.setColor(style: .lightBlue)
+//        let gradient = CAGradientLayer()
+//        gradient.colors = [CustomColors.setColor(style: .lightBlue).cgColor, CustomColors.setColor(style: .deepBlue).cgColor]
+//        gradient.startPoint = CGPoint(x: 0.0, y: 1.0)
+//        gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
+//        stack.layer.insertSublayer(gradient, at: 0)
+//        gradient.frame = stack.bounds
+//        stack.layer.insertSublayer(gradient, at: 0)
+        stack.backgroundColor =  CustomColors.setColor(style: .lightBlue)
         stack.layer.cornerRadius = 8
         stack.axis = .horizontal
         stack.spacing = 8
@@ -341,6 +341,19 @@ class DailyWeatherDetailTableCell: UITableViewCell {
         stack.isLayoutMarginsRelativeArrangement = true
         stack.toAutoLayout()
         return stack
+    }()
+    
+    // Not working
+    private var gradient: CAGradientLayer = {
+        let gradient = CAGradientLayer()
+        gradient.type = .axial
+        gradient.colors = [
+            CustomColors.setColor(style: .lightBlue).cgColor,
+            CustomColors.setColor(style: .deepBlue).cgColor
+        ]
+        gradient.startPoint = CGPoint(x: 0.0, y: 1.0)
+        gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
+        return gradient
     }()
     
     // MARK: - Sun
@@ -473,11 +486,11 @@ class DailyWeatherDetailTableCell: UITableViewCell {
     // MARK: - Configure Layout
 
     private func configureLayout(){
-        contentView.addSubview(backgroundLabel)
-        backgroundLabel.addSubview(topStackView)
+        contentView.addSubview(cellBackgroundView)
+        cellBackgroundView.addSubview(topStackView)
         topStackView.addArrangedSubview(dayInfoStack)
         topStackView.addArrangedSubview(nightInfoStack)
-        backgroundLabel.addSubview(generalInfoStack)
+        cellBackgroundView.addSubview(generalInfoStack)
         dayInfoStack.addArrangedSubview(dayStackView)
         dayStackView.addArrangedSubview(dayIcon)
         dayStackView.addArrangedSubview(dayTempLabel)
@@ -498,7 +511,7 @@ class DailyWeatherDetailTableCell: UITableViewCell {
         generalInfoStack.addArrangedSubview(uvStack)
         uvStack.addArrangedSubview(uvImage)
         uvStack.addArrangedSubview(uvLabel)
-        backgroundLabel.addSubview(astronomicalInfoStack)
+        cellBackgroundView.addSubview(astronomicalInfoStack)
         astronomicalInfoStack.addArrangedSubview(sunStack)
         sunStack.addArrangedSubview(sunriseStack)
         sunriseStack.addArrangedSubview(sunriseImage)
@@ -514,28 +527,30 @@ class DailyWeatherDetailTableCell: UITableViewCell {
         moonsetStack.addArrangedSubview(moonsetImage)
         moonsetStack.addArrangedSubview(moonsetLabel)
         
-
+        // Not working
+//        gradient.frame = astronomicalInfoStack.bounds
+    
         let constraints = [
-            backgroundLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            backgroundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            backgroundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            backgroundLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor),
-            backgroundLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor),
+            cellBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cellBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            cellBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            cellBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            cellBackgroundView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+            cellBackgroundView.heightAnchor.constraint(equalTo: contentView.heightAnchor),
             
-            topStackView.topAnchor.constraint(equalTo: backgroundLabel.topAnchor, constant: regularSideInset),
-            topStackView.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: regularSideInset),
-            topStackView.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -regularSideInset),
+            topStackView.topAnchor.constraint(equalTo: cellBackgroundView.topAnchor, constant: regularSideInset),
+            topStackView.leadingAnchor.constraint(equalTo: cellBackgroundView.leadingAnchor, constant: regularSideInset),
+            topStackView.trailingAnchor.constraint(equalTo: cellBackgroundView.trailingAnchor, constant: -regularSideInset),
             topStackView.heightAnchor.constraint(equalToConstant: (self.frame.width - (regularSideInset * 3)) / 2 ),
         
             generalInfoStack.topAnchor.constraint(equalTo: topStackView.bottomAnchor, constant: regularSideInset),
-            generalInfoStack.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: regularSideInset),
-            generalInfoStack.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -regularSideInset),
+            generalInfoStack.leadingAnchor.constraint(equalTo: cellBackgroundView.leadingAnchor, constant: regularSideInset),
+            generalInfoStack.trailingAnchor.constraint(equalTo: cellBackgroundView.trailingAnchor, constant: -regularSideInset),
 //            generalInfoLabel.heightAnchor.constraint(equalToConstant: self.frame.width)
             
             astronomicalInfoStack.topAnchor.constraint(equalTo: generalInfoStack.bottomAnchor, constant: regularSideInset),
-            astronomicalInfoStack.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: regularSideInset),
-            astronomicalInfoStack.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -regularSideInset),
+            astronomicalInfoStack.leadingAnchor.constraint(equalTo: cellBackgroundView.leadingAnchor, constant: regularSideInset),
+            astronomicalInfoStack.trailingAnchor.constraint(equalTo: cellBackgroundView.trailingAnchor, constant: -regularSideInset),
             astronomicalInfoStack.heightAnchor.constraint(equalToConstant: 100)
         
         ]

@@ -31,14 +31,6 @@ struct ForecastWeatherReqObj {
 
 class ForecastService {
     
-//    public var currentWeather: CurrentWeather?
-//    public var hourlyWeather: [HourlyWeather]?
-//    public var dailyWeather: [DailyWeather]?
-    
-//    lazy var coordinates = LocationService().currentLocation
-//    lazy var lon = coordinates?.longitude
-//    lazy var lat = coordinates?.latitude
-    
     private let baseURL = "https://weatherbit-v1-mashape.p.rapidapi.com"
     
     private var apiKey: String {
@@ -54,29 +46,31 @@ class ForecastService {
       }
     }
     
-    func getCurrentWeather(
-        with parameters: ForecastWeatherReqObj,
-        completion: @escaping (Result<CurrentWeather, ForecastServiceError>) -> Void
-    ) {
-        let url: String = "\(baseURL)/current/"
-        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
+    func getCommonParameters(parameters: ForecastWeatherReqObj) -> [String: Any] {
         let parameters = [  "lon" : String(parameters.longitude),
                             "lat" : String(parameters.latitude),
                           "units" : parameters.units.rawValue,
-                           "lang" : parameters.lang ]
+                           "lang" : parameters.lang,
+                            "hours": parameters.hours]
+        return parameters
+    }
+    
+    func getWeatherItems<T: Codable>(
+        with parameters: [String: Any],
+        path: String,
+        completion: @escaping (Result<T, ForecastServiceError>) -> Void
+    ) {
+        let url: String = "\(baseURL)\(path)"
+        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
         
         AF.request(url,
                    method: .get,
                    parameters: parameters,
                    headers: header
-        ).responseDecodable(of: CurrentWeatherResponse.self){ (response) in
+        ).responseDecodable(of: GenericWeatherResponse<T>.self){ (response) in
             switch response.result {
             case .success(let weather):
-                guard let currentWeather = weather.data.first else {
-                    completion(.failure(ForecastServiceError.noData))
-                    return
-                }
-                completion(.success(currentWeather))
+                completion(.success(weather.data))
             case .failure(let error):
                 print("Probably ran out of free api requests")
                 completion(.failure(ForecastServiceError.unknown(error)))
@@ -84,66 +78,156 @@ class ForecastService {
         }
     }
     
+    func getWeatherItem<T: Codable>(
+        with parameters: [String: Any],
+        path: String,
+        completion: @escaping (Result<T, ForecastServiceError>) -> Void
+    ) {
+        getWeatherItems(
+            with: parameters,
+            path: path,
+            completion: { (result: Result<[T], ForecastServiceError>) in
+                switch result {
+                case .success(let items):
+                    guard let firstItem = items.first else {
+                        completion(.failure(ForecastServiceError.noData))
+                        return
+                    }
+                    completion(.success(firstItem))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        )
+    }
+    
+    func getCurrentWeather(
+        with parameters: ForecastWeatherReqObj,
+        completion: @escaping (Result<CurrentWeather, ForecastServiceError>) -> Void
+    ) {
+        getWeatherItem(
+            with: getCommonParameters(parameters: parameters),
+            path: "/current/",
+            completion: completion
+        )
+    }
+    
     func getHourlyWeather(
         with parameters: ForecastWeatherReqObj,
         completion: @escaping (Result<[HourlyWeather], ForecastServiceError>) -> Void
     ) {
-        let url: String = "\(baseURL)/forecast/hourly/"
-        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
-        let parameters = [  "lon" : String(parameters.longitude),
-                            "lat" : String(parameters.latitude),
-                          "units" : parameters.units.rawValue,
-                           "lang" : parameters.lang,
-                           "hours": parameters.hours ]
-        
-        AF.request(url,
-                   method: .get,
-                   parameters: parameters,
-                   headers: header
-        ).responseDecodable(of: HourlyWeatherResponse.self){ (response) in
-            switch response.result {
-            case .success(let weather):
-                let hourlyWeather = weather.data
-                guard hourlyWeather != nil else {
-                    completion(.failure(ForecastServiceError.noData))
-                    return
-                }
-                completion(.success(hourlyWeather))
-            case .failure(let error):
-                completion(.failure(ForecastServiceError.unknown(error)))
-            }
-        }
+        getWeatherItems(
+            with: getCommonParameters(parameters: parameters),
+            path: "/forecast/hourly/",
+            completion: completion
+        )
     }
-
     
     func getDailyWeather(
         with parameters: ForecastWeatherReqObj,
         completion: @escaping (Result<[DailyWeather], ForecastServiceError>) -> Void
     ) {
-        let url: String = "\(baseURL)/forecast/daily/"
-        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
-        let parameters = [  "lon" : String(parameters.longitude),
-                            "lat" : String(parameters.latitude),
-                          "units" : parameters.units.rawValue,
-                           "lang" : parameters.lang ]
-        
-        AF.request(url,
-                   method: .get,
-                   parameters: parameters,
-                   headers: header
-        ).responseDecodable(of: DailyWeatherResponse.self){ (response) in
-            switch response.result {
-            case .success(let weather):
-                let dailyWeather = weather.data
-                guard dailyWeather != nil else {
-                    completion(.failure(ForecastServiceError.noData))
-                    return
-                }
-                completion(.success(dailyWeather))
-            case .failure(let error):
-                completion(.failure(ForecastServiceError.unknown(error)))
-            }
-        }
+        getWeatherItems(
+            with: getCommonParameters(parameters: parameters),
+            path: "/forecast/daily/",
+            completion: completion
+        )
     }
+         
+            
+    
+//    func getCurrentWeather(
+//        with parameters: ForecastWeatherReqObj,
+//        completion: @escaping (Result<CurrentWeather, ForecastServiceError>) -> Void
+//    ) {
+//        let url: String = "\(baseURL)/current/"
+//        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
+//        let parameters = [  "lon" : String(parameters.longitude),
+//                            "lat" : String(parameters.latitude),
+//                          "units" : parameters.units.rawValue,
+//                           "lang" : parameters.lang,
+//                            "hours": parameters.hours
+//        ]
+//
+//        AF.request(url,
+//                   method: .get,
+//                   parameters: parameters,
+//                   headers: header
+//        ).responseDecodable(of: CurrentWeatherResponse.self){ (response) in
+//            switch response.result {
+//            case .success(let weather):
+//                guard let currentWeather = weather.data.first else {
+//                    completion(.failure(ForecastServiceError.noData))
+//                    return
+//                }
+//                completion(.success(currentWeather))
+//            case .failure(let error):
+//                print("Probably ran out of free api requests")
+//                completion(.failure(ForecastServiceError.unknown(error)))
+//            }
+//        }
+//    }
+    
+//    func getHourlyWeather(
+//        with parameters: ForecastWeatherReqObj,
+//        completion: @escaping (Result<[HourlyWeather], ForecastServiceError>) -> Void
+//    ) {
+//        let url: String = "\(baseURL)/forecast/hourly/"
+//        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
+//        let parameters = [  "lon" : String(parameters.longitude),
+//                            "lat" : String(parameters.latitude),
+//                          "units" : parameters.units.rawValue,
+//                           "lang" : parameters.lang,
+//                           "hours": parameters.hours ]
+//        
+//        AF.request(url,
+//                   method: .get,
+//                   parameters: parameters,
+//                   headers: header
+//        ).responseDecodable(of: HourlyWeatherResponse.self){ (response) in
+//            switch response.result {
+//            case .success(let weather):
+//                let hourlyWeather = weather.data
+//                guard hourlyWeather != nil else {
+//                    completion(.failure(ForecastServiceError.noData))
+//                    return
+//                }
+//                completion(.success(hourlyWeather))
+//            case .failure(let error):
+//                completion(.failure(ForecastServiceError.unknown(error)))
+//            }
+//        }
+//    }
+
+    
+//    func getDailyWeather(
+//        with parameters: ForecastWeatherReqObj,
+//        completion: @escaping (Result<[DailyWeather], ForecastServiceError>) -> Void
+//    ) {
+//        let url: String = "\(baseURL)/forecast/daily/"
+//        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
+//        let parameters = [  "lon" : String(parameters.longitude),
+//                            "lat" : String(parameters.latitude),
+//                          "units" : parameters.units.rawValue,
+//                           "lang" : parameters.lang ]
+//
+//        AF.request(url,
+//                   method: .get,
+//                   parameters: parameters,
+//                   headers: header
+//        ).responseDecodable(of: DailyWeatherResponse.self){ (response) in
+//            switch response.result {
+//            case .success(let weather):
+//                let dailyWeather = weather.data
+//                guard dailyWeather != nil else {
+//                    completion(.failure(ForecastServiceError.noData))
+//                    return
+//                }
+//                completion(.success(dailyWeather))
+//            case .failure(let error):
+//                completion(.failure(ForecastServiceError.unknown(error)))
+//            }
+//        }
+//    }
 
 }

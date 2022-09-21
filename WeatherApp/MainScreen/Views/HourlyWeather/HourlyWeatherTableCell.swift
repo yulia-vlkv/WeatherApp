@@ -16,7 +16,7 @@ extension HourlyWeatherTableCell: ConfigurableView {
     }
 }
 
-
+// TO DO
 class HourlyWeatherTableCell: UITableViewCell {
     
     private var cells: [HourlyWeatherCellModel] = []
@@ -53,7 +53,7 @@ class HourlyWeatherTableCell: UITableViewCell {
         let constraints = [
             hourlyWeatherCollection.topAnchor.constraint(equalTo: contentView.topAnchor),
             hourlyWeatherCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            hourlyWeatherCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: sideInset),
+            hourlyWeatherCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             hourlyWeatherCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             hourlyWeatherCollection.heightAnchor.constraint(equalToConstant: height)
         ]
@@ -98,6 +98,9 @@ extension HourlyWeatherTableCell: UICollectionViewDataSource, UICollectionViewDe
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return inset
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
     }
     
 }

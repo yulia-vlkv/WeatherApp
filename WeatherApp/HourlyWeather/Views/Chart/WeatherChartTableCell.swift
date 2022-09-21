@@ -25,11 +25,11 @@ class WeatherChartTableCell: UITableViewCell {
         return view
     }()
     
-    private let backgroundLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = CustomColors.setColor(style: .lightBlue)
-        label.toAutoLayout()
-        return label
+    private let cellBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = CustomColors.setColor(style: .lightBlue)
+        view.toAutoLayout()
+        return view
     }()
     
     private let lineChartView: LineChart = {
@@ -52,8 +52,8 @@ class WeatherChartTableCell: UITableViewCell {
     private func configureLayout(){
         self.separatorInset = UIEdgeInsets(top: 0, left: contentView.frame.width, bottom: 0, right: contentView.frame.width)
         contentView.addSubview(scrollView)
-        scrollView.addSubview(backgroundLabel)
-        backgroundLabel.addSubview(lineChartView)
+        scrollView.addSubview(cellBackgroundView)
+        cellBackgroundView.addSubview(lineChartView)
         
         let scrollContantGuide = scrollView.contentLayoutGuide
         let scrollFrameGuide = scrollView.frameLayoutGuide
@@ -65,18 +65,18 @@ class WeatherChartTableCell: UITableViewCell {
             scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             scrollView.heightAnchor.constraint(equalToConstant: 170),
             
-            backgroundLabel.topAnchor.constraint(equalTo: scrollContantGuide.topAnchor),
-            backgroundLabel.leadingAnchor.constraint(equalTo: scrollContantGuide.leadingAnchor),
-            backgroundLabel.trailingAnchor.constraint(equalTo: scrollContantGuide.trailingAnchor),
-            backgroundLabel.bottomAnchor.constraint(equalTo: scrollContantGuide.bottomAnchor),
-            backgroundLabel.topAnchor.constraint(equalTo: scrollFrameGuide.topAnchor),
-            backgroundLabel.bottomAnchor.constraint(equalTo: scrollFrameGuide.bottomAnchor),
-            backgroundLabel.widthAnchor.constraint(equalToConstant: 80 * 24 ),
+            cellBackgroundView.topAnchor.constraint(equalTo: scrollContantGuide.topAnchor),
+            cellBackgroundView.leadingAnchor.constraint(equalTo: scrollContantGuide.leadingAnchor),
+            cellBackgroundView.trailingAnchor.constraint(equalTo: scrollContantGuide.trailingAnchor),
+            cellBackgroundView.bottomAnchor.constraint(equalTo: scrollContantGuide.bottomAnchor),
+            cellBackgroundView.topAnchor.constraint(equalTo: scrollFrameGuide.topAnchor),
+            cellBackgroundView.bottomAnchor.constraint(equalTo: scrollFrameGuide.bottomAnchor),
+            cellBackgroundView.widthAnchor.constraint(equalToConstant: 80 * 24 ),
             
-            lineChartView.topAnchor.constraint(equalTo: backgroundLabel.topAnchor),
-            lineChartView.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor),
-            lineChartView.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor),
-            lineChartView.bottomAnchor.constraint(equalTo: backgroundLabel.bottomAnchor),
+            lineChartView.topAnchor.constraint(equalTo: cellBackgroundView.topAnchor),
+            lineChartView.leadingAnchor.constraint(equalTo: cellBackgroundView.leadingAnchor),
+            lineChartView.trailingAnchor.constraint(equalTo: cellBackgroundView.trailingAnchor),
+            lineChartView.bottomAnchor.constraint(equalTo: cellBackgroundView.bottomAnchor),
 
         ]
         

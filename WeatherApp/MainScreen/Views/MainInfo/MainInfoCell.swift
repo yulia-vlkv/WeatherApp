@@ -36,13 +36,13 @@ extension MainInfoCell: ConfigurableView {
 
 class MainInfoCell: UICollectionViewCell {
     
-    private let backgroundLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = CustomColors.setColor(style: .deepBlue)
-        label.layer.cornerRadius = 22
-        label.layer.masksToBounds = true
-        label.toAutoLayout()
-        return label
+    private let cellBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = CustomColors.setColor(style: .deepBlue)
+        view.layer.cornerRadius = 22
+        view.layer.masksToBounds = true
+        view.toAutoLayout()
+        return view
     }()
     
     private let contentStack: UIStackView = {
@@ -253,7 +253,7 @@ class MainInfoCell: UICollectionViewCell {
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.lineWidth = 3
         
-        backgroundLabel.layer.addSublayer(shapeLayer)
+        cellBackgroundView.layer.addSublayer(shapeLayer)
     }
 
     @available(*, unavailable)
@@ -273,9 +273,9 @@ class MainInfoCell: UICollectionViewCell {
 
     private func configureLayout(){
         
-        contentView.addSubview(backgroundLabel)
+        contentView.addSubview(cellBackgroundView)
         drawSemicircle()
-        backgroundLabel.addSubview(contentStack)
+        cellBackgroundView.addSubview(contentStack)
         contentStack.addArrangedSubview(generalTemperatureLabel)
         contentStack.addArrangedSubview(currentTemperatureLabel)
         contentStack.addArrangedSubview(commentLabel)
@@ -290,28 +290,28 @@ class MainInfoCell: UICollectionViewCell {
         humidityStack.addArrangedSubview(humidityImage)
         humidityStack.addArrangedSubview(humidityLabel)
         contentStack.addArrangedSubview(dateLabel)
-        backgroundLabel.addSubview(sunriseStack)
+        cellBackgroundView.addSubview(sunriseStack)
         sunriseStack.addArrangedSubview(sunriseImage)
         sunriseStack.addArrangedSubview(sunriseLabel)
-        backgroundLabel.addSubview(sunsetStack)
+        cellBackgroundView.addSubview(sunsetStack)
         sunsetStack.addArrangedSubview(sunsetImage)
         sunsetStack.addArrangedSubview(sunsetLabel)
  
         let constraints = [
-            backgroundLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            backgroundLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            backgroundLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            cellBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cellBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            cellBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            cellBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            contentStack.centerXAnchor.constraint(equalTo: backgroundLabel.centerXAnchor),
-            contentStack.centerYAnchor.constraint(equalTo: backgroundLabel.centerYAnchor),
+            contentStack.centerXAnchor.constraint(equalTo: cellBackgroundView.centerXAnchor),
+            contentStack.centerYAnchor.constraint(equalTo: cellBackgroundView.centerYAnchor),
             contentStack.widthAnchor.constraint(equalToConstant: contentView.frame.width / 3 * 2),
             
-            sunriseStack.bottomAnchor.constraint(equalTo: backgroundLabel.bottomAnchor, constant: -bottomInset),
-            sunriseStack.leadingAnchor.constraint(equalTo: backgroundLabel.leadingAnchor, constant: inset),
+            sunriseStack.bottomAnchor.constraint(equalTo: cellBackgroundView.bottomAnchor, constant: -bottomInset),
+            sunriseStack.leadingAnchor.constraint(equalTo: cellBackgroundView.leadingAnchor, constant: inset),
             
-            sunsetStack.bottomAnchor.constraint(equalTo: backgroundLabel.bottomAnchor, constant: -bottomInset),
-            sunsetStack.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -inset)
+            sunsetStack.bottomAnchor.constraint(equalTo: cellBackgroundView.bottomAnchor, constant: -bottomInset),
+            sunsetStack.trailingAnchor.constraint(equalTo: cellBackgroundView.trailingAnchor, constant: -inset)
         ]
         
         NSLayoutConstraint.activate(constraints)

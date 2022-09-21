@@ -89,10 +89,7 @@ extension DateScrollTableCell: UICollectionViewDataSource, UICollectionViewDeleg
             let model = cells[indexPath.item]
             cell.configure(with: model)
         }
-        if cell.isSelected {
-            cell.backgroundColor = .red
-        }
-//        cell.backgroundColor = .clear
+        cell.backgroundColor = .clear
         return cell
     }
     
@@ -104,80 +101,29 @@ extension DateScrollTableCell: UICollectionViewDataSource, UICollectionViewDeleg
         return inset
     }
     
+    // Not working
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
 //        if let cell = collectionView.cellForItem(at: indexPath) as? DateScrollCell {
 //            cell.dateLabel.backgroundColor = CustomColors.setColor(style: .deepBlue)
+//            print("select")
 //            collectionView.reloadData()
 //        }
-        
+//
 //        collectionView.reloadItems(at: [indexPath])
         if indexPath.item < cells.count {
-            
             let model = cells[indexPath.item]
             model.onSelect?()
         }
     }
     
-    
+//    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+//        if let cell = collectionView.cellForItem(at: indexPath) as? DateScrollCell {
+//            cell.dateLabel.backgroundColor = CustomColors.setColor(style: .lightBlue)
+//            print("deselect")
+////            collectionView.reloadData()
+//        }
+//    }
     
 }
-
-//
-//DateScrollTableCellModel {
-//    cells: [
-//        DateScrollCellModel {
-//            date: "02.09.2022"
-//        },
-//        DateScrollCellModel {
-//            date: "03.09.2022"
-//        },
-//        DateScrollCellModel {
-//            date: "04.09.2022"
-//        }
-//    ]
-//}
-//
-//// 1
-//
-//DateScrollTableCellModel {
-//    cells: [
-//        DateScrollCellModel {
-//            date: "02.09.2022"
-//        },
-//        DateScrollCellModel {
-//            date: "03.09.2022"
-//        },
-//        DateScrollCellModel {
-//            date: "04.09.2022"
-//        }
-//    ],
-//    onSelect: { selectedIndex in
-//        selectedItem = dailyWeather[selectedIndex]
-//        ...
-//    }
-//}
-//
-//// 2
-//
-//DateScrollTableCellModel {
-//    cells: [
-//        DateScrollCellModel {
-//            date: "02.09.2022",
-//            onSelect: {
-//                selectedItem = dailyWeather[0]
-//            }
-//        },
-//        DateScrollCellModel {
-//            date: "03.09.2022",
-//            onSelect: {
-//                selectedItem = dailyWeather[1]
-//            }
-//        },
-//        DateScrollCellModel {
-//            date: "04.09.2022",
-//            onSelect: {
-//                selectedItem = dailyWeather[2]
-//            }
-//        }
-//    ]
-//}

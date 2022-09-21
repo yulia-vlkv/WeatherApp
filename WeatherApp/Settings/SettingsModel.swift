@@ -20,6 +20,10 @@ final class SettingsModel {
         static let timeType = "timeType"
         static let notifications = "notifications"
     }
+    
+    private func notify() {
+        NotificationCenter.default.post(name: NSNotification.Name("SettingsUpdated"), object: nil)
+    }
 
     public var temperatureSettings: tempType {
         get {
@@ -31,6 +35,7 @@ final class SettingsModel {
         }
         set {
             userDefaults.set(newValue.rawValue, forKey: Keys.tempType)
+            notify()
         }
     }
     
@@ -44,6 +49,7 @@ final class SettingsModel {
         }
         set {
             userDefaults.set(newValue.rawValue, forKey: Keys.systemType)
+            notify()
         }
     }
     
@@ -57,6 +63,7 @@ final class SettingsModel {
         }
         set {
             userDefaults.set(newValue.rawValue, forKey: Keys.timeType)
+            notify()
         }
     }
     
@@ -70,6 +77,7 @@ final class SettingsModel {
         }
         set {
             userDefaults.set(newValue.rawValue, forKey: Keys.notifications)
+            notify()
         }
     }
     

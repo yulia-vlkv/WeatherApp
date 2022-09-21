@@ -32,7 +32,6 @@ class HourlyWeatherViewModel: HourlyWeatherScreenViewOutput {
         self.hourlyWeather = model
     }
     
-    var city: String = "Город, страна"
     var sections: [HourlyWeatherDataSourceSection] = [] {
         didSet {
             view?.configure(with: self)

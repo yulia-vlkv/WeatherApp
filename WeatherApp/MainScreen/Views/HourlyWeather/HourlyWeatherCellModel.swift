@@ -39,7 +39,7 @@ extension HourlyWeatherCellModel  {
         
         self.temperature = {
             let tempInCelsius = hourlyWeather.currentTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+            return Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
     }

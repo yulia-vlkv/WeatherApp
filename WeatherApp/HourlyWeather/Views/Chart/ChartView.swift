@@ -20,8 +20,13 @@ struct PointEntry {
 extension PointEntry {
 
     init(with hourlyWeather: HourlyWeather) {
-        self.temperature = Float(Int((hourlyWeather.currentTemperature).rounded()))
-
+        
+        self.temperature = {
+            let tempInCelsius = hourlyWeather.currentTemperature
+            let temperature = Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
+            return Float(temperature)!
+        }()
+        
         self.icon = {
             let code = hourlyWeather.description.iconCode
             let icon = WeatherIcon(code: code)
@@ -195,14 +200,15 @@ class LineChart: UIView {
         let numMax = temperature.reduce(temperature[0], { max($0, $1) })
         let numMin = temperature.reduce(temperature[0], { min ($0, $1) })
         let diff = numMax - numMin
-        let difference = 30 / diff
+        let difference = diff / 30
         return difference
+//        return diff
     }
     
     // Найти медиану, чтобы определить на какой высоте рисовать график
     private func calculateMedian(entries: [PointEntry]) -> Float {
         var temperature: [Float] = []
-        var difference = getDifference(entries: entries)
+//        var difference = getDifference(entries: entries)
         for value in entries {
             let height = Float(value.temperature)
             temperature.append(height)
@@ -228,23 +234,29 @@ class LineChart: UIView {
         
         let inset = 30 / absMedian
         
-        let medianToCompare = -median * difference * inset
+        let medianToCompare = -median * inset
     
         for value in entries {
             let value = value.temperature
-            var height = -(value) * difference
+            var height = -(value)
             height = height * inset
             if medianToCompare < 0 {
                 height = height + abs(medianToCompare)
             } else if medianToCompare > 80 {
                 height = height - abs(medianToCompare)
             }
-            print("height \(height)")
             result.append(CGFloat(height))
         }
-        print("diff \(difference)")
-        print("median \(median)")
-        print("inset \(inset)")
+        
+        var extraInset: Float = 0
+        var minHeight: Float = Float(result.min()!)
+        while minHeight < 0 {
+            extraInset += 5
+            minHeight += extraInset
+        }
+        
+        result = result.map { CGFloat(Float($0) + extraInset) }
+
         return result
     }
 
@@ -260,7 +272,6 @@ class LineChart: UIView {
             let point = CGPoint(x: width, y: height)
             result.append(point)
         }
-        print(result)
         return result
     }
 
@@ -303,9 +314,8 @@ class LineChart: UIView {
                 textLayer.alignmentMode = CATextLayerAlignmentMode.center
                 textLayer.contentsScale = UIScreen.main.scale
                 textLayer.font = CTFontCreateWithName(UIFont.systemFont(ofSize: 0).fontName as CFString, 0, nil)
-                textLayer.fontSize = 14
+                textLayer.fontSize = 16
                 textLayer.string = dataEntries[i].time
-//                print(textLayer.frame.debugDescription)
                 mainLayer.addSublayer(textLayer)
             }
         }
@@ -324,9 +334,8 @@ class LineChart: UIView {
                 textLayer.alignmentMode = CATextLayerAlignmentMode.center
                 textLayer.contentsScale = UIScreen.main.scale
                 textLayer.font = CTFontCreateWithName(UIFont.systemFont(ofSize: 0).fontName as CFString, 0, nil)
-                textLayer.fontSize = 14
+                textLayer.fontSize = 16
                 textLayer.string = String(Int(dataEntries[i].temperature.rounded()))
-                print(textLayer.frame.debugDescription)
                 mainLayer.addSublayer(textLayer)
             }
         }
@@ -334,7 +343,7 @@ class LineChart: UIView {
     
     // Ось х, на которой отмечеается время
     private func drawHorizontalLine() {
-        let width = Int(lineGap) * (dataEntries?.count ?? 0)
+        let width = Int(lineGap) * (dataEntries?.count ?? 0) - 30
 
         let path = UIBezierPath()
         path.move(to: CGPoint(x: 30, y: 100))

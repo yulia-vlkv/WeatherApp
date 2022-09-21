@@ -8,11 +8,13 @@
 import Foundation
 import UIKit
 
-class OnboardingView: UIViewController, OnboardingScreenViewOutput {
+class OnboardingView: UIViewController {
     
-    public var onPermitAccess: (() -> Void)?
-    public var onDenyAccess: (() -> Void)?
-    public var model: LocationService!
+    //    public var onPermitAccess: (() -> Void)?
+    //    public var onDenyAccess: (() -> Void)?
+    //    public var model = LocationService.shared
+    
+    public var model: OnboardingViewModel!
     
     private let scroll: UIScrollView = {
         let scroll = UIScrollView()
@@ -45,7 +47,7 @@ class OnboardingView: UIViewController, OnboardingScreenViewOutput {
         )
         return label
     }()
-
+    
     private let permissionCommentLabel: UILabel = {
         let label = CustomLabel(
             font: UIFont.systemFont(ofSize: 14, weight: .regular),
@@ -54,18 +56,17 @@ class OnboardingView: UIViewController, OnboardingScreenViewOutput {
         return label
     }()
     
-    private let grantAccessButton: UIButton = {
+    private lazy var grantAccessButton: UIButton = {
         let button = CustomButton(
             text: OnboardingText.addText(text: .onBoardingGrantAccessButton),
             buttonAction: {
-                LocationService().checkUserLocationPermissions()
-                    // To main screen
+                self.model.grantAccess()
                 print("button is tapped")
             })
         return button
     }()
     
-    private let denyAccessButton: UIButton = {
+    private lazy var denyAccessButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .clear
         button.setTitle(OnboardingText.addText(text: .onBoardingDenyButton),
@@ -79,39 +80,26 @@ class OnboardingView: UIViewController, OnboardingScreenViewOutput {
         return button
     }()
     
+    
     @objc func buttonIsTapped(){
+        self.model.onManualLocationTap()
         
-        let alert = UIAlertController(title: "Укажите вашу локацию", message: nil, preferredStyle: .alert)
-        alert.addTextField() { newTextField in
-            newTextField.placeholder = "Мой город"
-        }
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Ок", style: .default) { _ in
-            if let textFields = alert.textFields,
-               let tf = textFields.first,
-               let title = tf.text {
-                self.model.getPlace(for: self.model.currentLocation!) { placemark in
-                    
-                    guard let placemark = placemark else { return }
-                    
-                    let placeForWeather = Location(
-                        city: placemark.locality ?? "Неизвестно",
-                        country: placemark.country ?? "Неизвестно",
-                        longitude: String(self.model.currentLocation!.coordinate.longitude),
-                        latitude: String(self.model.currentLocation!.coordinate.latitude)
-                    )
-                    
-                    self.model.locations?.append(placeForWeather)
-                    // Отправить на главный экран 
-                }
-            } else {
-                print("Can't add an annotation")
-            }
-        })
-        navigationController?.present(alert, animated: true)
-        // Alert to add Location
-        // To main screen
-        print("deny button is tapped")
+//        let alert = UIAlertController(title: "Укажите вашу локацию", message: nil, preferredStyle: .alert)
+//        alert.addTextField() { newTextField in
+//            newTextField.placeholder = "Мой город"
+//        }
+//        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+//        alert.addAction(UIAlertAction(title: "Ок", style: .default) { _ in
+//            if let textFields = alert.textFields,
+//               let tf = textFields.first,
+//               let text = tf.text {
+//                self.model.addLocation(for: text)
+//            } else {
+//                print("Can't find the location")
+//            }
+//        })
+//        self.present(alert, animated: true)
+//        print("deny button is tapped")
     }
     
     override func viewDidLoad() {
@@ -144,7 +132,7 @@ class OnboardingView: UIViewController, OnboardingScreenViewOutput {
             contentStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant:  -sideInset),
             contentStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             contentStack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-
+            
         ]
         
         NSLayoutConstraint.activate(constraints)

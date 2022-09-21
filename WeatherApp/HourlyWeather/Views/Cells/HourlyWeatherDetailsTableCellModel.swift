@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+
 struct HourlyWeatherDetailsTableCellModel {
     
     var date: String
@@ -50,12 +51,12 @@ extension HourlyWeatherDetailsTableCellModel  {
         
         self.currentTemperature = {
             let tempInCelsius = hourlyWeather.currentTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+            return Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
         self.feelsLikeTemperature = {
             let tempInCelsius = hourlyWeather.feelsLikeTemperature
-            return convertTemperature(tempInCelsius: tempInCelsius)
+            return Converter.shared.convertTemperature(tempInCelsius: tempInCelsius)
         }()
         
         self.probabilityOfRain = String(Int(hourlyWeather.probabilityOfRain))
@@ -64,7 +65,7 @@ extension HourlyWeatherDetailsTableCellModel  {
         
         self.windSpeed = {
             let speedInMetric = hourlyWeather.windSpeed
-            return convertSpeed(speedInMetric: speedInMetric)
+            return Converter.shared.convertSpeed(speedInMetric: speedInMetric)
         }()
 
         self.windDirection = hourlyWeather.windDirection

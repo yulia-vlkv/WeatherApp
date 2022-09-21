@@ -25,42 +25,76 @@ class LocationService: NSObject {
     
     static var shared = LocationService()
     
-    public var currentLocation: CLLocation? {
-        didSet {
-            if locationManager.authorizationStatus == .authorizedAlways || locationManager.authorizationStatus == .authorizedWhenInUse {
-                self.getPlace(for: currentLocation!) { placemark in
-                    
-                    guard let placemark = placemark else { return }
-                    
-                    let placeForWeather = Location(
-                        city: placemark.locality ?? "Неизвестно",
-                        country: placemark.country ?? "Неизвестно",
-                        longitude: String(self.currentLocation!.coordinate.longitude),
-                        latitude: String(self.currentLocation!.coordinate.latitude)
-                    )
-                    
-                    self.locations?.append(placeForWeather)
-                }
+    public var currentLocation: Location?
+    
+    private lazy var locationManager = CLLocationManager()
+
+    override init() {
+        super.init()
+        
+        locationManager.delegate = self
+        
+    }
+    
+    public func getLocation(){
+        if locationManager.authorizationStatus == .authorizedAlways || locationManager.authorizationStatus == .authorizedWhenInUse {
+            
+            if let location = locationManager.location {
+                configureCurrentLocation(location: location)
             }
+//            self.getLocationFromCoordinates(for: location!) { placemark in
+//
+//                guard let placemark = placemark else { return }
+//
+//                let placeForWeather = Location(
+//                    city: placemark.locality ?? "Неизвестно",
+//                    country: placemark.country ?? "Неизвестно",
+//                    longitude: String(location!.coordinate.longitude),
+//                    latitude: String(location!.coordinate.latitude)
+//                )
+//
+//                self.currentLocation = placeForWeather
+//
+//            }
         }
     }
     
-    public var locations: [Location]? 
+    private func configureCurrentLocation(location: CLLocation) {
+        self.getLocationFromCoordinates(for: location) { placemark in
+            
+            guard let placemark = placemark else { return }
+            
+            let placeForWeather = Location(
+                city: placemark.locality ?? "Неизвестно",
+                country: placemark.country ?? "Неизвестно",
+                longitude: String(location.coordinate.longitude),
+                latitude: String(location.coordinate.latitude)
+            )
+            
+            self.currentLocation = placeForWeather
+            
+        }
+    }
     
-    private lazy var locationManager = CLLocationManager()
+//    public var location: [Location]
     
-    func checkUserLocationPermissions() {
-        locationManager.delegate = self
-        locationManager.startUpdatingLocation()
+    private var locationPermissionResult: ((Bool) -> Void)?
+    
+    func checkUserLocationPermissions(response: ((Bool) -> Void)? = nil) {
     
         switch locationManager.authorizationStatus {
             
         case .notDetermined:
+            locationPermissionResult = response
             locationManager.requestWhenInUseAuthorization()
             
         case .authorizedAlways, .authorizedWhenInUse:
+            locationManager.startUpdatingLocation()
             if let location = locationManager.location {
-                self.currentLocation = location
+                print("[DEBUG] Setup current location to: \(location)")
+                configureCurrentLocation(location: location)
+//                self.currentLocation = location
+                response?(true)
             }
             
         case .denied, .restricted:
@@ -68,20 +102,21 @@ class LocationService: NSObject {
             // Чистый экран с +
             // Алерт с полем для введения города
             print("DENIED")
+            response?(false)
             
         @unknown default:
             fatalError("Не обрабатываемый статус")
         }
     }
     
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        checkUserLocationPermissions()
-    }
+//    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+//        checkUserLocationPermissions()
+//    }
     
 //    func getCityFromCoordinates(currentCoordinates: CLLocationCoordinate2D) -> Location {
 //    https://rapidapi.com/wirefreethought/api/geodb-cities/
     //    }
-    func getPlace(for location: CLLocation,
+    func getLocationFromCoordinates(for location: CLLocation,
                   completion: @escaping (CLPlacemark?) -> Void) {
         
         let geocoder = CLGeocoder()
@@ -102,6 +137,20 @@ class LocationService: NSObject {
             completion(placemark)
         }
     }
+    
+    func getLocationFromString(from address: String,
+                     completion: @escaping (_ location: CLLocationCoordinate2D?)-> Void) {
+        
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) { (placemarks, error) in
+            guard let placemarks = placemarks,
+            let location = placemarks.first?.location?.coordinate else {
+                completion(nil)
+                return
+            }
+            completion(location)
+        }
+    }
 
 }
 
@@ -109,13 +158,38 @@ extension LocationService: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locationManager.location {
-            self.currentLocation = location
+            configureCurrentLocation(location: location)
+//            self.currentLocation = location
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-          print("Failed to find user's location: \(error.localizedDescription)")
-          manager.stopUpdatingLocation()
+        print("Failed to find user's location: \(error.localizedDescription)")
+        manager.stopUpdatingLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+            
+        case .notDetermined:
+//            manager.requestWhenInUseAuthorization()
+            break
+            
+        case .authorizedAlways, .authorizedWhenInUse:
+            if let location = manager.location {
+                configureCurrentLocation(location: location)
+//                self.currentLocation = location
+            }
+            locationPermissionResult?(true)
+            locationPermissionResult = nil
+            
+        case .denied, .restricted:
+            locationPermissionResult?(false)
+            locationPermissionResult = nil
+            
+        @unknown default:
+            fatalError("Не обрабатываемый статус")
+        }
     }
     
 }
