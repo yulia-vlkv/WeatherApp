@@ -9,11 +9,13 @@ import Foundation
 import MapKit
 import Alamofire
 
+
 enum ForecastServiceError: Error {
     
     case noData
     case unknown(Error)
 }
+
 
 struct ForecastWeatherReqObj {
     
@@ -28,6 +30,7 @@ struct ForecastWeatherReqObj {
     let lang: String = "ru"
     let hours: String = "24"
 }
+
 
 class ForecastService {
     
@@ -133,101 +136,5 @@ class ForecastService {
             completion: completion
         )
     }
-         
-            
-    
-//    func getCurrentWeather(
-//        with parameters: ForecastWeatherReqObj,
-//        completion: @escaping (Result<CurrentWeather, ForecastServiceError>) -> Void
-//    ) {
-//        let url: String = "\(baseURL)/current/"
-//        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
-//        let parameters = [  "lon" : String(parameters.longitude),
-//                            "lat" : String(parameters.latitude),
-//                          "units" : parameters.units.rawValue,
-//                           "lang" : parameters.lang,
-//                            "hours": parameters.hours
-//        ]
-//
-//        AF.request(url,
-//                   method: .get,
-//                   parameters: parameters,
-//                   headers: header
-//        ).responseDecodable(of: CurrentWeatherResponse.self){ (response) in
-//            switch response.result {
-//            case .success(let weather):
-//                guard let currentWeather = weather.data.first else {
-//                    completion(.failure(ForecastServiceError.noData))
-//                    return
-//                }
-//                completion(.success(currentWeather))
-//            case .failure(let error):
-//                print("Probably ran out of free api requests")
-//                completion(.failure(ForecastServiceError.unknown(error)))
-//            }
-//        }
-//    }
-    
-//    func getHourlyWeather(
-//        with parameters: ForecastWeatherReqObj,
-//        completion: @escaping (Result<[HourlyWeather], ForecastServiceError>) -> Void
-//    ) {
-//        let url: String = "\(baseURL)/forecast/hourly/"
-//        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
-//        let parameters = [  "lon" : String(parameters.longitude),
-//                            "lat" : String(parameters.latitude),
-//                          "units" : parameters.units.rawValue,
-//                           "lang" : parameters.lang,
-//                           "hours": parameters.hours ]
-//        
-//        AF.request(url,
-//                   method: .get,
-//                   parameters: parameters,
-//                   headers: header
-//        ).responseDecodable(of: HourlyWeatherResponse.self){ (response) in
-//            switch response.result {
-//            case .success(let weather):
-//                let hourlyWeather = weather.data
-//                guard hourlyWeather != nil else {
-//                    completion(.failure(ForecastServiceError.noData))
-//                    return
-//                }
-//                completion(.success(hourlyWeather))
-//            case .failure(let error):
-//                completion(.failure(ForecastServiceError.unknown(error)))
-//            }
-//        }
-//    }
-
-    
-//    func getDailyWeather(
-//        with parameters: ForecastWeatherReqObj,
-//        completion: @escaping (Result<[DailyWeather], ForecastServiceError>) -> Void
-//    ) {
-//        let url: String = "\(baseURL)/forecast/daily/"
-//        let header: HTTPHeaders = ["X-RapidAPI-Key" : apiKey]
-//        let parameters = [  "lon" : String(parameters.longitude),
-//                            "lat" : String(parameters.latitude),
-//                          "units" : parameters.units.rawValue,
-//                           "lang" : parameters.lang ]
-//
-//        AF.request(url,
-//                   method: .get,
-//                   parameters: parameters,
-//                   headers: header
-//        ).responseDecodable(of: DailyWeatherResponse.self){ (response) in
-//            switch response.result {
-//            case .success(let weather):
-//                let dailyWeather = weather.data
-//                guard dailyWeather != nil else {
-//                    completion(.failure(ForecastServiceError.noData))
-//                    return
-//                }
-//                completion(.success(dailyWeather))
-//            case .failure(let error):
-//                completion(.failure(ForecastServiceError.unknown(error)))
-//            }
-//        }
-//    }
 
 }

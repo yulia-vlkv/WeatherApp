@@ -10,6 +10,11 @@ import Foundation
 import CoreLocation
 
 
+protocol HourlyWeatherScreenViewOutput: AnyObject {
+    
+}
+
+
 enum HourlyWeatherDataSourceSection {
     
     case temperatureChart([PointEntry])

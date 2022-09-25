@@ -14,6 +14,9 @@
 		EF7F3E2B28BA5B0C00F3682D /* DateScrollTableCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7F3E2A28BA5B0C00F3682D /* DateScrollTableCellModel.swift */; };
 		EF7F3E2D28BA5B4800F3682D /* DateScrollCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7F3E2C28BA5B4800F3682D /* DateScrollCellModel.swift */; };
 		EF820EA728D8D4A300F3CEF6 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF820EA628D8D4A300F3CEF6 /* OnboardingViewModel.swift */; };
+		EF820EAA28DE185400F3CEF6 /* LocationSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF820EA928DE185400F3CEF6 /* LocationSelectorViewModel.swift */; };
+		EF820EAC28DE1A4300F3CEF6 /* LocationSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF820EAB28DE1A4300F3CEF6 /* LocationSelectorView.swift */; };
+		EF820EAE28DE1C5000F3CEF6 /* MainFabric.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF820EAD28DE1C5000F3CEF6 /* MainFabric.swift */; };
 		EFB56BEA28B4D9F0006BD71E /* DailyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB56BE528B4D9F0006BD71E /* DailyWeather.swift */; };
 		EFB56BEC28B4D9F0006BD71E /* ForecastService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB56BE728B4D9F0006BD71E /* ForecastService.swift */; };
 		EFB56BED28B4D9F0006BD71E /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB56BE828B4D9F0006BD71E /* Icon.swift */; };
@@ -75,6 +78,9 @@
 		EF7F3E2A28BA5B0C00F3682D /* DateScrollTableCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateScrollTableCellModel.swift; sourceTree = "<group>"; };
 		EF7F3E2C28BA5B4800F3682D /* DateScrollCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateScrollCellModel.swift; sourceTree = "<group>"; };
 		EF820EA628D8D4A300F3CEF6 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
+		EF820EA928DE185400F3CEF6 /* LocationSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSelectorViewModel.swift; sourceTree = "<group>"; };
+		EF820EAB28DE1A4300F3CEF6 /* LocationSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSelectorView.swift; sourceTree = "<group>"; };
+		EF820EAD28DE1C5000F3CEF6 /* MainFabric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFabric.swift; sourceTree = "<group>"; };
 		EFB56BE528B4D9F0006BD71E /* DailyWeather.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyWeather.swift; sourceTree = "<group>"; };
 		EFB56BE728B4D9F0006BD71E /* ForecastService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForecastService.swift; sourceTree = "<group>"; };
 		EFB56BE828B4D9F0006BD71E /* Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
@@ -157,11 +163,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EF820EA828DE182400F3CEF6 /* LocationService */ = {
+			isa = PBXGroup;
+			children = (
+				EFD23F7628B5467700F974AA /* LocationService.swift */,
+				EF820EA928DE185400F3CEF6 /* LocationSelectorViewModel.swift */,
+				EF820EAB28DE1A4300F3CEF6 /* LocationSelectorView.swift */,
+			);
+			path = LocationService;
+			sourceTree = "<group>";
+		};
 		EFB1AA24289AAEB40041231A /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
 				EFCFDF1D28B53CA500921592 /* Coordinator.swift */,
 				EFCFDF1F28B53CF900921592 /* MainCoordinator.swift */,
+				EF820EAD28DE1C5000F3CEF6 /* MainFabric.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -310,7 +327,6 @@
 			children = (
 				EFD23F7528B5467700F974AA /* OnboardingView.swift */,
 				EF820EA628D8D4A300F3CEF6 /* OnboardingViewModel.swift */,
-				EFD23F7628B5467700F974AA /* LocationService.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -390,6 +406,7 @@
 				EFD23F6028B5464700F974AA /* HourlyWeather */,
 				EFD23F5328B545EF00F974AA /* DailyWeather */,
 				EFD23F7428B5467700F974AA /* Onboarding */,
+				EF820EA828DE182400F3CEF6 /* LocationService */,
 				EFD23F6E28B5467700F974AA /* Settings */,
 				EFD23F2328B541AE00F974AA /* Helpers */,
 				EFD23F5028B545EF00F974AA /* CustomViews */,
@@ -534,11 +551,13 @@
 			files = (
 				EFD23F4128B5459A00F974AA /* HourlyWeatherCellModel.swift in Sources */,
 				EFD23F5B28B545EF00F974AA /* CustomLabel.swift in Sources */,
+				EF820EAC28DE1A4300F3CEF6 /* LocationSelectorView.swift in Sources */,
 				EFEAA57F28919D6A005D91DD /* ViewController.swift in Sources */,
 				EFD23F7B28B5467700F974AA /* OnboardingView.swift in Sources */,
 				EFD23F5928B545EF00F974AA /* CustomColors.swift in Sources */,
 				EFD23F4028B5459A00F974AA /* MainScreenViewModel.swift in Sources */,
 				EFD23F7728B5467700F974AA /* SettingsView.swift in Sources */,
+				EF820EAE28DE1C5000F3CEF6 /* MainFabric.swift in Sources */,
 				EFD23F5A28B545EF00F974AA /* CustomButton.swift in Sources */,
 				EFCFDF2028B53CF900921592 /* MainCoordinator.swift in Sources */,
 				EFB56BEA28B4D9F0006BD71E /* DailyWeather.swift in Sources */,
@@ -583,6 +602,7 @@
 				EFD23F4928B5459A00F974AA /* MainInfoCell.swift in Sources */,
 				EFD23F4328B5459A00F974AA /* HourlyWeatherTableCellModel.swift in Sources */,
 				EFD23F4C28B5459A00F974AA /* MainScreenView.swift in Sources */,
+				EF820EAA28DE185400F3CEF6 /* LocationSelectorViewModel.swift in Sources */,
 				EFD23F7828B5467700F974AA /* SettingsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

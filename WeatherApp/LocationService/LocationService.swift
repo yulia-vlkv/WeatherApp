@@ -8,26 +8,23 @@
 import Foundation
 import CoreLocation
 
-struct Location {
+
+struct Location: Codable {
     let city: String
     let country: String
     let longitude: String
     let latitude: String
 }
 
+
 class LocationService: NSObject {
-    
-//    private weak var view: OnboardingView!
-//    
-//    init(view: OnboardingView) {
-//        self.view = view
-//    }
-    
+
     static var shared = LocationService()
     
     public var currentLocation: Location?
     
     private lazy var locationManager = CLLocationManager()
+    private var locationPermissionResult: ((Bool) -> Void)?
 
     override init() {
         super.init()
@@ -38,24 +35,9 @@ class LocationService: NSObject {
     
     public func getLocation(){
         if locationManager.authorizationStatus == .authorizedAlways || locationManager.authorizationStatus == .authorizedWhenInUse {
-            
             if let location = locationManager.location {
                 configureCurrentLocation(location: location)
             }
-//            self.getLocationFromCoordinates(for: location!) { placemark in
-//
-//                guard let placemark = placemark else { return }
-//
-//                let placeForWeather = Location(
-//                    city: placemark.locality ?? "Неизвестно",
-//                    country: placemark.country ?? "Неизвестно",
-//                    longitude: String(location!.coordinate.longitude),
-//                    latitude: String(location!.coordinate.latitude)
-//                )
-//
-//                self.currentLocation = placeForWeather
-//
-//            }
         }
     }
     
@@ -70,17 +52,11 @@ class LocationService: NSObject {
                 longitude: String(location.coordinate.longitude),
                 latitude: String(location.coordinate.latitude)
             )
-            
             self.currentLocation = placeForWeather
-            
         }
     }
     
-//    public var location: [Location]
-    
-    private var locationPermissionResult: ((Bool) -> Void)?
-    
-    func checkUserLocationPermissions(response: ((Bool) -> Void)? = nil) {
+    public func checkUserLocationPermissions(response: ((Bool) -> Void)? = nil) {
     
         switch locationManager.authorizationStatus {
             
@@ -93,14 +69,10 @@ class LocationService: NSObject {
             if let location = locationManager.location {
                 print("[DEBUG] Setup current location to: \(location)")
                 configureCurrentLocation(location: location)
-//                self.currentLocation = location
                 response?(true)
             }
             
         case .denied, .restricted:
-            // Пользователь выбирает место сам
-            // Чистый экран с +
-            // Алерт с полем для введения города
             print("DENIED")
             response?(false)
             
@@ -109,14 +81,7 @@ class LocationService: NSObject {
         }
     }
     
-//    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-//        checkUserLocationPermissions()
-//    }
-    
-//    func getCityFromCoordinates(currentCoordinates: CLLocationCoordinate2D) -> Location {
-//    https://rapidapi.com/wirefreethought/api/geodb-cities/
-    //    }
-    func getLocationFromCoordinates(for location: CLLocation,
+    public func getLocationFromCoordinates(for location: CLLocation,
                   completion: @escaping (CLPlacemark?) -> Void) {
         
         let geocoder = CLGeocoder()
@@ -138,7 +103,7 @@ class LocationService: NSObject {
         }
     }
     
-    func getLocationFromString(from address: String,
+    public func getLocationFromString(from address: String,
                      completion: @escaping (_ location: CLLocationCoordinate2D?)-> Void) {
         
         let geocoder = CLGeocoder()
@@ -154,12 +119,13 @@ class LocationService: NSObject {
 
 }
 
+
+// MARK: - Delegate
 extension LocationService: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locationManager.location {
             configureCurrentLocation(location: location)
-//            self.currentLocation = location
         }
     }
     
@@ -172,13 +138,11 @@ extension LocationService: CLLocationManagerDelegate {
         switch status {
             
         case .notDetermined:
-//            manager.requestWhenInUseAuthorization()
             break
             
         case .authorizedAlways, .authorizedWhenInUse:
             if let location = manager.location {
                 configureCurrentLocation(location: location)
-//                self.currentLocation = location
             }
             locationPermissionResult?(true)
             locationPermissionResult = nil
@@ -191,5 +155,4 @@ extension LocationService: CLLocationManagerDelegate {
             fatalError("Не обрабатываемый статус")
         }
     }
-    
 }

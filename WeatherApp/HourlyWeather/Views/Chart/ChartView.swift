@@ -190,20 +190,6 @@ class LineChart: UIView {
         }
     }
     
-    // Посчитать разниwу между максимальной и минимальной температурами, найти коэффицент для того, чтобы скейлить график
-    private func getDifference(entries: [PointEntry]) -> Float {
-        var temperature: [Float] = []
-        for value in entries {
-            let temp = value.temperature
-            temperature.append(temp)
-        }
-        let numMax = temperature.reduce(temperature[0], { max($0, $1) })
-        let numMin = temperature.reduce(temperature[0], { min ($0, $1) })
-        let diff = numMax - numMin
-        let difference = diff / 30
-        return difference
-//        return diff
-    }
     
     // Найти медиану, чтобы определить на какой высоте рисовать график
     private func calculateMedian(entries: [PointEntry]) -> Float {
@@ -224,7 +210,6 @@ class LineChart: UIView {
     // Найти высоту для каждой точки на графике
     private func getHeigths(entries: [PointEntry]) -> [CGFloat] {
         var result: [CGFloat] = []
-        let difference = getDifference(entries: entries)
         let median = calculateMedian(entries: entries)
         var absMedian = abs(median)
         
@@ -264,10 +249,9 @@ class LineChart: UIView {
     private func convertDataEntriesToPoints(entries: [PointEntry]) -> [CGPoint] {
         var result: [CGPoint] = []
         let heights = getHeigths(entries: entries)
-        let difference = getDifference(entries: entries)
         
         for (index, value) in heights.enumerated() {
-            var height = value
+            let height = value
             let width = CGFloat(index)*lineGap + 40
             let point = CGPoint(x: width, y: height)
             result.append(point)

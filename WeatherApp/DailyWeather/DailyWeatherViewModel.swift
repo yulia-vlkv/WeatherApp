@@ -8,11 +8,17 @@
 import Foundation
 
 
+protocol DailyWeatherScreenViewOutput: AnyObject {
+    
+}
+
+
 enum DailyWeatherDataSourceSection {
     
     case dateScroll(DateScrollTableCellModel)
     case dailyWeatherDetails(DailyWeatherDetailTableCellModel)
 }
+
 
 class DailyWeatherViewModel: DailyWeatherScreenViewOutput {
     
@@ -31,8 +37,6 @@ class DailyWeatherViewModel: DailyWeatherScreenViewOutput {
     }
     
     private let currentDate = Date()
-    
-//    var city: String = "Город, страна"
     
     var sections: [DailyWeatherDataSourceSection] = [] {
         didSet {

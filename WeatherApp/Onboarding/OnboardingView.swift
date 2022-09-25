@@ -10,10 +10,6 @@ import UIKit
 
 class OnboardingView: UIViewController {
     
-    //    public var onPermitAccess: (() -> Void)?
-    //    public var onDenyAccess: (() -> Void)?
-    //    public var model = LocationService.shared
-    
     public var model: OnboardingViewModel!
     
     private let scroll: UIScrollView = {
@@ -80,30 +76,11 @@ class OnboardingView: UIViewController {
         return button
     }()
     
-    
     @objc func buttonIsTapped(){
         self.model.onManualLocationTap()
-        
-//        let alert = UIAlertController(title: "Укажите вашу локацию", message: nil, preferredStyle: .alert)
-//        alert.addTextField() { newTextField in
-//            newTextField.placeholder = "Мой город"
-//        }
-//        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-//        alert.addAction(UIAlertAction(title: "Ок", style: .default) { _ in
-//            if let textFields = alert.textFields,
-//               let tf = textFields.first,
-//               let text = tf.text {
-//                self.model.addLocation(for: text)
-//            } else {
-//                print("Can't find the location")
-//            }
-//        })
-//        self.present(alert, animated: true)
-//        print("deny button is tapped")
     }
     
     override func viewDidLoad() {
-        
         configureLayout()
     }
     

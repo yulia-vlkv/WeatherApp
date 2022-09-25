@@ -10,6 +10,18 @@ import UIKit
 import CoreLocation
 
 
+protocol MainScreenViewOutput: AnyObject {
+    
+    var onOpenHourlyWeather: (([HourlyWeather]) -> Void)? { get set }
+    
+    var onOpenDailyWeather: (([DailyWeather], DailyWeather) -> Void)? { get set }
+    
+    var onOpenSettings: (() -> Void)? { get set }
+    
+    var onOpenLocationSelection: (() -> Void)? { get set }
+    
+}
+
 enum MainScreenDataSourceSection {
     
     case basic([MainScreenDataSourceItem])
@@ -31,6 +43,7 @@ struct MainScreenWeatherFetchResponse: Codable {
     
 }
 
+
 class MainScreenViewModel: MainScreenViewOutput {
     
     private let userDefaults = UserDefaults.standard
@@ -48,7 +61,17 @@ class MainScreenViewModel: MainScreenViewOutput {
     private weak var view: MainScreenView!
     
     private var location: Location {
-        return staticLocation ?? locationService.currentLocation ?? Location(city: "000", country: "000", longitude: "0000", latitude: "0000")
+        if let savedLocation = userDefaults.object(forKey: "selectedLocation") {
+            do {
+                let location = try JSONDecoder().decode(Location.self, from: savedLocation as! Data)
+                return location
+            } catch {
+                print("Unable to decode weather (\(error))")
+            }
+        } else {
+            return staticLocation ?? locationService.currentLocation ?? Location(city: "000", country: "000", longitude: "0000", latitude: "0000")
+        }
+        return Location(city: "000", country: "000", longitude: "0000", latitude: "0000")
     }
     
     private var staticLocation: Location?
@@ -92,11 +115,7 @@ class MainScreenViewModel: MainScreenViewOutput {
     
     private func subscribeToSettingsUpdates() {
         NotificationCenter.default.addObserver(forName: NSNotification.Name("SettingsUpdated"), object: nil, queue: .main) { notification in
-            guard
-                let fetchResults = self.fetchResults else {
-                return
-            }
-            
+            guard let fetchResults = self.fetchResults else { return }
             self.sections = self.mapToViewModel(fetchResults: fetchResults)
         }
     }
@@ -108,7 +127,6 @@ class MainScreenViewModel: MainScreenViewOutput {
     
     private func configureDataFromCache() {
         if let savedWeather = userDefaults.object(forKey: key) {
-            
             do {
                 let savedWeather = try JSONDecoder().decode(MainScreenWeatherFetchResponse.self, from: savedWeather as! Data)
                 self.sections = self.mapToViewModel(fetchResults: savedWeather)
@@ -120,18 +138,7 @@ class MainScreenViewModel: MainScreenViewOutput {
     
     
     private func fetchData() {
-        //        guard let _ = locationService.currentLocation else {
-        //            print("[DEBUG] No current location!")
-        //            return
-        //        }
-        
-        //       if locationService.currentLocation == nil  {
-        //           print("[DEBUG] No current location!")
-        //       }
-        
-//        let location = locationService.locations?.first ?? Location(city: "000", country: "000", longitude: "20.457273", latitude: "44.787197")
-        
-        
+
         let group = DispatchGroup()
         
         group.enter()
