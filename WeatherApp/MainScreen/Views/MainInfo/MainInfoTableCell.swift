@@ -27,20 +27,6 @@ class MainInfoTableCell: UITableViewCell {
     private lazy var mainInfoCollection = UICollectionView(frame: .zero,
                                                            collectionViewLayout: layout)
     
-//    private lazy var pageControl: UIPageControl = {
-//        let control = UIPageControl()
-//        control.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-//        control.isUserInteractionEnabled = true
-//        control.hidesForSinglePage = true
-//        control.currentPageIndicatorTintColor = .systemBlue
-//        control.pageIndicatorTintColor = .systemGray5
-//        control.addTarget(self,
-//                          action: #selector(pageControlDidChange(_:)),
-//                          for: .valueChanged)
-//        control.toAutoLayout()
-//        return control
-//    }()
-    
     @objc private func pageControlDidChange(_ sender: UIPageControl) {
         let current = sender.currentPage
         mainInfoCollection.setContentOffset(CGPoint(x: CGFloat(current) * (contentView.frame.size.width - 32),
@@ -63,7 +49,6 @@ class MainInfoTableCell: UITableViewCell {
     // MARK: - Configure Layout
 
     private func configureLayout(){
-//        contentView.addSubview(pageControl)
         contentView.addSubview(mainInfoCollection)
         
         mainInfoCollection.toAutoLayout()
@@ -76,8 +61,6 @@ class MainInfoTableCell: UITableViewCell {
         mainInfoCollection.register(MainInfoCell.self, forCellWithReuseIdentifier: collectionCellID)
         
         let constraints = [
-//            pageControl.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: topInset),
-//            pageControl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             mainInfoCollection.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topInset * 2),
             mainInfoCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -108,7 +91,6 @@ extension MainInfoTableCell: UICollectionViewDataSource, UICollectionViewDelegat
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let count = cells.count
-//        pageControl.numberOfPages = count
         return count
     }
     
@@ -130,26 +112,4 @@ extension MainInfoTableCell: UICollectionViewDataSource, UICollectionViewDelegat
         return minInset
     }
     
-}
-    
-// MARK: - UIScrollViewDelegate
-
-extension MainInfoTableCell: UIScrollViewDelegate {
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-
-//        pageControl.currentPage = Int(scrollView.contentOffset.x) / Int(scrollView.frame.width)
-    }
-
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-
-//        pageControl.currentPage = Int(scrollView.contentOffset.x) / Int(scrollView.frame.width)
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-       let witdh = scrollView.frame.width - (scrollView.contentInset.left*2)
-       let index = (scrollView.contentOffset.x) / witdh
-       let roundedIndex = round(index)
-//       self.pageControl.currentPage = Int(roundedIndex)
-   }
 }

@@ -105,25 +105,26 @@ extension DateScrollTableCell: UICollectionViewDataSource, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         
-//        if let cell = collectionView.cellForItem(at: indexPath) as? DateScrollCell {
-//            cell.dateLabel.backgroundColor = CustomColors.setColor(style: .deepBlue)
-//            print("select")
-//            collectionView.reloadData()
-//        }
-//
-//        collectionView.reloadItems(at: [indexPath])
-        if indexPath.item < cells.count {
-            let model = cells[indexPath.item]
-            model.onSelect?()
+        if let cell = collectionView.cellForItem(at: indexPath) as? DateScrollCell {
+            cell.dateLabel.backgroundColor = CustomColors.setColor(style: .deepBlue)
+            print("select \(indexPath)")
+            collectionView.reloadData()
         }
+
+//        collectionView.reloadItems(at: [indexPath])
+//        if indexPath.item < cells.count {
+//            let model = cells[indexPath.item]
+//            model.onSelect?()
+//        }
     }
     
-//    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-//        if let cell = collectionView.cellForItem(at: indexPath) as? DateScrollCell {
-//            cell.dateLabel.backgroundColor = CustomColors.setColor(style: .lightBlue)
-//            print("deselect")
-////            collectionView.reloadData()
-//        }
-//    }
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        //        if let cell = collectionView.cellForItem(at: indexPath) as? DateScrollCell {
+        //            cell.dateLabel.backgroundColor = CustomColors.setColor(style: .lightBlue)
+        //            print("deselect \(indexPath)")
+        //            collectionView.reloadData()
+        //        }
+        //    }
+    }
     
 }

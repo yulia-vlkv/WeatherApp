@@ -20,7 +20,6 @@ enum ForecastServiceError: Error {
 struct ForecastWeatherReqObj {
     
     enum Units: String {
-        
         case metric
     }
     

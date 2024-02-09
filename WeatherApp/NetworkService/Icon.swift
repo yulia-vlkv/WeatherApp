@@ -39,7 +39,6 @@ extension WeatherIconType {
         let snow = [600, 601, 602, 610, 611, 612, 621, 622, 623]
         let rain = [300, 301, 302, 500, 501, 502, 511, 520, 521, 522]
         let fog = [700, 711, 721, 731, 741, 751]
-//        let unknown = [900]
         
         if clearSky.contains(code) {
             self = .clearSky

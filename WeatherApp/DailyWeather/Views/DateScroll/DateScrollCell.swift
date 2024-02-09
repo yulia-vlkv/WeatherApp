@@ -22,17 +22,7 @@ class DateScrollCell: UICollectionViewCell {
     // Not Working
     override var isSelected: Bool {
         didSet {
-            print(isSelected.description)
-            if self.isSelected {
-                self.dateLabel.backgroundColor = .blue
-                self.dateLabel.textColor = .white
-                print("selected")
-            } else {
-                self.dateLabel.backgroundColor = .green
-                self.dateLabel.textColor = .black
-                print("deselected")
-            }
-//            self.dateLabel.backgroundColor = isSelected ? CustomColors.setColor(style: .deepBlue) : CustomColors.setColor(style: .lightBlue)
+            self.dateLabel.backgroundColor = isSelected ? CustomColors.setColor(style: .deepBlue) : CustomColors.setColor(style: .lightBlue)
         }
     }
     
