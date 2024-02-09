@@ -37,6 +37,7 @@ class Converter {
     public func convertTime(timeFormat: String) -> String {
         let currentSettings = currentSettings.timeFormatSettings
         
+        // finish
         return timeFormat
     }
     

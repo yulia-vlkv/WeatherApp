@@ -113,5 +113,6 @@ extension DailyWeatherView: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
     }
+   
 }
 

@@ -39,7 +39,7 @@ class DateScrollTableCell: UITableViewCell {
     }
     
     // MARK: - Configure Layout
-
+    
     private func configureLayout(){
         contentView.addSubview(dailyWeatherCollection)
         dailyWeatherCollection.toAutoLayout()
@@ -70,7 +70,7 @@ class DateScrollTableCell: UITableViewCell {
     private var sideInset: CGFloat { return 16 }
     
     private var inset: CGFloat { return 8 }
-
+    
 }
 
 
@@ -104,13 +104,12 @@ extension DateScrollTableCell: UICollectionViewDataSource, UICollectionViewDeleg
     // Not working
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        
         if let cell = collectionView.cellForItem(at: indexPath) as? DateScrollCell {
             cell.dateLabel.backgroundColor = CustomColors.setColor(style: .deepBlue)
             print("select \(indexPath)")
             collectionView.reloadData()
         }
-
+        
 //        collectionView.reloadItems(at: [indexPath])
 //        if indexPath.item < cells.count {
 //            let model = cells[indexPath.item]
@@ -119,12 +118,12 @@ extension DateScrollTableCell: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        //        if let cell = collectionView.cellForItem(at: indexPath) as? DateScrollCell {
-        //            cell.dateLabel.backgroundColor = CustomColors.setColor(style: .lightBlue)
-        //            print("deselect \(indexPath)")
-        //            collectionView.reloadData()
-        //        }
-        //    }
+        if let cell = collectionView.cellForItem(at: indexPath) as? DateScrollCell {
+            cell.dateLabel.backgroundColor = CustomColors.setColor(style: .lightBlue)
+            print("deselect \(indexPath)")
+            collectionView.reloadData()
+        }
+        
     }
     
 }

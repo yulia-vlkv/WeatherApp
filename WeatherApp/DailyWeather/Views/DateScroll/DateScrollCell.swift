@@ -19,29 +19,12 @@ extension DateScrollCell: ConfigurableView {
 
 class DateScrollCell: UICollectionViewCell {
     
-    // Not Working
-    override var isSelected: Bool {
-        didSet {
-            self.dateLabel.backgroundColor = isSelected ? CustomColors.setColor(style: .deepBlue) : CustomColors.setColor(style: .lightBlue)
-        }
-    }
-    
 //    override var isSelected: Bool {
-//        get {
-//            return super.isSelected
-//        }
-//        set {
-//            if newValue {
-//                super.isSelected = true
-//                self.dateLabel.backgroundColor = CustomColors.setColor(style: .deepBlue)
-//                print("selected")
-//            } else if newValue == false {
-//                super.isSelected = false
-//                self.dateLabel.backgroundColor = CustomColors.setColor(style: .lightBlue)
-//                print("deselected")
-//            }
+//        didSet {
+//            self.dateLabel.backgroundColor = isSelected ? CustomColors.setColor(style: .deepBlue) : CustomColors.setColor(style: .lightBlue)
 //        }
 //    }
+    
 //    override func updateConfiguration(using state: UICellConfigurationState) {
 //        if state.isSelected {
 //            self.dateLabel.backgroundColor = CustomColors.setColor(style: .deepBlue)
